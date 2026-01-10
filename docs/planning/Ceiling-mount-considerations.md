@@ -55,8 +55,7 @@ binary_sensor:
 
 For "stop here" guidance: Ceiling mounting provides more than enough precision (within 10cm) for parking guidance.
 
-
-🏆 Recommendation 
+🏆 Recommendation
 
 Yes, use ceiling mounting with an LD2450 positioned:
 

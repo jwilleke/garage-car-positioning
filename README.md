@@ -23,7 +23,6 @@ Precise car positioning system for Home Assistant using dual LD2450 mmWave radar
 | HiLink LD2450 | 2 | 24GHz mmWave radar |
 | WS2812B LED Strip | 1 | Optional - parking guide |
 | 5V Power Supply | 1 | 2A minimum |
-| Project Enclosure | 1 | 3D printed or purchased |
 
 ## Quick Start
 
@@ -33,5 +32,13 @@ Precise car positioning system for Home Assistant using dual LD2450 mmWave radar
 4. Flash to ESP32-C6
 5. Add to Home Assistant
 
-## Wiring Diagram
+## Documentation
 
+- [Installation Guide](docs/installation.md)
+- [Calibration Guide](docs/calibration.md)
+- [Bill of Materials](hardware/BOM.md)
+- [Wiring Diagram](hardware/wiring-diagram.md)
+
+## License
+
+MIT License - See [LICENSE](LICENSE) for details.

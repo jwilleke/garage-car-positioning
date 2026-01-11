@@ -4,28 +4,28 @@ This document explains how the WS2812B LED strip provides visual feedback to hel
 
 ### Parking Sequence and Colors
 
-1.  **No Car Detected:**
-    *   When the garage is empty, the LED strip will be **off**.
+- No Car Detected:
+  - When the garage is empty, the LED strip will be off.
 
-2.  **Car Enters Garage (Far from Target):**
-    *   As you first pull in, the system will detect your car. The strip will turn **solid Blue**.
-    *   This color signals you to "keep moving forward".
+- Car Enters Garage (Far from Target):
+  - As you first pull in, the system will detect your car. The strip will turn solid Blue.
+  - This color signals you to "keep moving forward".
 
-3.  **Getting Closer (Approach Zone):**
-    *   As you move closer to the target, the color will change to **Cyan**.
-    *   This indicates you are in the "approach zone" and should continue moving forward slowly and prepare to stop.
+- Getting Closer (Approach Zone):
+  - As you move closer to the target, the color will change to Cyan.
+  - This indicates you are in the "approach zone" and should continue moving forward slowly and prepare to stop.
 
-4.  **Perfectly Parked:**
-    *   When your car is positioned correctly within the target zone, the strip will turn **solid Green**.
-    *   This is your confirmation that you've hit the perfect spot.
+- Perfectly Parked:
+  - When your car is positioned correctly within the target zone, the strip will turn solid Green.
+  - This is your confirmation that you've hit the perfect spot.
 
-5.  **Overshot the Target:**
-    *   If you go a little too far, the light will change to **Yellow**.
-    *   This means you've passed the target and should reverse a small amount.
+- Overshot the Target:
+  - If you go a little too far, the light will change to Yellow.
+  - This means you've passed the target and should reverse a small amount.
 
-6.  **Gone Way Too Far:**
-    *   If you continue to go too far past the target, the strip will turn **Orange/Red**.
-    *   This indicates you are now much too far and need to reverse to correct your position.
+- Gone Way Too Far:
+  - If you continue to go too far past the target, the strip will turn Orange/Red.
+  - This indicates you are now much too far and need to reverse to correct your position.
 
 ### Summary
 

@@ -2,57 +2,63 @@
 
 This document provides a comprehensive list of components for three different implementation options, all using the ESP32-C6 as the core microcontroller.
 
----
-
 ## Option 1: Standalone Car Positioning System
 
-A complete system focused only on detecting a car's position and providing visual LED feedback.
+Standalone Car Positioning System focused only on detecting a car's position and providing visual LED feedback.
 
-| Component | Quantity | Notes |
-| :------------------------- | :------- | :---------------------------------- |
-| ESP32-C6 DevKit | 1 | Core microcontroller (Wifi 6, BLE) |
-| HiLink LD2450 mmWave Radar | 2 | For precise car positioning (X, Y) |
-| WS2812B LED Strip | 1 | Optional visual parking aid |
-| 5V Power Supply | 1 | 2A minimum |
-| Jumper Wires | Assorted | For connecting modules |
-| Project Box / Enclosure | 1 | Optional, for housing components |
-
----
+| Component | Quantity | Notes | URL |
+| ---- | ---- | ---- |
+| ESP32-C6 DevKit | 1 | Core microcontroller (Wifi 6, BLE) | [ESP32-C6-DevKitC-1-N8 Development Board](https://www.amazon.com/dp/B0BRMSDR4R?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1) |
+| HiLink LD2450 mmWave Radar | 2 | For precise car positioning (X, Y) | [HiLetgo 2pcs NJK-5002C](https://www.amazon.com/dp/B01MZYYCLH?ref=ppx_yo2ov_dt_b_fed_asin_title) |
+| WS2812B LED Strip | 1 | Optional visual parking aid | [WS2812B LED Strip](https://www.amazon.com/SEZO-Individually-Addressable-Programmable-Non-Waterproof/dp/B097BWJGYK/)
+| 5V Power Supply | 1 | 2A minimum | TBD |
+| Jumper Wires | Assorted | For connecting modules | TBD |
+| Project Box / Enclosure | 1 | Optional, for housing components | TBD |
 
 ## Option 2: Standalone Garage Door Controller
 
 A robust, dedicated system for controlling the garage door.
 
-| Component | Quantity | Notes |
-| ---- | ---- | ---- |
-| ESP32-C6 DevKit | 1 | Core microcontroller (Wifi 6, BLE) |
-| Single-channel 3.3V Relay | 1 | To simulate a button press on the opener |
-| Magnetic Reed Switch | 1 | For the "Closed" state sensor |
-| Hall Effect Proximity Sensors (e.g., NJK-5002C) | 2 | For building the custom magnetic rotary encoder. |
-| Neodymium Magnets | Assorted | Small magnets for the rotary encoder's sprocket/shaft. |
-| 5V Power Supply | 1 | 1A minimum |
-| Jumper Wires | Assorted | For connecting modules |
-| Project Box / Enclosure | 1 | Optional, for housing components |
-
----
+| Component | Quantity | Notes | URL |
+| ---- | ---- | ---- | ---- |
+| ESP32-C6 DevKit | 1 | Core microcontroller (Wifi 6, BLE) | [ESP32-C6-DevKitC-1-N8 Development Board](https://www.amazon.com/dp/B0BRMSDR4R?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1) |
+| Magnetic Reed Switch | 1 | For the "Closed" state sensor | Already Had |
+| Hall Effect Proximity Sensors (e.g., NJK-5002C) | 2 | For building the custom magnetic rotary encoder. | [NJK-5002C](https://www.amazon.com/dp/B01MZYYCLH?ref=ppx_yo2ov_dt_b_fed_asin_title)
+| Neodymium Magnets | Assorted | Small magnets for the rotary encoder's sprocket/shaft. | Already had |
+| 5V Power Supply | 1 | 1A minimum | Already had |
+| Jumper Wires | Assorted | For connecting modules | Already had |
+| Project Box / Enclosure | 1 | Optional, for housing components | TBD |
 
 ## Option 3: Combined All-in-One System
 
-A single, advanced system that performs **both** car positioning and garage door control using one powerful ESP32-C6 microcontroller.
+A single, advanced system that performs **both** car positioning and garage door control **use one powerful ESP32-C6 microcontroller**.
 
-| Component | Quantity | Notes |
-| ---- | ---- | ---- |
-| **Controller & Power** | _ | |
-| ESP32-C6 DevKit | 1 | Core microcontroller to run both systems |
-| 5V Power Supply | 1 | 3A or higher recommended for combined load |
-| **Car Positioning Parts** | | |
-| HiLink LD2450 mmWave Radar | 2 | For precise car positioning (X, Y) |
-| WS2812B LED Strip | 1 | Optional visual parking aid |
-| **Garage Door Parts** | | |
-| Single-channel 3.3V Relay | 1 | To simulate a button press on the opener |
-| Magnetic Reed Switch | 1 | For the "Closed" state sensor |
-| Hall Effect Proximity Sensors (e.g., NJK-5002C) | 2 | For building the custom magnetic rotary encoder. |
-| Neodymium Magnets | Assorted | Small magnets for the rotary encoder's sprocket/shaft. |
-| **Misc** | | |
-| Jumper Wires | Assorted | For connecting all modules to the ESP32 |
-| Project Box / Enclosure | 1 | Optional, larger size may be needed |
+### Controller & Power
+
+| Component | Quantity | Notes | URL |
+| ---- | ---- | ---- | ---- |
+| ESP32-C6 DevKit | 1 | Core microcontroller to run both systems | [ESP32-C6-DevKitC-1-N8 Development Board](https://www.amazon.com/dp/B0BRMSDR4R?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1) |
+| 5V Power Supply | 1 | 3A or higher recommended for combined load | TBD |
+
+### Car Positioning Parts
+
+| Component | Quantity | Notes | URL |
+| ---- | ---- | ---- | ---- |
+| HiLink LD2450 mmWave Radar | 2 | For precise car positioning (X, Y) | [JMT HLK-LD2450 24GHz](https://www.amazon.com/dp/B0CGNMCTRC?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1) |
+| WS2812B LED Strip | 1 | Optional visual parking aid | [WS2812B LED Strip](https://www.amazon.com/SEZO-Individually-Addressable-Programmable-Non-Waterproof/dp/B097BWJGYK/) |
+
+### Garage Door Parts
+
+| Component | Quantity | Notes | URL |
+| ---- | ---- | ---- | ---- |
+| Single-channel 3.3V Relay | 1 | To simulate a button press on the opener | [1 Channel DC 3V / 3.3V Relay](https://www.amazon.com/DiGiYes-Channel-Optocoupler-Isolated-Control/dp/B0CZ3T8116/) |
+| Magnetic Reed Switch | 1 | For the "Closed" state sensor | Already had |
+| Hall Effect Proximity Sensors (e.g., NJK-5002C) | 2 | For building the custom magnetic rotary encoder. | [NJK-5002C](https://www.amazon.com/dp/B01MZYYCLH?ref=ppx_yo2ov_dt_b_fed_asin_title) |
+| Neodymium Magnets | Assorted | Small magnets for the rotary encoder's sprocket/shaft. | Already had |
+
+#### Misc
+
+| Component | Quantity | Notes | URL |
+| ---- | ---- | ---- | ---- |
+| Jumper Wires | Assorted | For connecting all modules to the ESP32 | Already had |
+| Project Box / Enclosure | 1 | Optional, larger size may be needed | TBD |

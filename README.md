@@ -17,12 +17,7 @@ Precise car positioning system for Home Assistant using dual LD2450 mmWave radar
 
 ## Hardware Requirements
 
-| Component | Quantity | Notes |
-| --------- | ---------- | ------- |
-| ESP32-C6 DevKit | 1 | WiFi 6 + BLE 5.0 |
-| HiLink LD2450 | 2 | 24GHz mmWave radar |
-| WS2812B LED Strip | 1 | Optional - parking guide |
-| 5V Power Supply | 1 | 2A minimum |
+See [BOM](./hardware/BOM.md)
 
 ## Quick Start
 

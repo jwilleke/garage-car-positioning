@@ -4,14 +4,14 @@ This document provides wiring connections for the three different implementation
 
 **Note:** Always disconnect power before making any wiring changes.
 
----
+See [BOM](./hardware/BOM.md)
 
 ## Option 1: Standalone Car Positioning System
 
 This diagram shows the wiring for a dedicated car positioning system using an ESP32-C6.
 
 | ESP32-C6 Pin | Component | Component Pin | Notes |
-| :----------- | :------------------ | :------------ | :---------------------------------------------------------- |
+| ---- | ---- | ---- | ---- | ---- |
 | **5V** | Front LD2450 | VCC | |
 | **GND** | Front LD2450 | GND | |
 | **GPIO16** | Front LD2450 | TX | ESP32 RX <- Sensor TX |

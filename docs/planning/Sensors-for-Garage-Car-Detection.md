@@ -84,5 +84,3 @@ Sensor Role
 
 - mmWave (LD2450) Primary car presence + position
 - Ultrasonic (backup) - Secondary distance verification
-
-

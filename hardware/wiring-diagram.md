@@ -16,7 +16,7 @@ GND ─────────────► GND                 GND
 ### LD2450 Sensor #1 (Front)
 
 | LD2450 Pin | ESP32-C6 Pin | Wire Color (suggested) |
-|------------|--------------|------------------------|
+| ------------ | -------------- | ------------------------ |
 | VCC | 3V3 | Red |
 | GND | GND | Black |
 | TX | GPIO16 | Yellow |
@@ -25,7 +25,7 @@ GND ─────────────► GND                 GND
 ### LD2450 Sensor #2 (Rear)
 
 | LD2450 Pin | ESP32-C6 Pin | Wire Color (suggested) |
-|------------|--------------|------------------------|
+| ------------ | -------------- | ------------------------ |
 | VCC | 3V3 | Red |
 | GND | GND | Black |
 | TX | GPIO18 | Blue |
@@ -34,7 +34,7 @@ GND ─────────────► GND                 GND
 ### LED Strip (Optional)
 
 | LED Pin | ESP32-C6 Pin | Notes |
-|---------|--------------|-------|
+| --------- | -------------- | ------- |
 | VCC | 5V (VIN) | External 5V recommended for >30 LEDs |
 | GND | GND | Common ground |
 | DIN | GPIO8 | Via 470Ω resistor |

@@ -1,98 +1,50 @@
 # Wiring Diagram
 
-## ESP32-C6 Connections
+This document provides the wiring connections for the ESP32-C6 DevKit to the various components for both the car positioning system and the garage door opener.
 
-ESP32-C6          LD2450 #1 (Front)    LD2450 #2 (Rear)
-─────────         ─────────────────    ─────────────────
-GPIO16 (RX) ◄──── TX
-GPIO17 (TX) ────► RX
-GPIO18 (RX) ◄────                      TX
-GPIO19 (TX) ────►                      RX
-3.3V ────────────► VCC                 VCC
-GND ─────────────► GND                 GND
+**Note:** Always disconnect power before making any wiring changes.
 
-## Detailed Connections
+---
 
-### LD2450 Sensor #1 (Front)
+## 🚗 Garage Car Positioning System
 
-| LD2450 Pin | ESP32-C6 Pin | Wire Color (suggested) |
-| ------------ | -------------- | ------------------------ |
-| VCC | 3V3 | Red |
-| GND | GND | Black |
-| TX | GPIO16 | Yellow |
-| RX | GPIO17 | Green |
+This system uses two LD2450 radar sensors for positioning and a WS2812B LED strip for visual guidance.
 
-### LD2450 Sensor #2 (Rear)
+### Connections Table
 
-| LD2450 Pin | ESP32-C6 Pin | Wire Color (suggested) |
-| ------------ | -------------- | ------------------------ |
-| VCC | 3V3 | Red |
-| GND | GND | Black |
-| TX | GPIO18 | Blue |
-| RX | GPIO19 | White |
+| ESP32-C6 Pin | Component              | Component Pin | Notes                                           |
+| :----------- | :--------------------- | :------------ | :---------------------------------------------- |
+| **5V**       | Front LD2450           | VCC           |                                                 |
+| **GND**      | Front LD2450           | GND           |                                                 |
+| **GPIO16**   | Front LD2450           | TX            | ESP32 RX <- Sensor TX                           |
+| **GPIO17**   | Front LD2450           | RX            | ESP32 TX -> Sensor RX                           |
+| **5V**       | Rear LD2450            | VCC           |                                                 |
+| **GND**      | Rear LD2450            | GND           |                                                 |
+| **GPIO18**   | Rear LD2450            | TX            | ESP32 RX <- Sensor TX                           |
+| **GPIO19**   | Rear LD2450            | RX            | ESP32 TX -> Sensor RX                           |
+| **5V**       | WS2812B LED Strip      | 5V / VCC      | **Important:** For long strips, use a separate 5V power supply. |
+| **GND**      | WS2812B LED Strip      | GND           | Share a common ground with the ESP32.           |
+| **GPIO0**    | WS2812B LED Strip      | Data In (DIN) |                                                 |
 
-### LED Strip (Optional)
+---
 
-| LED Pin | ESP32-C6 Pin | Notes |
-| --------- | -------------- | ------- |
-| VCC | 5V (VIN) | External 5V recommended for >30 LEDs |
-| GND | GND | Common ground |
-| DIN | GPIO8 | Via 470Ω resistor |
+## 🚪 Garage Door Opener
 
-## Physical Layout
+This system uses a relay to control the door, a reed switch to detect the closed state, and a custom rotary encoder for position tracking.
 
-## Sensor Mounting
+### Connections Table
 
-### Option 1
-
-Single Sensor (Simple)Mount directly above the target stopping point
-
-┌─────────────────────────────────────┐
-│             CEILING                 │
-│                                     │
-│          [mmWave] ← Mount here      │
-│              │                      │
-│              ▼                      │
-│     ┌─────────────┐                 │
-│     │   TARGET    │ ← Ideal stop    │
-│     │   ZONE      │   position      │
-│     └─────────────┘                 │
-│                                     │
-│         🚗──────────▶               │
-│         Car enters                  │
-│                                     │
-└─────────────────────────────────────┘
-
-### Option 2
-
-Dual Sensor (High Precision)For centimeter-level accuracy, use two sensors:
-
-        ┌─────────────────────────────────────┐
-        │             CEILING                 │
-        │                                     │
-        │    [Sensor A]       [Sensor B]      │
-        │         ╲               ╱           │
-        │          ╲             ╱            │
-        │           ╲           ╱             │
-        │            ╲         ╱              │
-        │             ╲       ╱               │
-        │              ╳─────╳  ← Triangulated│
-        │         ┌─────────────┐   position  │
-        │         │    🚗       │             │
-        │         └─────────────┘             │
-        └─────────────────────────────────────┘
-
-CEILING
-══════════════════════════════════════
-│              │
-[LD2450 #1]    [LD2450 #2]
-(Front)         (Rear)
-│              │
-▼              ▼
-┌─────────────────────────────────────┐
-│           TARGET ZONE               │
-│         ┌───────────┐               │
-│         │    🚗     │               │
-│         └───────────┘               │
-└─────────────────────────────────────┘
-GARAGE DOOR
+| ESP32-C6 Pin | Component              | Component Pin | Notes                                           |
+| :----------- | :--------------------- | :------------ | :---------------------------------------------- |
+| **3.3V**     | Relay Module           | VCC           |                                                 |
+| **GND**      | Relay Module           | GND           |                                                 |
+| **GPIO12**   | Relay Module           | IN / Signal   |                                                 |
+| -            | Relay Module           | NO & COM      | Wire these in parallel to your garage opener's wall button terminals. Polarity does not matter. |
+| **GND**      | Closed Reed Switch     | Terminal 1    |                                                 |
+| **GPIO4**    | Closed Reed Switch     | Terminal 2    | The internal pull-up resistor is used.          |
+| **3.3V**     | Hall Effect Sensor A   | VCC           | Rotary Encoder Sensor A                         |
+| **GND**      | Hall Effect Sensor A   | GND           |                                                 |
+| **GPIO5**    | Hall Effect Sensor A   | OUT / Signal  |                                                 |
+| **3.3V**     | Hall Effect Sensor B   | VCC           | Rotary Encoder Sensor B                         |
+| **GND**      | Hall Effect Sensor B   | GND           |                                                 |
+| **GPIO6**    | Hall Effect Sensor B   | OUT / Signal  |                                                 |

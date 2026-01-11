@@ -1,11 +1,21 @@
 substitutions:
   device_name: garage-car-sensor
   friendly_name: "Garage Car Sensor"
-  
-  # Target parking zone (adjust after calibration)
+
+  # Car Positioning Settings
   target_y_min: "1800"
   target_y_max: "2200"
   target_x_tolerance: "300"
+  num_leds: "30" # Number of LEDs in your WS2812B strip
+
+  # Garage Door Controller Settings
+  # NOTE: Update these GPIO pins to match your wiring
+  garage_door_relay_pin: GPIO12
+  garage_door_closed_switch_pin: GPIO4
+  garage_door_encoder_a_pin: GPIO5
+  garage_door_encoder_b_pin: GPIO6
+  # NOTE: Calibrate this value by opening the door fully and noting the encoder count
+  garage_door_full_open_counts: "10000"
 
 esphome:
   name: ${device_name}
@@ -96,10 +106,17 @@ sensor:
     id: car_center_x
     unit_of_measurement: "mm"
     lambda: |-
-      if (id(front_x).state != 0 && id(rear_x).state != 0) {
+      bool front_valid = !isnan(id(front_x).state) && id(front_x).state != 0;
+      bool rear_valid = !isnan(id(rear_x).state) && id(rear_x).state != 0;
+
+      if (front_valid && rear_valid) {
         return (id(front_x).state + id(rear_x).state) / 2.0;
+      } else if (front_valid) {
+        return id(front_x).state;
+      } else if (rear_valid) {
+        return id(rear_x).state;
       }
-      return 0;
+      return NAN;
     update_interval: 500ms
 
   - platform: template
@@ -107,13 +124,50 @@ sensor:
     id: car_center_y
     unit_of_measurement: "mm"
     lambda: |-
-      if (id(front_y).state != 0 && id(rear_y).state != 0) {
+      bool front_valid = !isnan(id(front_y).state) && id(front_y).state != 0;
+      bool rear_valid = !isnan(id(rear_y).state) && id(rear_y).state != 0;
+
+      if (front_valid && rear_valid) {
         return (id(front_y).state + id(rear_y).state) / 2.0;
+      } else if (front_valid) {
+        return id(front_y).state;
+      } else if (rear_valid) {
+        return id(rear_y).state;
       }
-      return 0;
+      return NAN;
     update_interval: 500ms
 
+  - platform: rotary_encoder
+    name: "Garage Door Position Encoder"
+    id: garage_door_encoder
+    pin_a: ${garage_door_encoder_a_pin}
+    pin_b: ${garage_door_encoder_b_pin}
+
+switch:
+  - platform: gpio
+    name: "Garage Door Relay"
+    pin: ${garage_door_relay_pin}
+    id: garage_door_relay
+    on_turn_on:
+      - delay: 200ms
+      - switch.turn_off: garage_door_relay
+
 binary_sensor:
+  - platform: gpio
+    name: "Garage Door Closed Switch"
+    id: garage_door_closed_switch
+    pin:
+      number: ${garage_door_closed_switch_pin}
+      mode: INPUT_PULLUP
+      inverted: true
+    device_class: door
+    filters:
+      - delayed_on: 10ms
+    on_press:
+      # When door is fully closed, reset encoder count to 0 for calibration
+      - sensor.rotary_encoder.set_value:
+          id: garage_door_encoder
+          value: 0
   - platform: template
     name: "Car Detected"
     id: car_detected
@@ -135,6 +189,56 @@ binary_sensor:
       bool x_ok = x <= ${target_x_tolerance};
       return id(car_detected).state && y_ok && x_ok;
 
+light:
+  - platform: esp32_rmt
+    name: "Garage Parking LED Strip"
+    chipset: WS2812B
+    pin: GPIO0 # Ensure this pin is not used by other components
+    num_leds: ${num_leds}
+    rgb_order: GRB
+    id: garage_parking_led
+    default_transition_length: 1s
+    effects:
+      - addressable_lambda:
+          name: Parking Guidance Effect
+          update_interval: 200ms # Update frequently for smooth feedback
+          lambda: |-
+            // If car not detected, turn off LEDs
+            if (!id(car_detected).state) {
+              it.all().set(0, 0, 0); // Off
+            } 
+            // If car is correctly parked, set to green
+            else if (id(car_correctly_parked).state) {
+              it.all().set(0, 255, 0); // Green
+            } 
+            // Car detected but not correctly parked, provide guidance based on Y position
+            else {
+              float y = id(car_center_y).state;
+              float target_y_min_f = std::stof("${target_y_min}");
+              float target_y_max_f = std::stof("${target_y_max}");
+              float target_y_mid = (target_y_min_f + target_y_max_f) / 2.0;
+              
+              // Define zones for color guidance (these values can be fine-tuned)
+              float perfect_zone_half_width = (target_y_max_f - target_y_min_f) / 2.0;
+              float approach_zone_half_width = perfect_zone_half_width + 300.0; // 300mm beyond perfect zone
+
+              if (y < target_y_mid - approach_zone_half_width) {
+                // Too far forward
+                it.all().set(0, 0, 255); // Blue (Move FORWARD)
+              } else if (y > target_y_mid + approach_zone_half_width) {
+                // Too far back
+                it.all().set(255, 69, 0); // OrangeRed (Move BACK)
+              } else if (y < target_y_mid - perfect_zone_half_width) {
+                // Approaching from front (within approach zone, but not perfect)
+                it.all().set(0, 255, 255); // Cyan (Minor FORWARD)
+              } else if (y > target_y_mid + perfect_zone_half_width) {
+                // Approaching from back (within approach zone, but not perfect)
+                it.all().set(255, 255, 0); // Yellow (Minor BACK)
+              } else {
+                // Fallback (should be covered by car_correctly_parked, but good to have)
+                it.all().set(255, 255, 255); // White (Indicates detection, unclear guidance)
+              }
+            }
 text_sensor:
   - platform: template
     name: "Parking Guidance"
@@ -155,3 +259,24 @@ text_sensor:
 button:
   - platform: restart
     name: "Restart"
+
+cover:
+  - platform: template
+    name: "Garage Door"
+    id: garage_door
+    device_class: garage
+    open_action:
+      - switch.turn_on: garage_door_relay
+    close_action:
+      - switch.turn_on: garage_door_relay
+    stop_action:
+      - switch.turn_on: garage_door_relay
+    position:
+      lambda: |-
+        if (id(garage_door_closed_switch).state) {
+          return 0.0;
+        }
+        float val = clamp((float)id(garage_door_encoder).state, 0.0f, (float)${garage_door_full_open_counts});
+        return val / (float)${garage_door_full_open_counts};
+    optimistic: false
+    assumed_state: false

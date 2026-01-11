@@ -1,0 +1,15 @@
+# Home Assistant Automations for Garage Car Positioning
+
+- alias: "Garage Car Parked Notification"
+  description: "Send a notification when the car is correctly parked in the garage."
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.car_correctly_parked
+      to: "on"
+  action:
+    - service: persistent_notification.create
+      data:
+        title: "Garage Parking"
+        message: "✅ Car is perfectly parked in the garage!"
+        notification_id: garage_car_parked_notification
+  mode: single

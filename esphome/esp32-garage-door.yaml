@@ -1,6 +1,12 @@
 substitutions:
-  device_name: shelly-garage-door
+  device_name: esp32-garage-door
   friendly_name: "Garage Door Controller"
+
+  # GPIO Assignments for ESP32-C6 DevKit
+  garage_door_relay_pin: GPIO12
+  garage_door_closed_switch_pin: GPIO4
+  garage_door_encoder_a_pin: GPIO5
+  garage_door_encoder_b_pin: GPIO6
 
   # NOTE: Calibrate this value by opening the door fully and noting the encoder count
   garage_door_full_open_counts: "10000"
@@ -12,36 +18,36 @@ esphome:
     board_build.flash_mode: dio
 
 esp32:
-  board: shelly_plus1
+  board: esp32-c6-devkitc-1
+  variant: esp32c6
   framework:
     type: esp-idf
 
-# Enable the captive portal for easy WiFi setup
-captive_portal:
-
 # Standard ESPHome integrations
+captive_portal:
 api:
 ota:
 logger:
 web_server:
 
 switch:
-  # This is the internal relay on the Shelly Plus 1
+  # Relay connected to the ESP32-C6
   - platform: gpio
     name: "Garage Door Relay"
-    pin: GPIO4
+    pin: ${garage_door_relay_pin}
     id: garage_door_relay
     on_turn_on:
       - delay: 200ms
       - switch.turn_off: garage_door_relay
 
 binary_sensor:
-  # This is the dedicated "SW" input on the Shelly Plus 1
+  # Closed-limit switch connected to the ESP32-C6
   - platform: gpio
     name: "Garage Door Closed Switch"
     id: garage_door_closed_switch
     pin:
-      number: GPIO13
+      number: ${garage_door_closed_switch_pin}
+      mode: INPUT_PULLUP
       inverted: true
     device_class: door
     on_press:
@@ -51,12 +57,12 @@ binary_sensor:
           value: 0
 
 sensor:
-  # Rotary encoder connected to the Shelly's expansion header
+  # Rotary encoder connected to the ESP32-C6
   - platform: rotary_encoder
     name: "Garage Door Position Encoder"
     id: garage_door_encoder
-    pin_a: GPIO25 # Use expansion header pins
-    pin_b: GPIO26 # Use expansion header pins
+    pin_a: ${garage_door_encoder_a_pin}
+    pin_b: ${garage_door_encoder_b_pin}
 
 cover:
   - platform: template

@@ -8,15 +8,6 @@ substitutions:
   target_x_tolerance: "300"
   num_leds: "30" # Number of LEDs in your WS2812B strip
 
-  # Garage Door Controller Settings
-  # NOTE: Update these GPIO pins to match your wiring
-  garage_door_relay_pin: GPIO12
-  garage_door_closed_switch_pin: GPIO4
-  garage_door_encoder_a_pin: GPIO5
-  garage_door_encoder_b_pin: GPIO6
-  # NOTE: Calibrate this value by opening the door fully and noting the encoder count
-  garage_door_full_open_counts: "10000"
-
 esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
@@ -137,37 +128,7 @@ sensor:
       return NAN;
     update_interval: 500ms
 
-  - platform: rotary_encoder
-    name: "Garage Door Position Encoder"
-    id: garage_door_encoder
-    pin_a: ${garage_door_encoder_a_pin}
-    pin_b: ${garage_door_encoder_b_pin}
-
-switch:
-  - platform: gpio
-    name: "Garage Door Relay"
-    pin: ${garage_door_relay_pin}
-    id: garage_door_relay
-    on_turn_on:
-      - delay: 200ms
-      - switch.turn_off: garage_door_relay
-
 binary_sensor:
-  - platform: gpio
-    name: "Garage Door Closed Switch"
-    id: garage_door_closed_switch
-    pin:
-      number: ${garage_door_closed_switch_pin}
-      mode: INPUT_PULLUP
-      inverted: true
-    device_class: door
-    filters:
-      - delayed_on: 10ms
-    on_press:
-      # When door is fully closed, reset encoder count to 0 for calibration
-      - sensor.rotary_encoder.set_value:
-          id: garage_door_encoder
-          value: 0
   - platform: template
     name: "Car Detected"
     id: car_detected
@@ -260,23 +221,3 @@ button:
   - platform: restart
     name: "Restart"
 
-cover:
-  - platform: template
-    name: "Garage Door"
-    id: garage_door
-    device_class: garage
-    open_action:
-      - switch.turn_on: garage_door_relay
-    close_action:
-      - switch.turn_on: garage_door_relay
-    stop_action:
-      - switch.turn_on: garage_door_relay
-    position:
-      lambda: |-
-        if (id(garage_door_closed_switch).state) {
-          return 0.0;
-        }
-        float val = clamp((float)id(garage_door_encoder).state, 0.0f, (float)${garage_door_full_open_counts});
-        return val / (float)${garage_door_full_open_counts};
-    optimistic: false
-    assumed_state: false

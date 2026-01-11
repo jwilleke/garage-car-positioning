@@ -1,0 +1,80 @@
+substitutions:
+  device_name: shelly-garage-door
+  friendly_name: "Garage Door Controller"
+
+  # NOTE: Calibrate this value by opening the door fully and noting the encoder count
+  garage_door_full_open_counts: "10000"
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  platformio_options:
+    board_build.flash_mode: dio
+
+esp32:
+  board: shelly_plus1
+  framework:
+    type: esp-idf
+
+# Enable the captive portal for easy WiFi setup
+captive_portal:
+
+# Standard ESPHome integrations
+api:
+ota:
+logger:
+web_server:
+
+switch:
+  # This is the internal relay on the Shelly Plus 1
+  - platform: gpio
+    name: "Garage Door Relay"
+    pin: GPIO4
+    id: garage_door_relay
+    on_turn_on:
+      - delay: 200ms
+      - switch.turn_off: garage_door_relay
+
+binary_sensor:
+  # This is the dedicated "SW" input on the Shelly Plus 1
+  - platform: gpio
+    name: "Garage Door Closed Switch"
+    id: garage_door_closed_switch
+    pin:
+      number: GPIO13
+      inverted: true
+    device_class: door
+    on_press:
+      # When door is fully closed, reset encoder count to 0 for calibration
+      - sensor.rotary_encoder.set_value:
+          id: garage_door_encoder
+          value: 0
+
+sensor:
+  # Rotary encoder connected to the Shelly's expansion header
+  - platform: rotary_encoder
+    name: "Garage Door Position Encoder"
+    id: garage_door_encoder
+    pin_a: GPIO25 # Use expansion header pins
+    pin_b: GPIO26 # Use expansion header pins
+
+cover:
+  - platform: template
+    name: "Garage Door"
+    id: garage_door
+    device_class: garage
+    open_action:
+      - switch.turn_on: garage_door_relay
+    close_action:
+      - switch.turn_on: garage_door_relay
+    stop_action:
+      - switch.turn_on: garage_door_relay
+    position:
+      lambda: |-
+        if (id(garage_door_closed_switch).state) {
+          return 0.0;
+        }
+        float val = clamp((float)id(garage_door_encoder).state, 0.0f, (float)${garage_door_full_open_counts});
+        return val / (float)${garage_door_full_open_counts};
+    optimistic: false
+    assumed_state: false

@@ -32,7 +32,7 @@ Choosing the correct power supply is crucial for stable operation, especially wi
 - Amperage (Current Rating): This is the most critical factor.
   - Option 1 (Standalone Car Positioning System): A good quality 5V 2A (2000mA) power supply is recommended.
   - Option 2 (Standalone Garage Door Controller): A good quality 5V 1A (1000mA) power supply is sufficient.
-  - Option 3 (Combined All-in-One System): A good quality 5V 3A (3000mA) power supply is the minimum recommended. A 5V 4A or 5A supply provides even more stability. Lower amperage power supplies (e.g., 1A or 2A) can lead to system instability, crashes, or reboots (brownouts) due to peak power demands.
+  - Option 3 (Combined All-in-One System): A good quality 5V 3A (3000mA) power supply is the minimum recommended. A 5V 4A or 5A supply provides even more stability. Lower amperage power supplies (e.g., 1A or 2A) can lead to system instability, crashes or reboots (brownouts) due to peak power demands.
 
 Important Wiring Note for High-Current Components:
 For components like the WS2812B LED strip, which can draw significant current, it is highly recommended to power them directly from your 5V power supply's terminals. Do not draw high current through the ESP32's 5V pin, as this can potentially damage the board. Ensure all components share a common ground (`GND`).
@@ -60,13 +60,17 @@ This project uses ESPHome to program the microcontroller(s).
   - ESPHome will find your new YAML file(s). Click "ADOPT" for each one.
   - Click "INSTALL" on your newly adopted device. The first time, you must select "Plug into this computer" and follow the browser-based flashing process. Subsequent updates can be done wirelessly ("Over the Air").
 
-## Step 6: Calibration
+---
+
+### Step 6: Calibration
 
 Once your device is online, you must calibrate it for it to function correctly. This is a critical step.
 
 ➡️ See the [Calibration Guide](calibration.md) for detailed instructions.
 
-## Step 7: Home Assistant Integration
+---
+
+### Step 7: Home Assistant Integration
 
 - Add Device: After flashing, your device should be automatically discovered by the ESPHome integration in Home Assistant. Navigate to Settings -> Devices & Services and you should see a "Discovered" card. Click "CONFIGURE" to add it.
 - Add Dashboard: You can use the provided Lovelace dashboard to get a pre-made view for this system.

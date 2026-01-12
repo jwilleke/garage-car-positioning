@@ -35,34 +35,34 @@ Accurate physical placement of the magnets and Hall Effect sensors is crucial fo
 
 Your setup uses two Hall Effect sensors (`pin_a` and `pin_b`) to create a "quadrature encoder." This means:
 
-### 1. Direction Detection
+### Direction Detection
 
 By observing which sensor triggers first as the magnets pass, the ESP32 can determine if the door is opening or closing.
 
-### 2. Increased Resolution
+### Increased Resolution
 
 The system can often detect four "edges" (two rising, two falling) per magnet pair passing the sensors, effectively multiplying your magnet count for finer tracking.
 
-**Steps for Magnet and Sensor Placement:**
+### Steps for Magnet and Sensor Placement
 
-### 1. Determine Resolution (Number of Magnets)
+#### Step 1 Determine Resolution (Number of Magnets)
 
 * Decide how many magnets you want to use. More magnets mean more "counts" per rotation of the torsion bar, leading to a more precise measurement of the door's position.
 * A common starting point is 4, 8, or 16 small, strong neodymium magnets.
 * Consider the circumference of the drum/sprocket you're attaching them to. Don't put too many magnets if they are too large to be distinct.
 
-### 2. Prepare the Mounting Surface (Torsion Bar Drum/Sprocket)
+#### Step 2 Prepare the Mounting Surface (Torsion Bar Drum/Sprocket)
 
 * You'll attach the magnets to a rotating part connected to the torsion bar. This could be an existing sprocket, a custom 3D-printed wheel, or directly on the drum.
 * Ensure the surface is clean and provides good adhesion for the magnets.
 
-### 3. Evenly Space and Mount the Magnets
+#### Step 3 Evenly Space and Mount the Magnets
 
 * This is **critical** for accurate readings. Divide the circumference of your chosen mounting surface by the number of magnets to get the precise spacing between the center of each magnet.
 * Use a ruler or compass to mark these positions accurately around the entire circle.
 * Attach the magnets firmly (e.g., with strong adhesive like epoxy or super glue, or press-fitting if using a 3D-printed part). Ensure they all have the same polarity facing outwards (e.g., all North poles pointing towards where the sensors will be).
 
-### 4. Mount the Hall Effect Sensors
+#### Step 4 Mount the Hall Effect Sensors
 
 * You need a rigid mounting bracket to hold the two Hall Effect sensors (`pin_a` and `pin_b`) in a fixed position. This bracket should be very close to the path of the rotating magnets, but not touching them.
 * **Achieving Quadrature:** The two Hall sensors need to be offset from each other so that their signals are approximately **90 degrees out of phase** as the magnets pass.
@@ -70,7 +70,7 @@ The system can often detect four "edges" (two rising, two falling) per magnet pa
   * The ideal angular offset between your two Hall sensors is roughly `(360/N) / 4` degrees.
   * **Practical Approach:** Mount the first sensor so it reliably detects the magnets. Then, mount the second sensor next to it, with a slight physical offset. You'll likely need to experiment by rotating the torsion bar slowly and observing the sensor outputs (e.g., via ESPHome logs or a multimeter) until you achieve the desired phase shift. The goal is that when one sensor is just about to trigger or just triggered, the other is at its midpoint.
 
-### 5. Test and Verify
+#### Step 5 Test and Verify
 
 * Once everything is physically mounted, flash your ESP32-C6 with the `esp32-garage-door.yaml` firmware.
 * Carefully open and close the garage door manually.

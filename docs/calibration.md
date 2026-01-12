@@ -35,13 +35,8 @@ Accurate physical placement of the magnets and Hall Effect sensors is crucial fo
 
 Your setup uses two Hall Effect sensors (`pin_a` and `pin_b`) to create a "quadrature encoder." This means:
 
-### Direction Detection
-
-By observing which sensor triggers first as the magnets pass, the ESP32 can determine if the door is opening or closing.
-
-### Increased Resolution
-
-The system can often detect four "edges" (two rising, two falling) per magnet pair passing the sensors, effectively multiplying your magnet count for finer tracking.
+* Direction Detection - By observing which sensor triggers first as the magnets pass, the ESP32 can determine if the door is opening or closing.
+* Increased Resolution - The system can often detect four "edges" (two rising, two falling) per magnet pair passing the sensors, effectively multiplying your magnet count for finer tracking.
 
 ### Steps for Magnet and Sensor Placement
 

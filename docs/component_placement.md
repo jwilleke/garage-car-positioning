@@ -63,7 +63,7 @@ This setup focuses on controlling and monitoring the garage door's status.
 
 ```
 
-**Placement Details:**
+## Placement Details
 
 * Relay Module: Wired in parallel with your existing garage door wall button. It can be housed in a small enclosure near the garage door opener unit.
 * Closed Reed Switch: Attached to the garage door track, with the magnet on the door itself. It should be positioned so the switch is triggered only when the door is fully closed.

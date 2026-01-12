@@ -61,14 +61,56 @@ This diagram shows the wiring for a single ESP32-C6 controlling all car position
 | **GPIO5** | Hall Effect Sensor A | OUT / Signal | Rotary Encoder Channel A |
 | **GPIO6** | Hall Effect Sensor B | OUT / Signal | Rotary Encoder Channel B |
 
-### Rotary Encoder Wires
+
+### Components Located Near Garage Door Opwnwer
+
+#### Relay Module
+
+Located near Garage Door opener. Wired to terminals on Garge door opener for NO & COM.
+
+#### Relay Pins
+
+- +Coil to ESP32-C6 Pin GPIO12
+- GRN
+- NO & COM
+
+#### Rear LD2450 Sensor - Ceiling Mounted
+
+- 5V Power supply input 5V
+- GND Power Ground
+- Tx Serial port Tx pins
+- Rx Serial port Rx pins
+
+### Components Located Near Garage Door Opening
+
+Seven (seven conductors)
 
 - 5V (brown wire)                                                                                                                                                                                                                                                                                                                                                      │
 - GRN (blue wire)
-- Signal (black wire)
+- Reed switch contaact
+- Rotary Encoder Channel A
+- Rotary Encoder Channel B
+- Tx Serial port Tx pins
+- Rx Serial port Rx pins
 
-### Relay Module
+#### Garage Door Opening - Reed switch
 
-- +Coil to GPIO12
+- NO
 - GRN
-- NO & COM
+
+### Rotary Encoder Wires
+
+We need 4 wires to the Rotary Encoder(s)
+
+- 5V (brown wire)                                                                                                                                                                                                                                                                                                                                                      │
+- GRN (blue wire)
+- Rotary Encoder Channel A (black wire)
+- Rotary Encoder Channel B (black wire)
+
+### Front LD2450 Sensor - Wall Mounted
+
+- 5V Power supply input 5V
+- GND Power Ground
+- Tx Serial port Tx pins
+- Rx Serial port Rx pins
+

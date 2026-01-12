@@ -36,6 +36,7 @@ All documentation is organized to guide you through the process, from component 
 - [Installation Guide](./docs/Installation.md) - The main, step-by-step guide.
 - [Bill of Materials (BOM)](./hardware/BOM.md) - Component lists for all three build options.
 - [Wiring Diagrams](./hardware/wiring-diagram.md) - Detailed wiring instructions for all three build options.
+- [Component Placement](./docs/component_placement.md) - Diagrams illustrating where to install the hardware in your garage.
 - [Calibration Guide](./docs/calibration.md) - Instructions for calibrating the sensors and door position.
 - [LED Strip Operation](./docs/light-strip-operation.md) - An explanation of the visual parking aid.
 

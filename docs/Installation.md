@@ -47,30 +47,20 @@ This project uses ESPHome to program the microcontroller(s).
   - For Option 2: `esp32-garage-door.yaml`
   - For Option 3: You will need to manually merge the contents of both files into a single YAML configuration. The `Combined All-in-One System` wiring diagram shows the required pin assignments.
 - Create Secrets: Create a file named `secrets.yaml` in your ESPHome directory (if you don't have one) to store your WiFi credentials and other private information. Your `secrets.yaml` should look something like this:
-
-    ```yaml
-    wifi_ssid: "Your WiFi Name"
-    wifi_password: "Your WiFi Password"
-    api_encryption_key: "GenerateARandom32ByteBase64KeyHere"
-    ota_password: "YourSecurePasswordForUpdates"
-    ```
+  - Sample is at [esphome/secrets-example.yaml](../esphome/secrets-example.yaml)
 
 - Adopt and Flash: Open the ESPHome dashboard in Home Assistant.
   - Click "+ NEW DEVICE" and select "Continue".
   - ESPHome will find your new YAML file(s). Click "ADOPT" for each one.
   - Click "INSTALL" on your newly adopted device. The first time, you must select "Plug into this computer" and follow the browser-based flashing process. Subsequent updates can be done wirelessly ("Over the Air").
 
----
-
-### Step 6: Calibration
+## Step 6: Calibration
 
 Once your device is online, you must calibrate it for it to function correctly. This is a critical step.
 
 ➡️ See the [Calibration Guide](calibration.md) for detailed instructions.
 
----
-
-### Step 7: Home Assistant Integration
+## Step 7: Home Assistant Integration
 
 - Add Device: After flashing, your device should be automatically discovered by the ESPHome integration in Home Assistant. Navigate to Settings -> Devices & Services and you should see a "Discovered" card. Click "CONFIGURE" to add it.
 - Add Dashboard: You can use the provided Lovelace dashboard to get a pre-made view for this system.

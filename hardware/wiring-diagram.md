@@ -24,8 +24,6 @@ This diagram shows the wiring for a dedicated car positioning system using an ES
 | **GND** | WS2812B LED Strip | GND | Share a common ground with the ESP32. |
 | **GPIO0** | WS2812B LED Strip | Data In (DIN) | |
 
----
-
 ## Option 2: Standalone Garage Door Controller
 
 This diagram shows the wiring for a dedicated garage door controller using an ESP32-C6.
@@ -38,10 +36,8 @@ This diagram shows the wiring for a dedicated garage door controller using an ES
 | **GPIO12** | Relay Module | IN / Signal | |
 | - | Relay Module | NO & COM | Wire in parallel to garage opener's wall button. |
 | **GPIO4** | Closed Reed Switch | Signal | Use internal pull-up. Connect other leg to GND. |
-| **GPIO5** | Hall Effect Sensor A | OUT / Signal | Rotary Encoder Channel A |
-| **GPIO6** | Hall Effect Sensor B | OUT / Signal | Rotary Encoder Channel B |
-
----
+| **GPIO5** | Hall Effect Sensor A | OUT / Signal (black wire) | Rotary Encoder Channel A |
+| **GPIO6** | Hall Effect Sensor B | OUT / Signal (black wire) | Rotary Encoder Channel B |
 
 ## Option 3: Combined All-in-One System
 
@@ -57,10 +53,22 @@ This diagram shows the wiring for a single ESP32-C6 controlling all car position
 | **GPIO17** | Front LD2450 | RX | |
 | **GPIO18** | Rear LD2450 | TX | |
 | **GPIO19** | Rear LD2450 | RX | |
-| **GPIO0** | WS2812B LED Strip | Data In (DIN) | |
+| **GPIO0** | WS2812B LED Strip | Data In (DIN) | **Important:** For long strips, use a separate 5V power supply. |
 | --- | **Garage Door Control** | --- | --- |
 | **GPIO12** | Relay Module | IN / Signal | |
 | - | Relay Module | NO & COM | Wire in parallel to garage opener's wall button. |
 | **GPIO4** | Closed Reed Switch | Signal | Use internal pull-up. Connect other leg to GND. |
 | **GPIO5** | Hall Effect Sensor A | OUT / Signal | Rotary Encoder Channel A |
 | **GPIO6** | Hall Effect Sensor B | OUT / Signal | Rotary Encoder Channel B |
+
+### Rotary Encoder Wires
+
+- 5V (brown wire)                                                                                                                                                                                                                                                                                                                                                      │
+- GRN (blue wire)
+- Signal (black wire)
+
+### Relay Module
+
+- +Coil to GPIO12
+- GRN
+- NO & COM

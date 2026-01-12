@@ -2,7 +2,7 @@
 
 This document explains how the WS2812B LED strip provides visual feedback to help guide you while parking. The behavior is designed to be intuitive, changing colors based on your car's position relative to the designated "perfect" parking spot.
 
-### Parking Sequence and Colors
+## Parking Sequence and Colors
 
 - No Car Detected:
   - When the garage is empty, the LED strip will be off.
@@ -27,9 +27,8 @@ This document explains how the WS2812B LED strip provides visual feedback to hel
   - If you continue to go too far past the target, the strip will turn Orange/Red.
   - This indicates you are now much too far and need to reverse to correct your position.
 
-### Summary
+## Summary
 
 In short, the goal is to simply **follow the colors until the light turns solid green**.
 
----
 *This behavior is controlled by the `lambda` code within the `light:` component of the `esphome/garage-car-sensor.yaml` file. The colors and distance thresholds can be fine-tuned there if you wish.*

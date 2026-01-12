@@ -23,7 +23,7 @@ A robust, dedicated system for controlling the garage door.
 | ---- | ---- | ---- | ---- |
 | ESP32-C6 DevKit | 1 | Core microcontroller (Wifi 6, BLE) | [ESP32-C6-DevKitC-1-N8 Development Board](https://www.amazon.com/dp/B0BRMSDR4R?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1) |
 | Magnetic Reed Switch | 1 | For the "Closed" state sensor | Already Had |
-| Hall Effect Proximity Sensors (e.g., NJK-5002C) | 2 | For building the custom magnetic rotary encoder. | [NJK-5002C](https://www.amazon.com/dp/B01MZYYCLH?ref=ppx_yo2ov_dt_b_fed_asin_title)
+| Hall Effect Proximity Sensors (e.g., NJK-5002C) | 2 | For building the custom magnetic rotary encoder. | [NJK-5002C](https://www.amazon.com/dp/B01MZYYCLH?ref=ppx_yo2ov_dt_b_fed_asin_title) |
 | Neodymium Magnets | Assorted | Small magnets for the rotary encoder's sprocket/shaft. | Already had |
 | 5V Power Supply | 1 | 1A minimum | Already had |
 | Jumper Wires | Assorted | For connecting modules | Already had |
@@ -62,3 +62,17 @@ A single, advanced system that performs **both** car positioning and garage door
 | ---- | ---- | ---- | ---- |
 | Jumper Wires | Assorted | For connecting all modules to the ESP32 | Already had |
 | Project Box / Enclosure | 1 | Optional, larger size may be needed | TBD |
+
+## ESP32-C6 DevKit full docunmnetation
+
+[ESP32-C6 DevKit full docunmnetation](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/index.html)
+
+## LD2450
+
+- LD2450 Ra·dar Module: A Trajectory Module, which can achieve real-time tracking of the position of the moving target in the detection area, and output the distance, angle and speed information of the moving target in the area through the serial port.
+- Using Scenes: It is mainly used in common indoor scenes, such as home, office and hotel, to realize the positioning and tracking of moving people.
+- Detection Angle : Azimuth ± 60° / Tilt ± 35°. Angle Accuracy : 2° ~ 20°.
+- Detection Distance : Max Sensing Distance 8m. Distance Defense Rate : 0.75m. Distance Measurement Accuracy : 0.15m.
+- Data Format : Serial ASCIl output. Modulation Mode: FMCW. Sweep Bandwidth: 250MHz (CE/FCC compliant). Frequency: 24G-24.25GHz.
+- The Serial Port baud rate is 256000. 1 stop bit, no parity bit. Package: Default 1.5mmx4Pin Female.
+- Warm Tips: The serial port tool and the host tool can not be used at the same time.

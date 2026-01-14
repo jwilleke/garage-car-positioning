@@ -1,0 +1,13 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Users/jim/.platformio/packages/tool-cmake/share/cmake-3.30/Modules/CMakeDetermineSystem.cmake:200 (message)"
+      - "/Users/jim/.platformio/packages/framework-espidf/tools/cmake/project.cmake:589 (__project)"
+      - "CMakeLists.txt:3 (project)"
+    message: |
+      The target system is: Generic -  - 
+      The host system is: Darwin - 25.2.0 - arm64
+...

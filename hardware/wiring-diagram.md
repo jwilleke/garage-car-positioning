@@ -61,7 +61,6 @@ This diagram shows the wiring for a single ESP32-C6 controlling all car position
 | **GPIO5** | Hall Effect Sensor A | OUT / Signal | Rotary Encoder Channel A |
 | **GPIO6** | Hall Effect Sensor B | OUT / Signal | Rotary Encoder Channel B |
 
-
 ### Components Located Near Garage Door Opwnwer
 
 #### Relay Module
@@ -113,4 +112,3 @@ We need 4 wires to the Rotary Encoder(s)
 - GND Power Ground
 - Tx Serial port Tx pins
 - Rx Serial port Rx pins
-

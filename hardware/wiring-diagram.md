@@ -49,10 +49,10 @@ This diagram shows the wiring for a single ESP32-C6 controlling all car position
 | 3.3V | Power Distribution | - | Provide 3.3V to all 3.3V components. |
 | GND | Power Distribution | - | Common ground for all components. |
 | --- | **Car Positioning** | --- | --- |
-| GPIO16 | Front LD2450 | TX | |
-| GPIO17 | Front LD2450 | RX | |
-| GPIO18 | Rear LD2450 | TX | |
-| GPIO19 | Rear LD2450 | RX | |
+| GPIO16 | Front LD2450 | TX | ESP32 RX <- Sensor TX |
+| GPIO17 | Front LD2450 | RX | ESP32 TX -> Sensor RX |
+| GPIO18 | Rear LD2450 | TX | ESP32 RX <- Sensor TX |
+| GPIO19 | Rear LD2450 | RX | ESP32 TX -> Sensor RX |
 | GPIO0 | WS2812B LED Strip | Data In (DIN) | **Important:** For long strips, use a separate 5V power supply. |
 | --- | **Garage Door Control** | --- | --- |
 | GPIO10 | Relay Module | IN / Signal | |

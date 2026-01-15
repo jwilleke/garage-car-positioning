@@ -1,6 +1,7 @@
 # Secrets
 secrets.yaml
 .secrets/
+private/
 
 # ESPHome
 .esphome/

@@ -1,0 +1,267 @@
+substitutions:
+  device_name: esp32-garage-all-in-one
+  friendly_name: "Garage All-in-One"
+
+  # Car Positioning Settings
+  target_y_min: "1800"
+  target_y_max: "2200"
+  target_x_tolerance: "300"
+  num_leds: "30" # Number of LEDs in your WS2812B strip
+
+  # Garage Door Settings
+  garage_door_full_open_counts: "10000"
+
+  # GPIO Assignments for ESP32-C6 DevKit (All-in-One)
+  led_strip_pin: GPIO0
+  garage_door_closed_switch_pin: GPIO4
+  garage_door_encoder_a_pin: GPIO5
+  garage_door_encoder_b_pin: GPIO6
+  garage_door_relay_pin: GPIO12
+  ld2450_front_rx_pin: GPIO16
+  ld2450_front_tx_pin: GPIO17
+  ld2450_rear_rx_pin: GPIO18
+  ld2450_rear_tx_pin: GPIO19
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  platformio_options:
+    board_build.flash_mode: dio
+
+esp32:
+  board: esp32-c6-devkitc-1
+  variant: esp32c6
+  framework:
+    type: esp-idf
+    version: recommended
+
+# Standard ESPHome integrations
+logger:
+  level: DEBUG
+api:
+  encryption:
+    key: !secret api_encryption_key
+ota:
+  - platform: esphome
+    password: !secret ota_password
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "${device_name}-AP"
+    password: !secret ap_password
+captive_portal:
+web_server:
+
+# Car Positioning Components
+uart:
+  - id: uart_ld2450_front
+    rx_pin: ${ld2450_front_rx_pin}
+    tx_pin: ${ld2450_front_tx_pin}
+    baud_rate: 256000
+  - id: uart_ld2450_rear
+    rx_pin: ${ld2450_rear_rx_pin}
+    tx_pin: ${ld2450_rear_tx_pin}
+    baud_rate: 256000
+
+ld2450:
+  - id: ld2450_front
+    uart_id: uart_ld2450_front
+  - id: ld2450_rear
+    uart_id: uart_ld2450_rear
+
+sensor:
+  # LD2450 Sensors
+  - platform: ld2450
+    ld2450_id: ld2450_front
+    target_count:
+      name: "Front Sensor Target Count"
+    target_1:
+      x:
+        name: "Front Target X"
+        id: front_x
+      y:
+        name: "Front Target Y"
+        id: front_y
+      distance:
+        name: "Front Target Distance"
+        id: front_distance
+  - platform: ld2450
+    ld2450_id: ld2450_rear
+    target_count:
+      name: "Rear Sensor Target Count"
+    target_1:
+      x:
+        name: "Rear Target X"
+        id: rear_x
+      y:
+        name: "Rear Target Y"
+        id: rear_y
+      distance:
+        name: "Rear Target Distance"
+        id: rear_distance
+
+  # Car Position Template Sensors
+  - platform: template
+    name: "Car Center X Position"
+    id: car_center_x
+    unit_of_measurement: "mm"
+    lambda: |-
+      bool front_valid = !isnan(id(front_x).state) && id(front_x).state != 0;
+      bool rear_valid = !isnan(id(rear_x).state) && id(rear_x).state != 0;
+      if (front_valid && rear_valid) {
+        return (id(front_x).state + id(rear_x).state) / 2.0;
+      } else if (front_valid) {
+        return id(front_x).state;
+      } else if (rear_valid) {
+        return id(rear_x).state;
+      }
+      return NAN;
+    update_interval: 500ms
+  - platform: template
+    name: "Car Center Y Position"
+    id: car_center_y
+    unit_of_measurement: "mm"
+    lambda: |-
+      bool front_valid = !isnan(id(front_y).state) && id(front_y).state != 0;
+      bool rear_valid = !isnan(id(rear_y).state) && id(rear_y).state != 0;
+      if (front_valid && rear_valid) {
+        return (id(front_y).state + id(rear_y).state) / 2.0;
+      } else if (front_valid) {
+        return id(front_y).state;
+      } else if (rear_valid) {
+        return id(rear_y).state;
+      }
+      return NAN;
+    update_interval: 500ms
+
+  # Garage Door Encoder Sensor
+  - platform: rotary_encoder
+    name: "Garage Door Position Encoder"
+    id: garage_door_encoder
+    pin_a: ${garage_door_encoder_a_pin}
+    pin_b: ${garage_door_encoder_b_pin}
+
+binary_sensor:
+  # Car Detection Binary Sensors
+  - platform: template
+    name: "Car Detected"
+    id: car_detected
+    device_class: occupancy
+    lambda: |-
+      return (id(front_distance).state > 100) || (id(rear_distance).state > 100);
+    filters:
+      - delayed_on: 1s
+      - delayed_off: 5s
+  - platform: template
+    name: "Car Correctly Parked"
+    id: car_correctly_parked
+    device_class: occupancy
+    lambda: |-
+      float y = id(car_center_y).state;
+      float x = abs(id(car_center_x).state);
+      bool y_ok = (y >= ${target_y_min}) && (y <= ${target_y_max});
+      bool x_ok = x <= ${target_x_tolerance};
+      return id(car_detected).state && y_ok && x_ok;
+
+  # Garage Door Binary Sensor
+  - platform: gpio
+    name: "Garage Door Closed Switch"
+    id: garage_door_closed_switch
+    pin:
+      number: ${garage_door_closed_switch_pin}
+      mode: INPUT_PULLUP
+      inverted: true
+    device_class: door
+    on_press:
+      - sensor.rotary_encoder.set_value:
+          id: garage_door_encoder
+          value: 0
+
+text_sensor:
+  - platform: template
+    name: "Parking Guidance"
+    lambda: |-
+      if (!id(car_detected).state) {
+        return {"No car detected"};
+      }
+      if (id(car_correctly_parked).state) {
+        return {"✅ Perfect!"};
+      }
+      float y = id(car_center_y).state;
+      float target = (${target_y_min} + ${target_y_max}) / 2.0;
+      if (y < target - 100) return {"⬆️ Move FORWARD"};
+      if (y > target + 100) return {"⬇️ Move BACK"};
+      return {"🔄 Minor adjustment"};
+    update_interval: 500ms
+
+light:
+  - platform: esp32_rmt_led_strip
+    name: "Garage Parking LED Strip"
+    chipset: WS2812
+    pin: ${led_strip_pin}
+    num_leds: ${num_leds}
+    rgb_order: GRB
+    id: garage_parking_led
+    default_transition_length: 1s
+    effects:
+      - addressable_lambda:
+          name: Parking Guidance Effect
+          update_interval: 200ms
+          lambda: |-
+            if (!id(car_detected).state) {
+              it.all().set(Color(0, 0, 0)); // Off
+            } else if (id(car_correctly_parked).state) {
+              it.all().set(Color(0, 255, 0)); // Green
+            } else {
+              float y = id(car_center_y).state;
+              float target_y_min_f = std::stof("${target_y_min}");
+              float target_y_max_f = std::stof("${target_y_max}");
+              float target_y_mid = (target_y_min_f + target_y_max_f) / 2.0;
+              float perfect_zone_half_width = (target_y_max_f - target_y_min_f) / 2.0;
+              float approach_zone_half_width = perfect_zone_half_width + 300.0;
+              if (y < target_y_mid - approach_zone_half_width) {
+                it.all().set(Color(0, 0, 255)); // Blue (Move FORWARD)
+              } else if (y > target_y_mid + approach_zone_half_width) {
+                it.all().set(Color(255, 69, 0)); // OrangeRed (Move BACK)
+              } else if (y < target_y_mid - perfect_zone_half_width) {
+                it.all().set(Color(0, 255, 255)); // Cyan (Minor FORWARD)
+              } else if (y > target_y_mid + perfect_zone_half_width) {
+                it.all().set(Color(255, 255, 0)); // Yellow (Minor BACK)
+              } else {
+                it.all().set(Color(255, 255, 255)); // White (Indicates detection, unclear guidance)
+              }
+            }
+
+switch:
+  - platform: gpio
+    name: "Garage Door Relay"
+    pin: ${garage_door_relay_pin}
+    id: garage_door_relay
+    on_turn_on:
+      - delay: 200ms
+      - switch.turn_off: garage_door_relay
+
+cover:
+  - platform: template
+    name: "Garage Door"
+    id: garage_door
+    device_class: garage
+    open_action:
+      - switch.turn_on: garage_door_relay
+    close_action:
+      - switch.turn_on: garage_door_relay
+    stop_action:
+      - switch.turn_on: garage_door_relay
+    lambda: |-
+      if (id(garage_door_closed_switch).state) {
+        return 0.0;
+      }
+      float val = clamp((float)id(garage_door_encoder).state, 0.0f, (float)${garage_door_full_open_counts});
+      return val / (float)${garage_door_full_open_counts};
+    optimistic: false
+    assumed_state: false
+
+button:
+  - platform: restart
+    name: "Restart Device"

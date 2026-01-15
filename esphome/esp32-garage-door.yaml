@@ -47,6 +47,7 @@ binary_sensor:
     id: garage_door_closed_switch
     pin:
       number: ${garage_door_closed_switch_pin}
+      # Use internal pull-up resistere
       mode: INPUT_PULLUP
       inverted: true
     device_class: door

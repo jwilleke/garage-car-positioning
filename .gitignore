@@ -12,6 +12,7 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
+esphome_venv/
 
 # IDE
 .vscode/

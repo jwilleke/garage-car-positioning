@@ -27,6 +27,14 @@ wifi:
     ssid: "simple-wifi-test"
     password: "test1234"
     ap_timeout: 0s  # Always on
+  # Using DHCP - will get IP from 192.168.68.X network automatically
+  # If you need static IP, uncomment and configure manual_ip below
+  # manual_ip:
+  #   static_ip: 192.168.68.100  # Available IP in 192.168.68.X range
+  #   gateway: 192.168.68.1      # Router IP (check Unifi Console)
+  #   subnet: 255.255.255.0
+  #   dns1: 192.168.68.1
+  #   dns2: 8.8.8.8
 
 captive_portal:
 
@@ -42,3 +50,4 @@ web_server:
 button:
   - platform: restart
     name: "Restart Device"
+    # Restarting will force a new DHCP lease renewal

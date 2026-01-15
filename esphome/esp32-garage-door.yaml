@@ -3,7 +3,7 @@ substitutions:
   friendly_name: "Garage Door Controller"
 
   # GPIO Assignments for ESP32-C6 DevKit
-  garage_door_relay_pin: GPIO12
+  garage_door_relay_pin: GPIO10
   garage_door_closed_switch_pin: GPIO4
   garage_door_encoder_a_pin: GPIO5
   garage_door_encoder_b_pin: GPIO6

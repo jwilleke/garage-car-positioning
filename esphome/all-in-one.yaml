@@ -16,7 +16,7 @@ substitutions:
   garage_door_closed_switch_pin: GPIO4
   garage_door_encoder_a_pin: GPIO5
   garage_door_encoder_b_pin: GPIO6
-  garage_door_relay_pin: GPIO12
+  garage_door_relay_pin: GPIO10
   ld2450_front_rx_pin: GPIO16
   ld2450_front_tx_pin: GPIO17
   ld2450_rear_rx_pin: GPIO18
@@ -56,14 +56,13 @@ wifi:
     password: !secret ap_password
     ap_timeout: 0s  # 0 = always on (for debugging - change to 1min after working)
 
-  # Manual IP Settings (for troubleshooting DHCP)
-  # Uncomment and configure if device doesn't get IP from DHCP
-  # manual_ip:
-  #   static_ip: 192.168.20.218  # Available IP on your network
-  #   gateway: 192.168.20.1      # Your router's IP (check Unifi Console)
-  #   subnet: 255.255.255.0
-  #   dns1: 192.168.20.1         # Usually same as gateway
-  #   dns2: 8.8.8.8              # Google DNS backup
+  # Static IP for 192.168.68.X network (SWIT2)
+  # TODO: Choose an available IP in your network range (check Unifi Console)
+  manual_ip:
+    static_ip: 192.168.68.100  # <-- Change to available IP in 192.168.68.X range
+    gateway: 192.168.68.1      # <-- Verify this is your router IP in Unifi Console
+    subnet: 255.255.255.0
+    dns1: 192.168.68.1         # DNS1 will forward if needed
 captive_portal:
   # Captive portal allows WiFi configuration when device can't connect
   # Connect to "garage-aio" AP and open browser to configure WiFi

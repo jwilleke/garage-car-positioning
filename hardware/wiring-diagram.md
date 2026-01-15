@@ -33,7 +33,7 @@ This diagram shows the wiring for a dedicated garage door controller using an ES
 | 5V | Power Distribution | - | Provide 5V to all 5V components. |
 | 3.3V | Power Distribution | - | Provide 3.3V to all 3.3V components. |
 | GND | Power Distribution | - | Common ground for all components. |
-| GPIO12 | Relay Module | IN / Signal | |
+| GPIO10 | Relay Module | IN / Signal | |
 | - | Relay Module | NO & COM | Wire in parallel to garage opener's wall button. |
 | GPIO4 | Closed Reed Switch | Signal | Use internal pull-up. Connect other leg to GND. |
 | GPIO5 | Hall Effect Sensor A | OUT / Signal (black wire) | Rotary Encoder Channel A |
@@ -55,11 +55,11 @@ This diagram shows the wiring for a single ESP32-C6 controlling all car position
 | GPIO19 | Rear LD2450 | RX | |
 | GPIO0 | WS2812B LED Strip | Data In (DIN) | **Important:** For long strips, use a separate 5V power supply. |
 | --- | **Garage Door Control** | --- | --- |
-| GPIO12 | Relay Module | IN / Signal | |
+| GPIO10 | Relay Module | IN / Signal | |
 | - | Relay Module | NO & COM | Wire in parallel to garage opener's wall button. |
 | GPIO4 | Closed Reed Switch | Signal | Use internal pull-up. Connect other leg to GND. |
-| GPIO5 | Hall Effect Sensor A | OUT / Signal | Rotary Encoder Channel A |
-| GPIO6 | Hall Effect Sensor B | OUT / Signal | Rotary Encoder Channel B |
+| GPIO5 | Hall Effect Sensor A | OUT / Signal | Rotary Encoder Channel A (black wire) |
+| GPIO6 | Hall Effect Sensor B | OUT / Signal | Rotary Encoder Channel B (black wire) |
 
 ### Components Located Near Garage Door Opwnwer
 
@@ -69,7 +69,7 @@ Located near Garage Door opener. Wired to terminals on Garge door opener for NO 
 
 #### Relay Pins
 
-- +Coil to ESP32-C6 Pin GPIO12
+- +Coil to ESP32-C6 Pin GPIO10
 - GRN
 - NO & COM
 
@@ -108,7 +108,8 @@ We need 4 wires to the Rotary Encoder(s)
 
 ### Front LD2450 Sensor - Wall Mounted
 
-- 5V Power supply input 5V
-- GND Power Ground
-- Tx Serial port Tx pins
-- Rx Serial port Rx pins
+| LEFT | RIGHT |
+| 5V | RX |
+| 3.3V | RX |
+| PA9  | DM |
+| GND  | OK |

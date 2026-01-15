@@ -45,7 +45,8 @@ This project uses ESPHome to program the microcontroller(s).
 - Get Configuration Files: Copy the appropriate YAML file(s) from the `/esphome` directory of this project into your Home Assistant's `/esphome` directory.
   - For Option 1: `garage-car-sensor.yaml`
   - For Option 2: `esp32-garage-door.yaml`
-  - For Option 3: You will need to manually merge the contents of both files into a single YAML configuration. The `Combined All-in-One System` wiring diagram shows the required pin assignments.
+  - For Option 3: `all-in-one.yaml` (pre-configured combined system)
+- **Important**: The car positioning configurations (Option 1 and Option 3) require the LD2450 external component. ESPHome will automatically download this when you compile the firmware. If you encounter issues, see the [Build Status Guide](../BUILD_STATUS.md) for troubleshooting.
 - Create Secrets: Create a file named `secrets.yaml` in your ESPHome directory (if you don't have one) to store your WiFi credentials and other private information. Your `secrets.yaml` should look something like this:
   - Sample is at [esphome/secrets-example.yaml](../esphome/secrets-example.yaml)
 

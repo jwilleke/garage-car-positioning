@@ -24,10 +24,21 @@ esp32:
     type: esp-idf
 
 # Standard ESPHome integrations
-captive_portal:
-api:
-ota:
 logger:
+  level: DEBUG
+api:
+  encryption:
+    key: !secret api_encryption_key
+ota:
+  - platform: esphome
+    password: !secret ota_password
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "${device_name}-AP"
+    password: !secret ap_password
+captive_portal:
 web_server:
 
 switch:
@@ -47,7 +58,7 @@ binary_sensor:
     id: garage_door_closed_switch
     pin:
       number: ${garage_door_closed_switch_pin}
-      # Use internal pull-up resistere
+      # Use internal pull-up resistor
       mode: INPUT_PULLUP
       inverted: true
     device_class: door
@@ -76,12 +87,11 @@ cover:
       - switch.turn_on: garage_door_relay
     stop_action:
       - switch.turn_on: garage_door_relay
-    position:
-      lambda: |-
-        if (id(garage_door_closed_switch).state) {
-          return 0.0;
-        }
-        float val = clamp((float)id(garage_door_encoder).state, 0.0f, (float)${garage_door_full_open_counts});
-        return val / (float)${garage_door_full_open_counts};
+    lambda: |-
+      if (id(garage_door_closed_switch).state) {
+        return 0.0;
+      }
+      float val = clamp((float)id(garage_door_encoder).state, 0.0f, (float)${garage_door_full_open_counts});
+      return val / (float)${garage_door_full_open_counts};
     optimistic: false
     assumed_state: false

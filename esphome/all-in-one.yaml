@@ -50,6 +50,13 @@ wifi:
   ap:
     ssid: "${device_name}-AP"
     password: !secret ap_password
+
+  # Manual IP Settings (for troubleshooting DHCP)
+  #-==  If you have problems with DHCP set a static IP address
+  # manual_ip:
+  #  static_ip: 192.168.20.218  # <-- CHANGE THIS
+  #  gateway: 192.168.20.1      # <-- CHANGE THIS to your router's IP
+  #  subnet: 255.255.255.0
 captive_portal:
 web_server:
 
@@ -59,10 +66,14 @@ uart:
     rx_pin: ${ld2450_front_rx_pin}
     tx_pin: ${ld2450_front_tx_pin}
     baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
   - id: uart_ld2450_rear
     rx_pin: ${ld2450_rear_rx_pin}
     tx_pin: ${ld2450_rear_tx_pin}
     baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
 
 ld2450:
   - id: ld2450_front
@@ -215,8 +226,8 @@ light:
               it.all().set(Color(0, 255, 0)); // Green
             } else {
               float y = id(car_center_y).state;
-              float target_y_min_f = std::stof("${target_y_min}");
-              float target_y_max_f = std::stof("${target_y_max}");
+              float target_y_min_f = ${target_y_min};
+              float target_y_max_f = ${target_y_max};
               float target_y_mid = (target_y_min_f + target_y_max_f) / 2.0;
               float perfect_zone_half_width = (target_y_max_f - target_y_min_f) / 2.0;
               float approach_zone_half_width = perfect_zone_half_width + 300.0;

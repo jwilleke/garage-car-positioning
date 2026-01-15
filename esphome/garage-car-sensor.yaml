@@ -46,20 +46,21 @@ uart:
     rx_pin: GPIO16
     tx_pin: GPIO17
     baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
     
   - id: uart_ld2450_rear
     rx_pin: GPIO18
     tx_pin: GPIO19
     baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
 
 ld2450:
   - id: ld2450_front
     uart_id: uart_ld2450_front
-    throttle: 500ms
-    
   - id: ld2450_rear
     uart_id: uart_ld2450_rear
-    throttle: 500ms
 
 sensor:
   - platform: ld2450

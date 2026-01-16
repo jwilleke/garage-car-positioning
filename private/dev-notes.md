@@ -11,7 +11,12 @@ ls /dev/cu.usb* | grep -i usb
    ls /dev/cu.usb* | grep -i usb
 
 # Build and upload Code 
-esphome upload simple-wifi.yaml --device /dev/cu.usbmodem31201
+source ../esphome_venv/bin/activate && esphome run simple-wifi.yaml --device /dev/cu.usbmodem31201
+esphome run simple-wifi.yaml --device /dev/cu.usbmodem31201
+#esphome upload only uploads
+esphome upload simple-wifi.yaml
+
+
 
 # Monmitor device logs
 esphome logs simple-wifi.yaml   

@@ -6,7 +6,7 @@ esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
   # Version marker - update this when making changes
-  comment: "GPIO4 Switch + Hall Effect Sensors + WS2812B LED Strip - v1.2 - 2026-01-16"
+  comment: "GPIO4 Switch + Hall Effect Sensors + WS2812B LED Strip - v1.3 - 2026-01-16"
 
 esp32:
   board: esp32-c6-devkitc-1
@@ -19,14 +19,11 @@ logger:
   level: DEBUG
   hardware_uart: USB_SERIAL_JTAG
 
-# AP mode only for testing - fake SSID to prevent scanning
+# AP-only mode - no station connection attempts
 wifi:
-  ssid: "FAKE_NETWORK_DO_NOT_CONNECT"
-  password: "fake12345678"
   ap:
     ssid: "simple-wifi-test"
     password: "test1234"
-  reboot_timeout: 0s  # Never reboot due to no WiFi
 
 api:
   # API might be required for web server to work properly
@@ -42,11 +39,20 @@ web_server:
 
 # Add a simple sensor so web interface has something to display
 sensor:
-  - platform: wifi_signal
-    name: "WiFi Signal"
-    update_interval: 60s
   - platform: uptime
     name: "Uptime"
+
+# LED count slider - adjustable from portal
+number:
+  - platform: template
+    name: "Active LED Count"
+    id: active_led_count
+    min_value: 1
+    max_value: 144
+    step: 1
+    initial_value: 30
+    restore_value: true
+    optimistic: true
 
 # Component Test: GPIO4 - Closed Door Reed Switch
 # Wiring: Connect one leg to GPIO4, other leg to GND
@@ -134,31 +140,66 @@ light:
     rgb_order: GRB
     default_transition_length: 500ms
     effects:
-      - addressable_rainbow:
-          name: "Rainbow"
-          speed: 10
-          width: 50
-      - addressable_color_wipe:
-          name: "Color Wipe"
-          colors:
-            - red: 100%
-              green: 0%
-              blue: 0%
-              num_leds: 5
-            - red: 0%
-              green: 100%
-              blue: 0%
-              num_leds: 5
-            - red: 0%
-              green: 0%
-              blue: 100%
-              num_leds: 5
-          add_led_interval: 100ms
-          reverse: false
-      - addressable_scan:
-          name: "Scan"
-          move_interval: 50ms
-          scan_width: 3
+      - addressable_lambda:
+          name: "Solid (Active LEDs)"
+          update_interval: 100ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            for (int i = 0; i < it.size(); i++) {
+              if (i < count) {
+                it[i] = current_color;
+              } else {
+                it[i] = Color::BLACK;
+              }
+            }
+      - addressable_lambda:
+          name: "Rainbow (Active LEDs)"
+          update_interval: 16ms
+          lambda: |-
+            static int offset = 0;
+            int count = id(active_led_count).state;
+            for (int i = 0; i < it.size(); i++) {
+              if (i < count) {
+                int hue = (i * 255 / count + offset) % 256;
+                // HSV to RGB conversion (S=255, V=255)
+                int region = hue / 43;
+                int remainder = (hue - (region * 43)) * 6;
+                uint8_t p = 0;
+                uint8_t q = 255 - remainder;
+                uint8_t t = remainder;
+                uint8_t r, g, b;
+                switch (region) {
+                  case 0: r = 255; g = t; b = 0; break;
+                  case 1: r = q; g = 255; b = 0; break;
+                  case 2: r = 0; g = 255; b = t; break;
+                  case 3: r = 0; g = q; b = 255; break;
+                  case 4: r = t; g = 0; b = 255; break;
+                  default: r = 255; g = 0; b = q; break;
+                }
+                it[i] = Color(r, g, b);
+              } else {
+                it[i] = Color::BLACK;
+              }
+            }
+            offset = (offset + 2) % 256;
+      - addressable_lambda:
+          name: "Scan (Active LEDs)"
+          update_interval: 50ms
+          lambda: |-
+            static int pos = 0;
+            static bool forward = true;
+            int count = id(active_led_count).state;
+            it.all() = Color::BLACK;
+            for (int i = 0; i < 3 && (pos + i) < count; i++) {
+              it[pos + i] = current_color;
+            }
+            if (forward) {
+              pos++;
+              if (pos >= count - 2) forward = false;
+            } else {
+              pos--;
+              if (pos <= 0) forward = true;
+            }
       - pulse:
           name: "Pulse"
           min_brightness: 20%
@@ -167,9 +208,5 @@ light:
 # Status text sensor
 text_sensor:
   - platform: wifi_info
-    ip_address:
-      name: "IP Address"
-    ssid:
-      name: "SSID"
     mac_address:
       name: "MAC Address"

@@ -17,28 +17,27 @@ logger:
   level: DEBUG
   hardware_uart: USB_SERIAL_JTAG
 
+# Try WiFi connection - fallback to AP if it fails
 wifi:
+  enable_on_boot: true
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  # fast_connect: true  # Disabled - can cause "Auth Expired" errors
+  # fast_connect: true  # Disabled - can cause issues with WPA2/WPA3 mixed mode
   power_save_mode: none
-  reboot_timeout: 5min
+  reboot_timeout: 10min
+  domain: .local
+  
   ap:
     ssid: "simple-wifi-test"
     password: "test1234"
-    ap_timeout: 0s  # Always on
-  # Using DHCP - will get IP from 192.168.68.X network automatically
-  # If you need static IP, uncomment and configure manual_ip below
-  # manual_ip:
-  #   static_ip: 192.168.68.100  # Available IP in 192.168.68.X range
-  #   gateway: 192.168.68.1      # Router IP (check Unifi Console)
-  #   subnet: 255.255.255.0
-  #   dns1: 192.168.68.1
-  #   dns2: 8.8.8.8
+    ap_timeout: 1min  # Start AP after 1 minute if WiFi fails
 
 captive_portal:
+  # Connect to "simple-wifi-test" WiFi and open any browser
+  # You'll be redirected to configure WiFi credentials for SWIT2
 
 api:
+  # API might be required for web server to work properly
 
 ota:
   - platform: esphome
@@ -46,8 +45,27 @@ ota:
 
 web_server:
   port: 80
+  # version: 2  # Try default version first
+  include_internal: false
+
+# Add a simple sensor so web interface has something to display
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 60s
+  - platform: uptime
+    name: "Uptime"
 
 button:
   - platform: restart
     name: "Restart Device"
-    # Restarting will force a new DHCP lease renewal
+
+# Status text sensor
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address"
+    ssid:
+      name: "SSID"
+    mac_address:
+      name: "MAC Address"

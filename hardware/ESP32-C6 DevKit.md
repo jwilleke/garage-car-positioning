@@ -16,7 +16,7 @@ TOP
 |  ---- | ---- | ---- | ---- |
 | 3V3 | Power | 3.3V Power Supply Output | Provide 3.3V to all 3.3V components. |
 | RST | Reset | CHIP_PU (High: Enable; Low: Reset)  | NC |
-| 4 | GPIO4 | "MTMS, LP_GPIO4, ADC1_CH4, SDIO" | Closed Door Switch Signal - Use internal pull-up. Connect other leg to GND. |
+| 4 | GPIO4 | "MTMS, LP_GPIO4, ADC1_CH4, SDIO" | Closed Door Switch Signal - Use internal pull-up. Connect other leg to GND. Black-RED |
 | 5 | GPIO5 | "MTDI, LP_GPIO5, ADC1_CH5, SDIO" | Hall Effect Sensor A (black wire) |
 | 6 | GPIO6 | "MTCK , LP_GPIO6, LP_I2C_SDA, ADC1_CH6" | Hall Effect Sensor B (black wire) |
 | 7 | GPIO7 | "MTDO , LP_GPIO7, LP_I2C_SCL, FSPID" |

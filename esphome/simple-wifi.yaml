@@ -5,6 +5,8 @@ substitutions:
 esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
+  # Version marker - update this when making changes
+  comment: "GPIO4 Switch Test - v1.0 - 2026-01-15"
 
 esp32:
   board: esp32-c6-devkitc-1
@@ -48,6 +50,38 @@ web_server:
   # version: 2  # Try default version first
   include_internal: false
 
+# Component Test: GPIO4 - Closed Door Reed Switch
+# Wiring: Connect one leg to GPIO4, other leg to GND
+# Expected: Switch OPEN when door is OPEN, CLOSED when door is CLOSED
+binary_sensor:
+  - platform: gpio
+    name: "Garage Door Closed Switch"
+    id: garage_door_closed_switch
+    pin:
+      number: GPIO4
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    device_class: door
+    internal: false  # Make sure it's not hidden
+    on_press:
+      - logger.log:
+          format: "*** GPIO4: Door switch PRESSED (Door CLOSED) ***"
+          level: INFO
+    on_release:
+      - logger.log:
+          format: "*** GPIO4: Door switch RELEASED (Door OPEN) ***"
+          level: INFO
+    on_state:
+      - logger.log:
+          format: "GPIO4 State Change: %s"
+          args: ['id(garage_door_closed_switch).state ? "CLOSED" : "OPEN"']
+          level: INFO
+    filters:
+      - delayed_on: 50ms
+      - delayed_off: 50ms
+
 # Add a simple sensor so web interface has something to display
 sensor:
   - platform: wifi_signal
@@ -55,6 +89,20 @@ sensor:
     update_interval: 60s
   - platform: uptime
     name: "Uptime"
+  # GPIO4 State Sensor - Shows current pin state for debugging
+  - platform: template
+    name: "GPIO4 Pin State"
+    internal: false  # Make sure it's visible
+    lambda: |-
+      bool state = id(garage_door_closed_switch).state;
+      return state ? 1.0 : 0.0;
+    update_interval: 2s
+    unit_of_measurement: ""
+    on_value:
+      - logger.log:
+          format: "GPIO4 Pin State: %s (1=CLOSED, 0=OPEN)"
+          args: ['id(garage_door_closed_switch).state ? "CLOSED" : "OPEN"']
+          level: INFO
 
 button:
   - platform: restart
@@ -69,3 +117,26 @@ text_sensor:
       name: "SSID"
     mac_address:
       name: "MAC Address"
+  # Version marker - logs version info on first update
+  - platform: template
+    name: "Code Version"
+    id: code_version
+    lambda: |-
+      return "GPIO4 Switch Test v1.0 - 2026-01-15";
+    update_interval: 60s
+    on_value:
+      - logger.log:
+          format: "=========================================="
+          level: INFO
+      - logger.log:
+          format: "Code Version: GPIO4 Switch Test v1.0"
+          level: INFO
+      - logger.log:
+          format: "Build Date: 2026-01-15"
+          level: INFO
+      - logger.log:
+          format: "Testing: GPIO4 Closed Door Switch"
+          level: INFO
+      - logger.log:
+          format: "=========================================="
+          level: INFO

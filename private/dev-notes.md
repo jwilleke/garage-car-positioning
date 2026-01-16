@@ -1,7 +1,5 @@
 # Jim Notes
 
-
-
 Connect the device via USB
 
 ```bash
@@ -30,7 +28,6 @@ esptool.py --port /dev/cu.usbmodem31201 chip_id 2>&1 | head -100
 Not picking up IP address
 
 Proposed IP Address 192.168.20.218
-
 
 ```bash
 # Device 1

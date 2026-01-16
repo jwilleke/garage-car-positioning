@@ -28,3 +28,4 @@ Thumbs.db
 # Build artifacts
 *.bin
 *.elf
+private/dev-notes.md

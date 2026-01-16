@@ -6,7 +6,7 @@ esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
   # Version marker - update this when making changes
-  comment: "GPIO4 Switch Test - v1.0 - 2026-01-15"
+  comment: "GPIO4 Switch + Hall Effect Sensors + WS2812B LED Strip - v1.2 - 2026-01-16"
 
 esp32:
   board: esp32-c6-devkitc-1
@@ -19,31 +19,21 @@ logger:
   level: DEBUG
   hardware_uart: USB_SERIAL_JTAG
 
-# Try WiFi connection - fallback to AP if it fails
+# AP mode only for testing - fake SSID to prevent scanning
 wifi:
-  enable_on_boot: true
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  # fast_connect: true  # Disabled - can cause issues with WPA2/WPA3 mixed mode
-  power_save_mode: none
-  reboot_timeout: 10min
-  domain: .local
-  
+  ssid: "FAKE_NETWORK_DO_NOT_CONNECT"
+  password: "fake12345678"
   ap:
     ssid: "simple-wifi-test"
     password: "test1234"
-    ap_timeout: 1min  # Start AP after 1 minute if WiFi fails
-
-captive_portal:
-  # Connect to "simple-wifi-test" WiFi and open any browser
-  # You'll be redirected to configure WiFi credentials for SWIT2
+  reboot_timeout: 0s  # Never reboot due to no WiFi
 
 api:
   # API might be required for web server to work properly
 
 ota:
   - platform: esphome
-    password: !secret ota_password
+    password: "test1234"
 
 web_server:
   port: 80
@@ -82,9 +72,97 @@ binary_sensor:
       - delayed_on: 50ms
       - delayed_off: 50ms
 
+  # Component Test: GPIO5 - Hall Effect Sensor A (NJK-5002C)
+  # Wiring: Brown=5V, Blue=GND, Black=GPIO5
+  # NPN Normally Open: No magnet=HIGH, Magnet detected=LOW
+  - platform: gpio
+    name: "Hall Effect Sensor A"
+    id: hall_sensor_a
+    pin:
+      number: GPIO5
+      mode: INPUT_PULLUP
+      inverted: true  # Invert so ON=magnet detected
+    device_class: occupancy
+    on_press:
+      - logger.log:
+          format: "*** GPIO5: Hall Sensor A TRIGGERED (magnet detected) ***"
+          level: INFO
+    on_release:
+      - logger.log:
+          format: "*** GPIO5: Hall Sensor A CLEARED (no magnet) ***"
+          level: INFO
+    filters:
+      - delayed_on: 50ms
+      - delayed_off: 50ms
+
+  # Component Test: GPIO6 - Hall Effect Sensor B (NJK-5002C)
+  # Wiring: Brown=5V, Blue=GND, Black=GPIO6
+  # NPN Normally Open: No magnet=HIGH, Magnet detected=LOW
+  - platform: gpio
+    name: "Hall Effect Sensor B"
+    id: hall_sensor_b
+    pin:
+      number: GPIO6
+      mode: INPUT_PULLUP
+      inverted: true  # Invert so ON=magnet detected
+    device_class: occupancy
+    on_press:
+      - logger.log:
+          format: "*** GPIO6: Hall Sensor B TRIGGERED (magnet detected) ***"
+          level: INFO
+    on_release:
+      - logger.log:
+          format: "*** GPIO6: Hall Sensor B CLEARED (no magnet) ***"
+          level: INFO
+    filters:
+      - delayed_on: 50ms
+      - delayed_off: 50ms
+
 button:
   - platform: restart
     name: "Restart Device"
+
+# Component Test: GPIO0 - WS2812B LED Strip
+# Wiring: External 5V PSU to VCC, GND shared with ESP32, DIN to GPIO0
+light:
+  - platform: esp32_rmt_led_strip
+    name: "LED Strip"
+    id: led_strip
+    pin: GPIO0
+    num_leds: 144
+    chipset: WS2812
+    rgb_order: GRB
+    default_transition_length: 500ms
+    effects:
+      - addressable_rainbow:
+          name: "Rainbow"
+          speed: 10
+          width: 50
+      - addressable_color_wipe:
+          name: "Color Wipe"
+          colors:
+            - red: 100%
+              green: 0%
+              blue: 0%
+              num_leds: 5
+            - red: 0%
+              green: 100%
+              blue: 0%
+              num_leds: 5
+            - red: 0%
+              green: 0%
+              blue: 100%
+              num_leds: 5
+          add_led_interval: 100ms
+          reverse: false
+      - addressable_scan:
+          name: "Scan"
+          move_interval: 50ms
+          scan_width: 3
+      - pulse:
+          name: "Pulse"
+          min_brightness: 20%
+          max_brightness: 100%
 
 # Status text sensor
 text_sensor:

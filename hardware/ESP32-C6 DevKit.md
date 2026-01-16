@@ -31,6 +31,7 @@ TOP
 | GND | Ground | Common Ground | Common ground for all components. |
 
 ### Right Side
+
 | Pin Label | Primary Function | Secondary Functions | Component Connection |
 |  ---- | ---- | ---- |
 | G | Ground | Common Ground | Common ground for all components. |

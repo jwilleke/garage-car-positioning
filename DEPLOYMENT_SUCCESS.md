@@ -1,4 +1,4 @@
-# ✅ Deployment Successful!
+# ✅ Deployment Successful
 
 ## Firmware Upload Complete
 
@@ -26,6 +26,7 @@ The firmware has been successfully deployed to your ESP32-C6 device!
 View the device logs to verify it's booting correctly:
 
 **Via USB:**
+
 ```bash
 cd esphome
 esphome logs all-in-one.yaml
@@ -33,6 +34,7 @@ esphome logs all-in-one.yaml
 ```
 
 **Via OTA (if device is on WiFi):**
+
 ```bash
 cd esphome
 esphome logs all-in-one.yaml
@@ -52,6 +54,7 @@ esphome logs all-in-one.yaml
 Once connected, verify these entities are available:
 
 **Car Positioning Sensors:**
+
 - `sensor.front_target_x`
 - `sensor.front_target_y`
 - `sensor.rear_target_x`
@@ -63,22 +66,26 @@ Once connected, verify these entities are available:
 - `text_sensor.parking_guidance`
 
 **Garage Door:**
+
 - `cover.garage_door`
 - `sensor.garage_door_position_encoder`
 - `binary_sensor.garage_door_closed_switch`
 
 **LED Strip:**
+
 - `light.garage_parking_led_strip`
 
 ### 4. Calibrate the System
 
 **Car Positioning Calibration:**
+
 1. Park your car in the ideal position
 2. Note the `car_center_y_position` value in Home Assistant
 3. Update `target_y_min` and `target_y_max` in `all-in-one.yaml`
 4. Re-upload firmware (can use OTA now)
 
 **Garage Door Calibration:**
+
 1. Close the garage door completely
 2. Open it fully
 3. Note the `garage_door_position_encoder` value
@@ -90,16 +97,19 @@ See `docs/calibration.md` for detailed instructions.
 ### 5. Test Functionality
 
 **Test LD2450 Sensors:**
+
 - Walk in front of sensors
 - Check if targets are detected
 - Verify X/Y coordinates are updating
 
 **Test Garage Door:**
+
 - Use Home Assistant to open/close door
 - Verify encoder counts change
 - Check closed switch state
 
 **Test LED Strip:**
+
 - Park car in different positions
 - Verify LED colors change:
   - 🟢 Green = Perfectly parked
@@ -112,6 +122,7 @@ See `docs/calibration.md` for detailed instructions.
 ### Device Not Appearing in Home Assistant
 
 1. **Check WiFi connection**:
+
    ```bash
    ping esp32-garage-all-in-one.local
    ```
@@ -167,4 +178,6 @@ No need to connect USB cable for future updates!
 
 ---
 
-**Congratulations! Your garage automation system is now deployed! 🎉**
+## Congratulations
+
+Your garage automation system is now deployed! 🎉

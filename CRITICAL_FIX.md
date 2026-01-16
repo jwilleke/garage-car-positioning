@@ -1,6 +1,7 @@
 # Critical Fix: Device Not Booting
 
 ## Problem Summary
+
 - Device responds to esptool (hardware OK)
 - Firmware uploads successfully
 - **BUT**: No logs, no AP, no network connection
@@ -9,6 +10,7 @@
 ## Fix Applied
 
 ### Logger Hardware UART Configuration
+
 Added explicit logger configuration for ESP32-C6:
 
 ```yaml
@@ -38,6 +40,7 @@ esphome upload all-in-one.yaml --device /dev/cu.usbmodem31201
 ```
 
 Or if prompted:
+
 ```bash
 esphome upload all-in-one.yaml
 # Select option [1] for USB
@@ -52,6 +55,7 @@ esphome logs all-in-one.yaml --device /dev/cu.usbmodem31201
 ```
 
 **What to look for:**
+
 - Boot messages
 - WiFi connection attempts
 - AP starting ("garage-aio")
@@ -60,6 +64,7 @@ esphome logs all-in-one.yaml --device /dev/cu.usbmodem31201
 ### 4. Check for AP
 
 After upload, immediately check for WiFi network:
+
 - **SSID**: `garage-aio`
 - **Password**: `Jbsbws12!` (from secrets.yaml)
 
@@ -99,6 +104,7 @@ GPIO0 is used for LED strip. On some ESP32 boards, GPIO0 can be problematic. If 
 ## Most Likely Issue
 
 The device is probably **crashing on boot** due to:
+
 1. Component initialization failure
 2. GPIO conflict
 3. Power issue

@@ -5,6 +5,7 @@
 The firmware has been successfully compiled and is ready to flash to your ESP32-C6 device.
 
 **Firmware Location:**
+
 ```
 esphome/.esphome/build/esp32-garage-all-in-one/.pioenvs/esp32-garage-all-in-one/firmware.factory.bin
 ```
@@ -21,10 +22,12 @@ esphome/.esphome/build/esp32-garage-all-in-one/.pioenvs/esp32-garage-all-in-one/
    - Press and release the RESET button
    - Release the BOOT button
 3. **Run upload command**:
+
    ```bash
    cd esphome
    esphome upload all-in-one.yaml
    ```
+
    - Select option `[1]` for USB upload when prompted
    - Or specify port directly: `esphome upload all-in-one.yaml --device /dev/cu.usbmodem31201`
 
@@ -36,6 +39,7 @@ Once the device is on your network, you can update wirelessly:
 cd esphome
 esphome upload all-in-one.yaml
 ```
+
 - Select option `[2]` for OTA upload when prompted
 - Device must be on the same WiFi network
 
@@ -78,11 +82,13 @@ If you get "port is busy" error:
    - PlatformIO serial monitor
 
 2. **Check what's using the port**:
+
    ```bash
    lsof /dev/cu.usbmodem31201
    ```
 
 3. **Kill the process** if needed:
+
    ```bash
    kill -9 <PID>
    ```
@@ -100,9 +106,11 @@ If you get "port is busy" error:
 
 1. **Check WiFi connection** - device must be on same network
 2. **Verify device is online**:
+
    ```bash
    ping esp32-garage-all-in-one.local
    ```
+
 3. **Use static IP** if mDNS doesn't work (see configuration)
 
 ## Post-Deployment
@@ -110,6 +118,7 @@ If you get "port is busy" error:
 After successful deployment:
 
 1. **Monitor logs**:
+
    ```bash
    esphome logs all-in-one.yaml
    ```

@@ -1,6 +1,7 @@
 # Fix: Device Not Getting IP Address
 
 ## Problem
+
 Device connects to WiFi but never obtains an IP address from DHCP server.
 
 ## Solution: Configure Static IP
@@ -9,7 +10,7 @@ I've updated the configuration to use a static IP address. You need to customize
 
 ## Step 1: Find Your Network Information
 
-### In Unifi Console:
+### In Unifi Console
 
 1. **Find Gateway IP** (Router IP):
    - Go to **Settings** → **Networks**
@@ -40,6 +41,7 @@ wifi:
 ```
 
 **Example values** (update for your network):
+
 - If gateway is `192.168.1.1`: Use `192.168.1.100` for static_ip
 - If gateway is `192.168.68.1`: Use `192.168.68.100` for static_ip
 - If gateway is `10.0.0.1`: Use `10.0.0.100` for static_ip
@@ -64,6 +66,7 @@ After upload, check:
    - Should show as "esp32-garage-all-in-one" or MAC address `98:a3:16:b1:c3:fc`
 
 2. **Ping the device**:
+
    ```bash
    ping 192.168.68.100  # Use your static IP
    ```

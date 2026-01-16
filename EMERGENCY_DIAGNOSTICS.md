@@ -1,6 +1,7 @@
 # Emergency Diagnostics: No Response from Device
 
 ## Symptoms
+
 - ❌ No WiFi connection
 - ❌ No AP visible ("garage-aio")
 - ❌ No USB logs
@@ -11,12 +12,14 @@
 ### 1. Hardware Verification
 
 **Power:**
+
 - ✅ Is USB cable connected securely?
 - ✅ Try different USB cable
 - ✅ Try different USB port
 - ✅ Check if computer recognizes USB device: `ls /dev/cu.usbmodem*`
 
 **Device:**
+
 - ✅ Press RESET button on ESP32-C6
 - ✅ Check for any LED indicators
 - ✅ Verify device is getting power
@@ -37,6 +40,7 @@ esptool.py --port /dev/cu.usbmodem31201 --baud 115200 chip_id
 ```
 
 **If esptool can't connect:**
+
 - Device may not be in bootloader mode
 - USB driver issue
 - Hardware problem
@@ -92,6 +96,7 @@ esphome upload all-in-one.yaml --device /dev/cu.usbmodem31201
 ### 6. Check for Boot Loop
 
 If device keeps resetting:
+
 - Check power supply (may need more current)
 - Check for short circuits
 - Verify all connections
@@ -116,33 +121,40 @@ Press Ctrl+A then K to exit screen.
 ## Possible Causes
 
 ### 1. Firmware Corruption
+
 - **Solution:** Re-upload firmware
 - Put in bootloader mode first
 
 ### 2. Power Issues
+
 - **Symptoms:** Device resets randomly
 - **Solution:** Use better USB cable, check power supply
 
 ### 3. Hardware Problem
+
 - **Symptoms:** No response at all
 - **Solution:** Check connections, try different device
 
 ### 4. USB Driver Issue
+
 - **Symptoms:** Port not detected
 - **Solution:** Install/update USB drivers (CP2102, CH340, etc.)
 
 ### 5. Boot Loop
+
 - **Symptoms:** Device resets continuously
 - **Solution:** Check logs for error, may need to fix configuration
 
 ## Step-by-Step Recovery
 
 1. **Verify USB connection:**
+
    ```bash
    ls /dev/cu.usbmodem*
    ```
 
 2. **Test device communication:**
+
    ```bash
    esptool.py --port /dev/cu.usbmodem31201 chip_id
    ```
@@ -186,6 +198,7 @@ screen /dev/cu.usbmodem31201 115200
 4. **Fourth:** If device doesn't respond, check hardware
 
 The fact that there are NO logs suggests either:
+
 - Device isn't booting at all
 - USB connection issue
 - Firmware corruption

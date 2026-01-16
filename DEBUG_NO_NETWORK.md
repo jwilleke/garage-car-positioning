@@ -1,6 +1,7 @@
 # Debug: Device Not on Network and No AP Visible
 
 ## Current Situation
+
 - Device not appearing on Unifi network
 - AP "garage-aio" not visible
 - Device may not be booting or stuck
@@ -17,6 +18,7 @@ esphome logs all-in-one.yaml --device /dev/cu.usbmodem31201
 ```
 
 **What to look for:**
+
 - Device booting messages
 - WiFi connection attempts
 - Error messages
@@ -31,6 +33,7 @@ esphome logs all-in-one.yaml --device /dev/cu.usbmodem31201
 ### Step 3: Check if Firmware is Running
 
 If logs show nothing, the device may not be booting:
+
 - Try pressing RESET button on ESP32-C6
 - Check if logs appear after reset
 - Verify firmware was uploaded correctly
@@ -40,11 +43,13 @@ If logs show nothing, the device may not be booting:
 ### Issue 1: Device Not Booting
 
 **Symptoms:**
+
 - No logs via USB
 - No AP visible
 - No activity
 
 **Solutions:**
+
 1. Press RESET button on ESP32-C6
 2. Check USB connection
 3. Re-upload firmware if needed
@@ -52,11 +57,13 @@ If logs show nothing, the device may not be booting:
 ### Issue 2: WiFi Stuck in Connection Loop
 
 **Symptoms:**
+
 - Logs show repeated connection attempts
 - Never times out to start AP
 - No AP visible
 
 **Solutions:**
+
 1. Reduce `reboot_timeout` (already set to 5min)
 2. Check WiFi credentials are correct
 3. Verify 2.4GHz network is available
@@ -64,10 +71,12 @@ If logs show nothing, the device may not be booting:
 ### Issue 3: AP Not Starting
 
 **Symptoms:**
+
 - Device connects to WiFi but no IP
 - AP should start but doesn't
 
 **Solutions:**
+
 1. Force AP to always be available (see below)
 2. Check `ap_timeout` setting
 3. Verify AP password is correct
@@ -75,6 +84,7 @@ If logs show nothing, the device may not be booting:
 ## Configuration Changes Made
 
 I've updated the configuration:
+
 - Reduced `reboot_timeout` to 5min (faster AP fallback)
 - Added `ap_timeout: 1min` (AP stays available)
 
@@ -120,6 +130,7 @@ This will force the device to always broadcast the AP. Good for testing, but rem
 **The most important step is to check USB logs** to see what the device is actually doing. Without logs, we're guessing.
 
 Run:
+
 ```bash
 cd esphome
 esphome logs all-in-one.yaml --device /dev/cu.usbmodem31201

@@ -11,6 +11,7 @@ If your ESP32-C6 device is not connecting to your Unifi network, follow these st
 **ESP32-C6 only supports 2.4GHz WiFi**, not 5GHz!
 
 **Check your Unifi network:**
+
 - Ensure your SSID "SWIT2" broadcasts on **2.4GHz**
 - If you have separate 2.4GHz and 5GHz networks, use the 2.4GHz one
 - In Unifi Console, check if "SWIT2" is configured for 2.4GHz band
@@ -20,24 +21,28 @@ If your ESP32-C6 device is not connecting to your Unifi network, follow these st
 ### 2. WiFi Security Settings
 
 ESP32-C6 supports:
+
 - ✅ WPA2 (most common)
 - ✅ WPA3 (if supported)
 - ❌ WPA Enterprise (not supported)
 - ❌ WEP (deprecated, not recommended)
 
 **Check Unifi Console:**
+
 - Security: Should be WPA2 or WPA3
 - Not WPA Enterprise
 
 ### 3. WiFi Credentials
 
 Verify your `secrets.yaml`:
+
 ```yaml
 wifi_ssid: "SWIT2"  # Must match exactly (case-sensitive)
 wifi_password: "Abc123......"  # Must be correct
 ```
 
 **Common issues:**
+
 - Extra spaces
 - Case sensitivity
 - Special characters not properly escaped
@@ -49,6 +54,7 @@ If DHCP is not working, use a static IP:
 1. Find an available IP on your network (check Unifi Console)
 2. Find your gateway IP (usually router IP)
 3. Uncomment and configure in `all-in-one.yaml`:
+
 ```yaml
 wifi:
   ssid: !secret wifi_ssid
@@ -62,6 +68,7 @@ wifi:
 ### 5. Network Isolation / VLAN
 
 If your Unifi network has:
+
 - Client isolation enabled
 - VLAN isolation
 - Firewall rules blocking devices
@@ -80,6 +87,7 @@ esphome logs all-in-one.yaml --device /dev/cu.usbmodem31201
 ```
 
 Look for:
+
 - `[WiFi] Connecting to 'SWIT2'...`
 - `[WiFi] Connected!`
 - `[WiFi] IP Address: 192.168.x.x`
@@ -91,6 +99,7 @@ Look for:
 ### Step 2: Check Access Point Mode
 
 If WiFi fails, the device should create an access point:
+
 - SSID: `esp32-garage-all-in-one-AP`
 - Password: From `secrets.yaml` (`ap_password`)
 
@@ -118,12 +127,14 @@ If DHCP is the issue, configure static IP:
 ### Fix 1: Enable Access Point Mode (Already Enabled)
 
 The device should automatically create an AP if WiFi fails. Look for:
+
 - WiFi network: `esp32-garage-all-in-one-AP`
 - Connect and use captive portal
 
 ### Fix 2: Add WiFi Fast Connect
 
 Add to `all-in-one.yaml`:
+
 ```yaml
 wifi:
   ssid: !secret wifi_ssid

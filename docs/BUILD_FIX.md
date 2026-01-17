@@ -3,6 +3,7 @@
 ## Problem
 
 The build was failing with:
+
 ```
 Bad CPU type in executable
 ```
@@ -54,6 +55,7 @@ Should show: `Mach-O 64-bit executable arm64` (not x86_64)
 ## Build Output
 
 The firmware has been successfully compiled:
+
 - **RAM Usage**: 10.8% (35,548 bytes used)
 - **Flash Usage**: 60.8% (1,115,902 bytes used)
 - **Firmware Size**: 0x121540 bytes

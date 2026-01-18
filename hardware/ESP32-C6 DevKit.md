@@ -20,7 +20,7 @@ TOP
 | 6 | 7 | GPIO7 | "MTDO , LP_GPIO7, LP_I2C_SCL, FSPID" | ⚠️ JTAG PIN - AVOID |
 | 7 | 0 | GPIO0 | "XTAL_32K_P,  LP_GPIO0,  LP_UART_DTRN, ADC1_CH0" | WS2812B LED Strip - Data In (DIN) |
 | 8 | 1 | GPIO1 | "XTAL_32K_N, LP_GPIO1, LP_UART_DSRN, ADC1_CH1" | Closed Door Switch Signal - Use internal pull-up. Connect other leg to GND. |
-| 9 | 8 | GPIO8 | "RGB LED, ROM, BOOT Strapping Pin" - Avoid (if possible) | NC |
+| 9 | 8 | GPIO8 | "RGB LED, ROM, BOOT Strapping Pin" -  ⚠️ Avoid (if possible) | NC |
 | 0 | 10 | GPIO10 | General Purpose IO | Relay Module - IN |
 | 1 | 11 | GPIO11 | General Purpose IO | NC |
 | 2 | 2 | GPIO2 | "LP_GPIO2, LP_UART_RTSN, ADC1_CH2, FSPIQ" | Hall Effect Sensor A (black wire) |
@@ -95,7 +95,7 @@ GPIO 4 (MTMS), GPIO 5 (MTDI), and GPIO 6 (MTCK) are part of the hardware debuggi
 For the most reliable 3.3V logic signals, prioritize these pins:
 
 | Pin Type | GPIO Numbers | Notes |
-| :--- | :--- | :--- |
+| --- | --- | --- |
 | General Purpose | 18, 19, 20, 21, 22, 23 | No special boot or debug functions. |
 | Low Power (LP) | 0, 1, 2, 3 | Can be used in deep sleep; very stable for simple triggers. |
 | Avoid (if possible) | 8, 9 | Strapping pins; state at boot is critical. |
@@ -116,3 +116,18 @@ If you are seeing "noise" when a pin is tied to 3.3V, it may be due to the DevKi
 - Disable JTAG: If you must use GPIO 4-6, add `gpio_reset_pin(GPIO_NUM_4);` (in ESP-IDF) or ensure the pin mode is explicitly set to `INPUT` or `OUTPUT` in Arduino to override default JTAG behaviors [Source](cite://https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/user_guide.html).
 - Check Strapping: Ensure you are not accidentally pulling GPIO 9 LOW during boot, as this will put the device into "Download Mode" instead of running your code [Source](cite://https://www.studiopieters.nl/esp32-c6-pinout/).
 - Filter the Rail: If the noise persists across all pins, the 3.3V rail itself might be noisy; try powering the sensors/inputs from an external filtered 3.3V source rather than the DevKit's 3.3V pin.
+
+## Other ESP32-C6-DevKit Components
+
+- 3.3 V Power On (RED) LED - Turns on when the USB power is connected to the board.
+- USB-to-UART Bridge - Single USB-to-UART bridge chip provides transfer rates up to 3 Mbps.
+- ESP32-C6 USB Type-C Port The USB Type-C port on the ESP32-C6 chip compliant with USB 2.0 full speed.
+  - It is capable of up to 12 Mbps transfer speed (Note that this port does not support the faster 480 Mbps high-speed transfer mode).
+  - This port is used for power supply to the board, for flashing applications to the chip, for communication with the chip using USB protocols, as well as for JTAG debugging.
+- Boot Button - Download button. Holding down Boot and then pressing Reset initiates Firmware Download mode for downloading firmware through the serial port.
+- Reset Button - Press this button to restart the system.
+- USB Type-C to UART Port Used for power supply to the board
+  - for flashing applications to the chip
+  - as well as the communication with the ESP32-C6 chip via the on-board USB-to-UART bridge.
+- RGB LED - Addressable RGB LED, driven by GPIO8.
+- J5 Used for current measurement. See details in Section Current

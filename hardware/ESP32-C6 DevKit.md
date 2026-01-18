@@ -14,17 +14,17 @@ TOP
 | ---- | ---- | ---- | ---- |
 | 3V3 | Power | 3.3V Power Supply Output | Provide 3.3V to all 3.3V components |
 | RST | Reset | CHIP_PU (High: Enable; Low: Reset) | NC |
-| 4 | GPIO4 | "MTMS, LP_GPIO4, ADC1_CH4, SDIO" | Closed Door Switch Signal - Use internal pull-up. Connect other leg to GND. Black-RED |
-| 5 | GPIO5 | "MTDI, LP_GPIO5, ADC1_CH5, SDIO" | Hall Effect Sensor A (black wire) |
-| 6 | GPIO6 | "MTCK , LP_GPIO6, LP_I2C_SDA, ADC1_CH6" | Hall Effect Sensor B (black wire) |
-| 7 | GPIO7 | "MTDO , LP_GPIO7, LP_I2C_SCL, FSPID" | NC |
-| 0 | GPI0O0 | "XTAL_32K_P,  LP_GPIO0,  LP_UART_DTRN, ADC1_CH0" | WS2812B LED Strip - Data In (DIN) |
-| 1 | GPIO1 | "XTAL_32K_N, LP_GPIO1, LP_UART_DSRN, ADC1_CH1" | NC |
+| 4 | GPIO4 | "MTMS, LP_GPIO4, ADC1_CH4, SDIO" | **⚠️ JTAG PIN - AVOID** |
+| 5 | GPIO5 | "MTDI, LP_GPIO5, ADC1_CH5, SDIO" | **⚠️ JTAG PIN - AVOID** |
+| 6 | GPIO6 | "MTCK , LP_GPIO6, LP_I2C_SDA, ADC1_CH6" | **⚠️ JTAG PIN - AVOID** |
+| 7 | GPIO7 | "MTDO , LP_GPIO7, LP_I2C_SCL, FSPID" | **⚠️ JTAG PIN - AVOID** |
+| 0 | GPIO0 | "XTAL_32K_P,  LP_GPIO0,  LP_UART_DTRN, ADC1_CH0" | WS2812B LED Strip - Data In (DIN) |
+| 1 | GPIO1 | "XTAL_32K_N, LP_GPIO1, LP_UART_DSRN, ADC1_CH1" | Closed Door Switch Signal - Use internal pull-up. Connect other leg to GND. |
 | 8 | GPIO8 | "RGB LED, ROM, BOOT Strapping Pin" | NC |
 | 10 | GPIO10 | General Purpose IO | Relay Module - IN |
 | 11 | GPIO11 | General Purpose IO | NC |
-| 2 | GPIO2 | "LP_GPIO2, LP_UART_RTSN, ADC1_CH2, FSPIQ" | NC |
-| 3 | GPIO3 | "LP_GPIO3, LP_UART_CTSN, ADC1_CH3" | NC |
+| 2 | GPIO2 | "LP_GPIO2, LP_UART_RTSN, ADC1_CH2, FSPIQ" | Hall Effect Sensor A (black wire) |
+| 3 | GPIO3 | "LP_GPIO3, LP_UART_CTSN, ADC1_CH3" | Hall Effect Sensor B (black wire) |
 | 5V | Power | 5V Power Supply (Input or Output) | Provide 5V to all 5V components. |
 | GND | Ground | Common Ground | Common ground for all components. |
 
@@ -65,3 +65,50 @@ External 5V PSU (-) ──┬──────── GND (LED Strip)
 ESP32-C6 GND ─────────┘
 ESP32-C6 GPIO0 ──────────────── DIN (LED Strip)
 ```
+
+## GPIO Stability and Noise on ESP32-C6-DevKit-1-N8
+
+The noise you are experiencing on GPIO 4, 5, and 6 is primarily due to these pins being multiplexed with the **JTAG debug interface** (MTMS, MTDI, and MTCK respectively) [Source](cite://https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/user_guide.html). These pins often have internal pull-up or pull-down resistors enabled by default or are sampled by the hardware during boot and debugging, which can cause signal instability or "ghost" toggling when connected directly to 3.3V without proper software configuration [Source](cite://https://www.studiopieters.nl/esp32-c6-pinout/). For high-stability digital or analog signals, it is recommended to use "clean" GPIOs that are not shared with JTAG, USB, or Strapping functions [Source](cite://https://nuttx.apache.org/docs/latest/platforms/risc-v/esp32c6/boards/esp32c6-devkitc/index.html).
+
+### Key Findings
+
+- **JTAG Conflict**: GPIO 4, 5, 6, and 7 are the default JTAG pins; they may remain active unless explicitly disabled in the firmware [Source](cite://https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/user_guide.html).
+- **Strapping Pins**: GPIO 8 and 9 are used for boot mode configuration; pulling these to 3.3V or Ground incorrectly can prevent the chip from booting [Source](cite://https://www.studiopieters.nl/esp32-c6-pinout/).
+- **USB Pins**: GPIO 12 and 13 are dedicated to the internal USB-Serial/JTAG controller and should be avoided for general I/O if USB functionality is used [Source](cite://https://nuttx.apache.org/docs/latest/platforms/risc-v/esp32c6/boards/esp32c6-devkitc/index.html).
+- **Stable Alternatives**: GPIO 0, 1, 2, and 3 (Low Power pins) and GPIO 18 through 23 are generally the most stable for general-purpose use [Source](cite://https://www.cnx-software.com/2023/01/12/esp32-c6-wifi-6-ble-802-15-4-module-development-board/).
+- **ADC Noise**: If using these pins for Analog-to-Digital conversion, the ESP32-C6 series requires software multisampling or hardware decoupling to manage inherent ADC noise [Source](cite://https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/user_guide.html).
+
+![cite-image://ESP32-C6-DevKitC-1 v1.2 - ESP32-C6 - — esp-dev-kits latest](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c6/_images/esp32-c6-devkitc-1-v1.2-annotated-photo.png)
+
+### Details
+
+#### The JTAG Problem
+
+GPIO 4 (MTMS), GPIO 5 (MTDI), and GPIO 6 (MTCK) are part of the hardware debugging port. Even if you are not using an external debugger, the internal JTAG circuitry can interfere with the pin state. If these pins must be used, you should ensure that JTAG is disabled in your `menuconfig` or code to release them for standard GPIO use [Source](cite://https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/user_guide.html).
+
+#### Recommended Stable Pins
+
+For the most reliable 3.3V logic signals, prioritize these pins:
+
+| Pin Type | GPIO Numbers | Notes |
+| :--- | :--- | :--- |
+| **General Purpose** | 18, 19, 20, 21, 22, 23 | No special boot or debug functions. |
+| **Low Power (LP)** | 0, 1, 2, 3 | Can be used in deep sleep; very stable for simple triggers. |
+| **Avoid (if possible)** | 8, 9 | Strapping pins; state at boot is critical. |
+| **Avoid (if possible)** | 12, 13 | USB D-/D+ pins; used for flashing/serial. |
+
+[Source](cite://https://www.studiopieters.nl/esp32-c6-pinout/) [Source](cite://https://nuttx.apache.org/docs/latest/platforms/risc-v/esp32c6/boards/esp32c6-devkitc/index.html)
+
+#### Hardware Mitigation for Noise
+
+If you are seeing "noise" when a pin is tied to 3.3V, it may be due to the DevKit's onboard LDO regulator ripple or electromagnetic interference (EMI).
+
+1. **Decoupling**: Add a small ceramic capacitor ($$0.1\mu F$$) between the GPIO pin and Ground to filter high-frequency noise.
+2. **External Pull-ups**: Instead of relying on internal pull-ups (which are weak, typically $$30k\Omega$$ to $$80k\Omega$$), use an external $$4.7k\Omega$$ or $$10k\Omega$$ resistor to 3.3V.
+
+### Practical Takeaway
+
+- **Switch Pins**: Move your 3.3V connections to **GPIO 18, 19, or 20** for the best stability without software overhead [Source](cite://https://www.studiopieters.nl/esp32-c6-pinout/).
+- **Disable JTAG**: If you must use GPIO 4-6, add `gpio_reset_pin(GPIO_NUM_4);` (in ESP-IDF) or ensure the pin mode is explicitly set to `INPUT` or `OUTPUT` in Arduino to override default JTAG behaviors [Source](cite://https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/user_guide.html).
+- **Check Strapping**: Ensure you are not accidentally pulling GPIO 9 LOW during boot, as this will put the device into "Download Mode" instead of running your code [Source](cite://https://www.studiopieters.nl/esp32-c6-pinout/).
+- **Filter the Rail**: If the noise persists across all pins, the 3.3V rail itself might be noisy; try powering the sensors/inputs from an external filtered 3.3V source rather than the DevKit's 3.3V pin.

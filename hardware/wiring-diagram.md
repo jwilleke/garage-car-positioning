@@ -4,6 +4,8 @@ This document provides wiring connections for the three different implementation
 
 **Note:** Always disconnect power before making any wiring changes.
 
+**Important:** GPIO 4, 5, 6, 7 are JTAG pins on ESP32-C6 and cause interrupt instability. Use GPIO 1, 2, 3 (LP pins) instead. See [ESP32-C6 DevKit.md](./ESP32-C6%20DevKit.md) for details.
+
 See [BOM](./hardware/BOM.md)
 
 ## Option 1: Standalone Car Positioning System
@@ -35,9 +37,9 @@ This diagram shows the wiring for a dedicated garage door controller using an ES
 | GND | Power Distribution | - | Common ground for all components. |
 | GPIO10 | Relay Module | IN / Signal | |
 | - | Relay Module | NO & COM | Wire in parallel to garage opener's wall button. |
-| GPIO4 | Closed Reed Switch | Signal | Use internal pull-up. Connect other leg to GND. |
-| GPIO5 | Hall Effect Sensor A | OUT / Signal (black wire) | Rotary Encoder Channel A |
-| GPIO6 | Hall Effect Sensor B | OUT / Signal (black wire) | Rotary Encoder Channel B |
+| GPIO1 | Closed Reed Switch | Signal | Use internal pull-up. Connect other leg to GND. |
+| GPIO2 | Hall Effect Sensor A | OUT / Signal (black wire) | Rotary Encoder Channel A |
+| GPIO3 | Hall Effect Sensor B | OUT / Signal (black wire) | Rotary Encoder Channel B |
 
 ## Option 3: Combined All-in-One System
 
@@ -57,11 +59,11 @@ This diagram shows the wiring for a single ESP32-C6 controlling all car position
 | --- | **Garage Door Control** | --- | --- |
 | GPIO10 | Relay Module | IN / Signal | |
 | - | Relay Module | NO & COM | Wire in parallel to garage opener's wall button. |
-| GPIO4 | Closed Reed Switch | Signal | Use internal pull-up. Connect other leg to GND. |
-| GPIO5 | Hall Effect Sensor A | OUT / Signal | Rotary Encoder Channel A (black wire) |
-| GPIO6 | Hall Effect Sensor B | OUT / Signal | Rotary Encoder Channel B (black wire) |
+| GPIO1 | Closed Reed Switch | Signal | Use internal pull-up. Connect other leg to GND. |
+| GPIO2 | Hall Effect Sensor A | OUT / Signal | Rotary Encoder Channel A (black wire) |
+| GPIO3 | Hall Effect Sensor B | OUT / Signal | Rotary Encoder Channel B (black wire) |
 
-### Components Located Near Garage Door Opwnwer
+### Components Located Near Garage Door Opener
 
 #### Relay Module
 

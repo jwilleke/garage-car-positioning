@@ -6,7 +6,20 @@ esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
   # Version marker - update this when making changes
-  comment: "GPIO4 Switch + Hall Effect Sensors + WS2812B LED Strip - v1.3 - 2026-01-16"
+  comment: "GPIO4 Switch + Hall Effect Sensors + WS2812B LED Strip - v1.4 - 2026-01-18"
+  on_boot:
+    priority: -100
+    then:
+      - lambda: |-
+          id(boot_count) += 1;
+          ESP_LOGI("boot", "Boot count: %d", id(boot_count));
+
+# Persistent boot counter
+globals:
+  - id: boot_count
+    type: int
+    restore_value: true
+    initial_value: '0'
 
 esp32:
   board: esp32-c6-devkitc-1
@@ -26,7 +39,9 @@ wifi:
     password: "test1234"
 
 api:
-  # API might be required for web server to work properly
+  # Disable reboot when Home Assistant isn't connected
+  # Set to 15min (default) when using with Home Assistant
+  reboot_timeout: 0s
 
 ota:
   - platform: esphome
@@ -34,13 +49,23 @@ ota:
 
 web_server:
   port: 80
-  # version: 2  # Try default version first
+  version: 3
   include_internal: false
 
 # Add a simple sensor so web interface has something to display
 sensor:
   - platform: uptime
-    name: "Uptime"
+    name: "Uptime Seconds"
+    id: uptime_sensor
+    internal: true  # Hide raw seconds from portal
+
+  - platform: template
+    name: "Boot Count"
+    id: boot_count_sensor
+    accuracy_decimals: 0
+    lambda: |-
+      return id(boot_count);
+    update_interval: 60s
 
 # LED count slider - adjustable from portal
 number:
@@ -53,72 +78,79 @@ number:
     initial_value: 30
     restore_value: true
     optimistic: true
+    set_action:
+      - logger.log:
+          format: "LED count set to %.0f"
+          args: ['x']
 
-# Component Test: GPIO4 - Closed Door Reed Switch
-# Wiring: Connect one leg to GPIO4, other leg to GND
+# MOVED FROM GPIO 4,5,6 (JTAG pins) to GPIO 1,2,3 (stable LP pins)
+# See hardware/ESP32-C6 DevKit.md for details on JTAG interference
+
+# Component Test: GPIO1 - Closed Door Reed Switch (was GPIO4)
+# Wiring: Connect one leg to GPIO1, other leg to GND
 # Expected: Switch OPEN when door is OPEN, CLOSED when door is CLOSED
 binary_sensor:
   - platform: gpio
     name: "Garage Door Closed Switch"
     id: garage_door_closed_switch
     pin:
-      number: GPIO4
+      number: GPIO1
       mode: INPUT_PULLUP
       inverted: true
     device_class: door
     on_press:
       - logger.log:
-          format: "*** GPIO4: Door switch PRESSED (Door CLOSED) ***"
+          format: "*** GPIO1: Door switch PRESSED (Door CLOSED) ***"
           level: INFO
     on_release:
       - logger.log:
-          format: "*** GPIO4: Door switch RELEASED (Door OPEN) ***"
+          format: "*** GPIO1: Door switch RELEASED (Door OPEN) ***"
           level: INFO
     filters:
       - delayed_on: 50ms
       - delayed_off: 50ms
 
-  # Component Test: GPIO5 - Hall Effect Sensor A (NJK-5002C)
-  # Wiring: Brown=5V, Blue=GND, Black=GPIO5
+  # Component Test: GPIO2 - Hall Effect Sensor A (NJK-5002C) (was GPIO5)
+  # Wiring: Brown=5V, Blue=GND, Black=GPIO2
   # NPN Normally Open: No magnet=HIGH, Magnet detected=LOW
   - platform: gpio
     name: "Hall Effect Sensor A"
     id: hall_sensor_a
     pin:
-      number: GPIO5
+      number: GPIO2
       mode: INPUT_PULLUP
       inverted: true  # Invert so ON=magnet detected
     device_class: occupancy
     on_press:
       - logger.log:
-          format: "*** GPIO5: Hall Sensor A TRIGGERED (magnet detected) ***"
+          format: "*** GPIO2: Hall Sensor A TRIGGERED (magnet detected) ***"
           level: INFO
     on_release:
       - logger.log:
-          format: "*** GPIO5: Hall Sensor A CLEARED (no magnet) ***"
+          format: "*** GPIO2: Hall Sensor A CLEARED (no magnet) ***"
           level: INFO
     filters:
       - delayed_on: 50ms
       - delayed_off: 50ms
 
-  # Component Test: GPIO6 - Hall Effect Sensor B (NJK-5002C)
-  # Wiring: Brown=5V, Blue=GND, Black=GPIO6
+  # Component Test: GPIO3 - Hall Effect Sensor B (NJK-5002C) (was GPIO6)
+  # Wiring: Brown=5V, Blue=GND, Black=GPIO3
   # NPN Normally Open: No magnet=HIGH, Magnet detected=LOW
   - platform: gpio
     name: "Hall Effect Sensor B"
     id: hall_sensor_b
     pin:
-      number: GPIO6
+      number: GPIO3
       mode: INPUT_PULLUP
       inverted: true  # Invert so ON=magnet detected
     device_class: occupancy
     on_press:
       - logger.log:
-          format: "*** GPIO6: Hall Sensor B TRIGGERED (magnet detected) ***"
+          format: "*** GPIO3: Hall Sensor B TRIGGERED (magnet detected) ***"
           level: INFO
     on_release:
       - logger.log:
-          format: "*** GPIO6: Hall Sensor B CLEARED (no magnet) ***"
+          format: "*** GPIO3: Hall Sensor B CLEARED (no magnet) ***"
           level: INFO
     filters:
       - delayed_on: 50ms
@@ -154,7 +186,7 @@ light:
             }
       - addressable_lambda:
           name: "Rainbow (Active LEDs)"
-          update_interval: 16ms
+          update_interval: 50ms  # Was 16ms - reduced to prevent task watchdog
           lambda: |-
             static int offset = 0;
             int count = id(active_led_count).state;
@@ -205,8 +237,49 @@ light:
           min_brightness: 20%
           max_brightness: 100%
 
-# Status text sensor
+# Status text sensors
 text_sensor:
   - platform: wifi_info
     mac_address:
       name: "MAC Address"
+
+  - platform: template
+    name: "Reset Reason"
+    id: reset_reason_sensor
+    lambda: |-
+      switch (esp_reset_reason()) {
+        case ESP_RST_POWERON: return std::string("Power-on");
+        case ESP_RST_EXT: return std::string("External pin");
+        case ESP_RST_SW: return std::string("Software reset");
+        case ESP_RST_PANIC: return std::string("Exception/panic");
+        case ESP_RST_INT_WDT: return std::string("Interrupt watchdog");
+        case ESP_RST_TASK_WDT: return std::string("Task watchdog");
+        case ESP_RST_WDT: return std::string("Other watchdog");
+        case ESP_RST_DEEPSLEEP: return std::string("Deep sleep wake");
+        case ESP_RST_BROWNOUT: return std::string("Brownout");
+        case ESP_RST_SDIO: return std::string("SDIO");
+        default: return std::string("Unknown");
+      }
+    update_interval: never
+
+  - platform: template
+    name: "Uptime"
+    lambda: |-
+      int seconds = (int) id(uptime_sensor).state;
+      int weeks = seconds / 604800;
+      seconds = seconds % 604800;
+      int days = seconds / 86400;
+      seconds = seconds % 86400;
+      int hours = seconds / 3600;
+      seconds = seconds % 3600;
+      int minutes = seconds / 60;
+      if (weeks > 0) {
+        return str_sprintf("%dw %dd %dh %dm", weeks, days, hours, minutes);
+      } else if (days > 0) {
+        return str_sprintf("%dd %dh %dm", days, hours, minutes);
+      } else if (hours > 0) {
+        return str_sprintf("%dh %dm", hours, minutes);
+      } else {
+        return str_sprintf("%dm", minutes);
+      }
+    update_interval: 60s

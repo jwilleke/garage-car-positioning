@@ -6,13 +6,14 @@ esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
   # Version marker - update this when making changes
-  comment: "GPIO4 Switch + Hall Effect Sensors + WS2812B LED Strip - v1.4 - 2026-01-18"
+  comment: "GPIO1/2/3 Sensors + WS2812B LED Strip - v1.5 - 2026-01-18"
   on_boot:
     priority: -100
     then:
       - lambda: |-
           id(boot_count) += 1;
           ESP_LOGI("boot", "Boot count: %d", id(boot_count));
+      - light.turn_off: led_strip
 
 # Persistent boot counter
 globals:
@@ -169,6 +170,7 @@ light:
     pin: GPIO0
     num_leds: 144
     chipset: WS2812
+    restore_mode: ALWAYS_OFF
     rgb_order: GRB
     default_transition_length: 500ms
     effects:

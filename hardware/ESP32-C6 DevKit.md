@@ -10,41 +10,45 @@ TOP
 
 ### Left Side
 
-| Pin Label | Primary Function | Secondary Functions | Component Connection |
-| ---- | ---- | ---- | ---- |
-| 3V3 | Power | 3.3V Power Supply Output | Provide 3.3V to all 3.3V components |
-| RST | Reset | CHIP_PU (High: Enable; Low: Reset) | NC |
-| 4 | GPIO4 | "MTMS, LP_GPIO4, ADC1_CH4, SDIO" | **⚠️ JTAG PIN - AVOID** |
-| 5 | GPIO5 | "MTDI, LP_GPIO5, ADC1_CH5, SDIO" | **⚠️ JTAG PIN - AVOID** |
-| 6 | GPIO6 | "MTCK , LP_GPIO6, LP_I2C_SDA, ADC1_CH6" | **⚠️ JTAG PIN - AVOID** |
-| 7 | GPIO7 | "MTDO , LP_GPIO7, LP_I2C_SCL, FSPID" | **⚠️ JTAG PIN - AVOID** |
-| 0 | GPIO0 | "XTAL_32K_P,  LP_GPIO0,  LP_UART_DTRN, ADC1_CH0" | WS2812B LED Strip - Data In (DIN) |
-| 1 | GPIO1 | "XTAL_32K_N, LP_GPIO1, LP_UART_DSRN, ADC1_CH1" | Closed Door Switch Signal - Use internal pull-up. Connect other leg to GND. |
-| 8 | GPIO8 | "RGB LED, ROM, BOOT Strapping Pin" | NC |
-| 10 | GPIO10 | General Purpose IO | Relay Module - IN |
-| 11 | GPIO11 | General Purpose IO | NC |
-| 2 | GPIO2 | "LP_GPIO2, LP_UART_RTSN, ADC1_CH2, FSPIQ" | Hall Effect Sensor A (black wire) |
-| 3 | GPIO3 | "LP_GPIO3, LP_UART_CTSN, ADC1_CH3" | Hall Effect Sensor B (black wire) |
-| 5V | Power | 5V Power Supply (Input or Output) | Provide 5V to all 5V components. |
-| GND | Ground | Common Ground | Common ground for all components. |
+| Screw# | Pin Label | Primary Function | Secondary Functions | Component Connection |
+| ----| ---- | ---- | ---- | ---- |
+| 1 | 3V3 | Power | 3.3V Power Supply Output | Provide 3.3V to all 3.3V components |
+| 2 | RST | Reset | CHIP_PU (High: Enable; Low: Reset) | NC |
+| 3 | 4 | GPIO4 | "MTMS, LP_GPIO4, ADC1_CH4, SDIO" | **⚠️ JTAG PIN - AVOID** |
+| 4 | 5 | GPIO5 | "MTDI, LP_GPIO5, ADC1_CH5, SDIO" | **⚠️ JTAG PIN - AVOID** |
+| 5 | 6 | GPIO6 | "MTCK , LP_GPIO6, LP_I2C_SDA, ADC1_CH6" | **⚠️ JTAG PIN - AVOID** |
+| 6 | 7 | GPIO7 | "MTDO , LP_GPIO7, LP_I2C_SCL, FSPID" | **⚠️ JTAG PIN - AVOID** |
+| 7 | 0 | GPIO0 | "XTAL_32K_P,  LP_GPIO0,  LP_UART_DTRN, ADC1_CH0" | WS2812B LED Strip - Data In (DIN) |
+| 8 | 1 | GPIO1 | "XTAL_32K_N, LP_GPIO1, LP_UART_DSRN, ADC1_CH1" | Closed Door Switch Signal - Use internal pull-up. Connect other leg to GND. |
+| 9 | 8 | GPIO8 | "RGB LED, ROM, BOOT Strapping Pin" - Avoid (if possible) | NC |
+| 0 | 10 | GPIO10 | General Purpose IO | Relay Module - IN |
+| 1 | 11 | GPIO11 | General Purpose IO | NC |
+| 2 | 2 | GPIO2 | "LP_GPIO2, LP_UART_RTSN, ADC1_CH2, FSPIQ" | Hall Effect Sensor A (black wire) |
+| 3 | 3 | GPIO3 | "LP_GPIO3, LP_UART_CTSN, ADC1_CH3" | Hall Effect Sensor B (black wire) |
+| 4 | 5V | Power | 5V Power Supply (Input or Output) | Provide 5V to all 5V components. |
+| 5 | GND | Ground | Common Ground | Common ground for all components. |
+| 6 | - | - | NC to Chip Board only | NC |
 
 ### Right Side
 
-| Pin Label | Primary Function | Secondary Functions | Component Connection |
-|  ---- | ---- | ---- |
-| G | Ground | Common Ground | Common ground for all components. |
-| TX | GPIO16 | "U0TXD, FSPICS0" | Front LD2450 TX (ESP32 RX) - Connect to sensor TX pin |
-| RX | GPIO17 | "U0RXD, FSPICS1" | Front LD2450 RX (ESP32 TX) - Connect to sensor RX pin |
-| 15 | GPIO15 | JTAG Function | NC |
-| 23 | GPIO23 | SDIO_DATA3 | NC |
-| 22 | GPIO22 | SDIO_DATA2 | NC |
-| 21 | GPIO21 | "SDIO_DATA1, FSPICS5" | NC |
-| 20 | GPIO20 | "SDIO_DATA0, FSPICS4" | NC |
-| 19 | GPIO19 | "SDIO_CLK, FSPICS3" | Rear LD2450 RX (ESP32 TX) - Connect to sensor RX pin |
-| 18 | GPIO18 | "SDIO_CMD, FSPICS2" | Rear LD2450 TX (ESP32 RX) - Connect to sensor TX pin |
-| 9 | GPIO9 | BOOT Strapping Pin | NC |
-| 13 | GPIO13 | USB_D+ | **⚠️ DO NOT USE** - Permanently tied to USB Serial/JTAG controller |
-| 12 | GPIO12 | USB_D- | **⚠️ DO NOT USE** - Permanently tied to USB Serial/JTAG controller |
+| Screw# | Pin Label | Primary Function | Secondary Functions | Component Connection |
+| ----| ---- | ---- | ---- | ---- |
+| 1 | G | Ground | Common Ground | Common ground for all components. |
+| 2 | TX | GPIO16 | "U0TXD, FSPICS0" | Front LD2450 TX (ESP32 RX) - Connect to sensor TX pin |
+| 3 | RX | GPIO17 | "U0RXD, FSPICS1" | Front LD2450 RX (ESP32 TX) - Connect to sensor RX pin |
+| 4 | 15 | GPIO15 | JTAG Function | NC |
+| 5 | 23 | GPIO23 | SDIO_DATA3 | NC |
+| 6 | 22 | GPIO22 | SDIO_DATA2 | NC |
+| 7 | 21 | GPIO21 | "SDIO_DATA1, FSPICS5" | NC |
+| 8 | 20 | GPIO20 | "SDIO_DATA0, FSPICS4" | NC |
+| 9 | 19 | GPIO19 | "SDIO_CLK, FSPICS3" | Rear LD2450 RX (ESP32 TX) - Connect to sensor RX pin |
+| 0 | 18 | GPIO18 | "SDIO_CMD, FSPICS2" | Rear LD2450 TX (ESP32 RX) - Connect to sensor TX pin |
+| 1 | 9 | GPIO9 | BOOT Strapping Pin Avoid (if possible) | NC |
+| 2 | 13 | GPIO13 | USB_D+ | **⚠️ JTAG PIN - AVOID** - Permanently tied to USB Serial/JTAG controller |
+| 3 | 12 | GPIO12 | USB_D- | **⚠️ JTAG PIN - AVOID** - Permanently tied to USB Serial/JTAG controller |
+| 4 | G | Ground | Common Ground | Common ground for all components. |
+| 5 | - | - | NC | NC |
+| 6 | - | - | NC to Chip Board only | NC |
 
 ## WS2812B LED Strip Wiring
 

@@ -6,7 +6,7 @@ esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
   # Version marker - update this when making changes
-  comment: "GPIO1/2/3 Sensors + WS2812B LED Strip - v1.5 - 2026-01-18"
+  comment: "GPIO1/2/3 Sensors + WS2812B LED Strip + Front LD2450 - v1.6 - 2026-01-19"
   on_boot:
     priority: -100
     then:
@@ -32,6 +32,20 @@ esp32:
 logger:
   level: DEBUG
   hardware_uart: USB_SERIAL_JTAG
+
+# Front LD2450 UART - GPIO16 (TX), GPIO17 (RX)
+# Wire colors: BLACK=5V, RED=RX, WHITE=TX, YELLOW=GND
+uart:
+  - id: uart_ld2450_front
+    rx_pin: GPIO16
+    tx_pin: GPIO17
+    baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
+
+ld2450:
+  - id: ld2450_front
+    uart_id: uart_ld2450_front
 
 # AP-only mode - no station connection attempts
 wifi:
@@ -68,10 +82,29 @@ sensor:
       return id(boot_count);
     update_interval: 60s
 
-# LED count slider - adjustable from portal
+  # Front LD2450 mmWave Radar Sensors
+  - platform: ld2450
+    ld2450_id: ld2450_front
+    target_count:
+      name: "Front Target Count"
+    target_1:
+      x:
+        name: "Front Target X"
+        id: front_x
+        unit_of_measurement: "mm"
+      y:
+        name: "Front Target Y"
+        id: front_y
+        unit_of_measurement: "mm"
+      distance:
+        name: "Front Target Distance"
+        id: front_distance
+        unit_of_measurement: "mm"
+
+# LED count slider - adjustable from portal (renamed to group with LED Strip in portal)
 number:
   - platform: template
-    name: "Active LED Count"
+    name: "LED Strip Active Count"
     id: active_led_count
     min_value: 1
     max_value: 144

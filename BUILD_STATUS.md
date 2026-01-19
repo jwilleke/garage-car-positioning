@@ -2,6 +2,17 @@
 
 ## Current Status
 
+## 2026-01-19-01
+
+Added UART config for Front LD2450 (GPIO16/GPIO17 at 256000 baud)
+LD2450 component initialization
+Sensors for the web portal:
+
+- Front Target Count
+- Front Target X (mm)
+- Front Target Y (mm)
+- Front Target Distance (mm)
+
 ### ✅ Configuration Files Validated
 
 1. esp32-garage-door.yaml - ✅ Validates successfully

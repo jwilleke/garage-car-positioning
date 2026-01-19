@@ -4,33 +4,35 @@
 
 ### ✅ Configuration Files Validated
 
-1. **esp32-garage-door.yaml** - ✅ Validates successfully
-2. **all-in-one.yaml** - ✅ Validates successfully (LD2450 native component working)
-3. **garage-car-sensor.yaml** - ✅ Ready (LD2450 native component working)
+1. esp32-garage-door.yaml - ✅ Validates successfully
+2. all-in-one.yaml - ✅ Validates successfully (LD2450 native component working)
+3. garage-car-sensor.yaml - ✅ Ready (LD2450 native component working)
 
 ### ✅ Build & Deployment Status
 
-**Current Status**: ✅ **BUILD AND DEPLOYMENT SUCCESSFUL!**
+Current Status: ✅ BUILD AND DEPLOYMENT SUCCESSFUL!
 
 The firmware has been successfully compiled and deployed to the ESP32-C6 device.
 
-**Firmware Location**: `.esphome/build/esp32-garage-all-in-one/.pioenvs/esp32-garage-all-in-one/firmware.factory.bin`
+Firmware Location: `.esphome/build/esp32-garage-all-in-one/.pioenvs/esp32-garage-all-in-one/firmware.factory.bin`
 
-**Build Statistics**:
+Build Statistics:
+
 - RAM Usage: 10.8% (35,548 bytes)
 - Flash Usage: 60.8% (1,115,902 bytes)
 - Build Time: ~28 seconds
 
-**Deployment Details**:
+Deployment Details:
+
 - ✅ Firmware uploaded successfully via USB
 - ✅ Device: ESP32-C6 (QFN40) revision v0.2
 - ✅ MAC Address: 98:a3:16:b1:c3:fc
 - ✅ Flash Size: 8MB
 - ✅ All flash writes verified
 
-**Next Steps**: See [DEPLOYMENT_SUCCESS.md](./DEPLOYMENT_SUCCESS.md) for post-deployment instructions.
+Next Steps: See [DEPLOYMENT_SUCCESS.md](./DEPLOYMENT_SUCCESS.md) for post-deployment instructions.
 
-**Note**: If you encounter the architecture mismatch issue again, use the `fix_ninja.sh` script. See [BUILD_FIX.md](./BUILD_FIX.md) for details.
+Note: If you encounter the architecture mismatch issue again, use the `fix_ninja.sh` script. See [BUILD_FIX.md](./BUILD_FIX.md) for details.
 
 ### ✅ Issues Fixed
 
@@ -43,13 +45,13 @@ The firmware has been successfully compiled and deployed to the ESP32-C6 device.
 
 ## LD2450 Component Setup
 
-According to the [official ESPHome documentation](https://esphome.io/components/sensor/ld2450/), LD2450 is a **native component** in ESPHome. 
+According to the [official ESPHome documentation](https://esphome.io/components/sensor/ld2450/), LD2450 is a native component in ESPHome.
 
 ### ✅ Current Status
 
-- **ESPHome Version**: 2025.5.2 (installed and working)
-- **LD2450 Component**: ✅ Native component available and validated
-- **Configuration**: ✅ All files validated successfully
+- ESPHome Version: 2025.5.2 (installed and working)
+- LD2450 Component: ✅ Native component available and validated
+- Configuration: ✅ All files validated successfully
 
 ### Verification
 
@@ -57,7 +59,8 @@ The LD2450 component is now working as a native component. No external component
 
 ### UART Configuration Requirements
 
-According to the [official documentation](https://esphome.io/components/sensor/ld2450/), the UART **must** have:
+According to the [official documentation](https://esphome.io/components/sensor/ld2450/), the UART must have:
+
 - `parity: NONE` ✅ (added)
 - `stop_bits: 1` ✅ (added)
 - `baud_rate: 256000` ✅ (already configured)
@@ -68,11 +71,11 @@ All configurations have been updated to match these requirements.
 
 ### Prerequisites
 
-1. **ESPHome Installed**
+1. ESPHome Installed
    - Version: 2025.2.2 or later
    - Can be installed via Home Assistant add-on or standalone
 
-2. **Secrets File**
+2. Secrets File
    - Ensure `esphome/secrets.yaml` exists with:
      - `wifi_ssid`
      - `wifi_password`
@@ -80,7 +83,7 @@ All configurations have been updated to match these requirements.
      - `ota_password`
      - `ap_password`
 
-3. **Network Access**
+3. Network Access
    - Required for downloading external components
    - Required for downloading ESP-IDF framework dependencies
 
@@ -117,15 +120,17 @@ esphome upload all-in-one.yaml
 ### Git Permission Errors
 
 If you encounter git errors like:
+
 ```
 could not set 'core.repositoryformatversion' to '0'
 ```
 
-**Solution**: Build outside the sandbox environment, or use Home Assistant ESPHome add-on which has proper permissions.
+Solution: Build outside the sandbox environment, or use Home Assistant ESPHome add-on which has proper permissions.
 
 ### External Component Not Found
 
 If the LD2450 component repository is not found:
+
 1. Check the repository URL is correct
 2. Verify network connectivity
 3. Try alternative repository URLs (see above)
@@ -142,6 +147,7 @@ If the LD2450 component repository is not found:
 ## Hardware Verification
 
 All hardware pinouts match the configuration:
+
 - ✅ LD2450 pinout verified (5V, GND, TX, RX)
 - ✅ GPIO assignments match wiring diagrams
 - ✅ UART baud rate: 256000 (matches LD2450 spec)

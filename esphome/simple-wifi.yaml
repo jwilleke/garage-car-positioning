@@ -6,7 +6,7 @@ esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
   # Version marker - update this when making changes
-  comment: "GPIO1/2/3 Sensors + WS2812B LED Strip + Front LD2450 - v1.6 - 2026-01-19"
+  comment: "GPIO1/2/3 Sensors + WS2812B LED Strip + Front/Rear LD2450 + Relay - v1.7 - 2026-01-19"
   on_boot:
     priority: -100
     then:
@@ -33,7 +33,8 @@ logger:
   level: DEBUG
   hardware_uart: USB_SERIAL_JTAG
 
-# Front LD2450 UART - GPIO16 (TX), GPIO17 (RX)
+# Front LD2450 UART - GPIO16 (RX from sensor TX), GPIO17 (TX to sensor RX)
+# Rear LD2450 UART - GPIO18 (RX from sensor TX), GPIO19 (TX to sensor RX)
 # Wire colors: BLACK=5V, RED=RX, WHITE=TX, YELLOW=GND
 uart:
   - id: uart_ld2450_front
@@ -43,9 +44,18 @@ uart:
     parity: NONE
     stop_bits: 1
 
+  - id: uart_ld2450_rear
+    rx_pin: GPIO18
+    tx_pin: GPIO19
+    baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
+
 ld2450:
   - id: ld2450_front
     uart_id: uart_ld2450_front
+  - id: ld2450_rear
+    uart_id: uart_ld2450_rear
 
 # AP-only mode - no station connection attempts
 wifi:
@@ -99,6 +109,25 @@ sensor:
       distance:
         name: "Front Target Distance"
         id: front_distance
+        unit_of_measurement: "mm"
+
+  # Rear LD2450 mmWave Radar Sensors
+  - platform: ld2450
+    ld2450_id: ld2450_rear
+    target_count:
+      name: "Rear Target Count"
+    target_1:
+      x:
+        name: "Rear Target X"
+        id: rear_x
+        unit_of_measurement: "mm"
+      y:
+        name: "Rear Target Y"
+        id: rear_y
+        unit_of_measurement: "mm"
+      distance:
+        name: "Rear Target Distance"
+        id: rear_distance
         unit_of_measurement: "mm"
 
 # LED count slider - adjustable from portal (renamed to group with LED Strip in portal)
@@ -193,6 +222,18 @@ binary_sensor:
 button:
   - platform: restart
     name: "Restart Device"
+
+# Garage Door Relay - GPIO10
+# 5V Relay Module with High/Low Trigger Jumper - Set to H (HIGH trigger)
+# Wiring: VCC=External 5V, GND=Shared with ESP32, IN=GPIO10
+switch:
+  - platform: gpio
+    name: "Garage Door Relay"
+    pin: GPIO10
+    id: garage_door_relay
+    on_turn_on:
+      - delay: 200ms
+      - switch.turn_off: garage_door_relay
 
 # Component Test: GPIO0 - WS2812B LED Strip
 # Wiring: External 5V PSU to VCC, GND shared with ESP32, DIN to GPIO0

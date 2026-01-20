@@ -92,6 +92,32 @@ ESP32-C6 GND ─────────┘
 ESP32-C6 GPIO0 ──────────────── DIN (LED Strip)
 ```
 
+## Relay Module Wiring
+
+Using 5V Relay Module with High/Low Trigger Jumper. Set jumper to **H** (HIGH trigger).
+
+| Relay Pin | Connect To |
+| ---- | ---- |
+| VCC | External 5V PSU (+) |
+| GND | External 5V PSU (-) AND ESP32-C6 GND |
+| IN | ESP32-C6 GPIO10 |
+| Jumper | **H** (HIGH trigger) |
+| NO | Garage door opener wall button terminal |
+| COM | Garage door opener wall button terminal |
+
+Important: The GND must be shared between the ESP32-C6 and the external power supply.
+
+```
+External 5V PSU (+) ─────────── VCC (Relay)
+External 5V PSU (-) ──┬──────── GND (Relay)
+                      │
+ESP32-C6 GND ─────────┘
+ESP32-C6 GPIO10 ───────────────── IN (Relay)
+
+Relay NO ──┬─────────────────── Garage Door Opener
+Relay COM ─┘                    Wall Button Terminals
+```
+
 ## GPIO Stability and Noise on ESP32-C6-DevKit-1-N8
 
 The noise you are experiencing on GPIO 4, 5, and 6 is primarily due to these pins being multiplexed with the JTAG debug interface (MTMS, MTDI, and MTCK respectively) [Source](cite://https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/user_guide.html). These pins often have internal pull-up or pull-down resistors enabled by default or are sampled by the hardware during boot and debugging, which can cause signal instability or "ghost" toggling when connected directly to 3.3V without proper software configuration [Source](cite://https://www.studiopieters.nl/esp32-c6-pinout/). For high-stability digital or analog signals, it is recommended to use "clean" GPIOs that are not shared with JTAG, USB, or Strapping functions [Source](cite://https://nuttx.apache.org/docs/latest/platforms/risc-v/esp32c6/boards/esp32c6-devkitc/index.html).

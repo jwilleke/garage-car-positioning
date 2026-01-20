@@ -67,13 +67,22 @@ This diagram shows the wiring for a single ESP32-C6 controlling all car position
 
 #### Relay Module
 
-Located near Garage Door opener. Wired to terminals on Garge door opener for NO & COM.
+Located near Garage Door opener. Wired to terminals on Garage door opener for NO & COM.
 
-#### Relay Pins
+5V Relay Module with High/Low Trigger Jumper - Set jumper to **H** (HIGH trigger).
 
-- +Coil to ESP32-C6 Pin GPIO10
-- GRN
-- NO & COM
+#### Relay Wiring
+
+| Relay Pin | Connect To |
+| ---- | ---- |
+| VCC | External 5V (+) |
+| GND | External 5V (-) AND ESP32-C6 GND (shared ground) |
+| IN | ESP32-C6 GPIO10 |
+| Jumper | Set to **H** (HIGH trigger) |
+| NO | Garage door opener wall button terminal |
+| COM | Garage door opener wall button terminal |
+
+**Important:** The GND must be shared between the ESP32-C6 and the external 5V power supply.
 
 #### Rear LD2450 Sensor - Ceiling Mounted
 

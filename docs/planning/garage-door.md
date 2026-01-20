@@ -24,7 +24,7 @@ This parts list is for a DIY build using the Seeed Studio XIAO ESP32C6 as the co
 #### Core Components
 
 - Microcontroller: Seeed Studio XIAO ESP32C6 — $8–12 (compact, Wi-Fi 6/BLE/Zigbee/Thread support for direct HA/ESPHome integration).
-- Relay Module: Single-channel 3.3V opto-isolated relay (e.g., low-level trigger) — $2–5 (wired to opener terminals for open/close pulses).
+- Relay Module: Single-channel 5V opto-isolated relay with High/Low trigger jumper (set to HIGH trigger) — $2–5 (wired to opener terminals for open/close pulses).
 - Power Supply: 5V USB wall adapter + micro-USB cable — $3–6 (or reuse existing phone charger).
 
 #### Rotary Encoder Setup (Custom Magnetic Quadrature)

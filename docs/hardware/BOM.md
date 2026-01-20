@@ -51,7 +51,7 @@ A single, advanced system that performs **both** car positioning and garage door
 
 | Component | Quantity | Notes | URL |
 | ---- | ---- | ---- | ---- |
-| Single-channel 3.3V Relay | 1 | To simulate a button press on the opener | [1 Channel DC 3V / 3.3V Relay](https://www.amazon.com/DiGiYes-Channel-Optocoupler-Isolated-Control/dp/B0CZ3T8116/) |
+| 5V Relay Module (High/Low Trigger) | 1 | To simulate a button press on the opener. Set jumper to H (HIGH trigger). | [1 Channel 5V Relay with High/Low Trigger](https://www.amazon.com/dp/B0CHFJSNP6) |
 | Magnetic Reed Switch | 1 | For the "Closed" state sensor | Already had |
 | Hall Effect Proximity Sensors (e.g., NJK-5002C) | 2 | For building the custom magnetic rotary encoder. | [NJK-5002C](https://www.amazon.com/dp/B01MZYYCLH?ref=ppx_yo2ov_dt_b_fed_asin_title) |
 | Neodymium Magnets | Assorted | Small magnets for the rotary encoder's sprocket/shaft. | Already had |
@@ -69,7 +69,7 @@ A single, advanced system that performs **both** car positioning and garage door
 
 ## LD2450
 
-- LD2450 Ra·dar Module: A Trajectory Module, which can achieve real-time tracking of the position of the moving target in the detection area, and output the distance, angle and speed information of the moving target in the area through the serial port.
+- LD2450 Radar Module: A Trajectory Module, which can achieve real-time tracking of the position of the moving target in the detection area, and output the distance, angle and speed information of the moving target in the area through the serial port.
 - Using Scenes: It is mainly used in common indoor scenes, such as home, office and hotel, to realize the positioning and tracking of moving people.
 - Detection Angle : Azimuth ± 60° / Tilt ± 35°. Angle Accuracy : 2° ~ 20°.
 - Detection Distance : Max Sensing Distance 8m. Distance Defense Rate : 0.75m. Distance Measurement Accuracy : 0.15m.

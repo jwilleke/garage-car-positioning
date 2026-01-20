@@ -77,7 +77,7 @@ This diagram combines both systems, showing how a single ESP32-C6 can manage all
 ```
       +-----------------------------------------------------------------+
       |                                                                 |
-      |                      GARAGE (Top-Down View)                       |
+      |                      GARAGE (Top-Down View)                     |
       |                                                                 |
       |    +--------------------------+                                 |
       |    | Garage Door Opener Motor |                                 |
@@ -98,6 +98,7 @@ This diagram combines both systems, showing how a single ESP32-C6 can manage all
       |                                                                 |
       |             (Front LD2450 Sensor - Wall Mounted)                |
       |                                                                 |
+      |                    Reed switch on track                         |
       +=================================================================+
                    (Garage Door Opening - Reed switch on track)
 ```
@@ -113,3 +114,55 @@ This diagram combines both systems, showing how a single ESP32-C6 can manage all
   * Relay Module: Near the garage door opener.
   * Rotary Encoder: On the torsion bar, typically at the Garage door opening.
   * Closed Reed Switch: On the garage door track, positioned to detect a fully closed door.
+
+## Wiring Components
+
+>May Vary for different Implementations
+
+There are three primary locations
+
+* Near Gargedoor opener
+* Wall at back of Garage
+* Ceiling at front of Garage
+
+### Near Gargedoor opener
+
+Could use 5V Power Suppy for this and WS2812B LED Strip.
+
+* ESP32-C6
+* Close Door Relay Module (5V) (Exisiting Wire on Opener)
+* Rear LD2450 Sensor (Ceiling)
+
+### Wall at Back of Garage
+
+3 Wires
+Could use 5V Power Suppy for Just this. Still need GND to ESP32-C6.
+
+* WS2812B LED Strip
+  * 5V
+  * GND
+  * Data
+
+### Ceiling at front of Garage
+
+Six Wires
+Could use 5V Power Suppy for Just this. Still need GND to ESP32-C6
+
+| Item | 5V | GND | Data | HESA | HESB | Realy IN |
+| ---- | ---- | ---- | ---- | ---- | ---- |
+| Power Supply | 5V | - | - | - | - | - |
+| GND | - | GND | - | - | - | - |
+| Hall Effect Sensor A | 5V | GND | HESA | - | - |
+| Hall Effect Sensor B | 5V | GND | - | HESB | - |
+| Closed Door Switch | 5V | GND | - | - | - | IN |
+
+## Wall at Front of Garage
+
+4 Wire
+
+Front LD2450 Sensor (Wall)
+
+* 5V
+* GND
+* RX
+* TX

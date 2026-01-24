@@ -1,3 +1,5 @@
+# simple-wifi-test.yaml is inbtended to be a simple file to test component configuration, code and connections. No caliration is done.
+
 substitutions:
   device_name: simple-wifi-test
   friendly_name: "Simple WiFi Test"

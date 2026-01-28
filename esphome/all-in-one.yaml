@@ -12,10 +12,11 @@ substitutions:
   garage_door_full_open_counts: "10000"
 
   # GPIO Assignments for ESP32-C6 DevKit (All-in-One)
+  # See docs/hardware/ESP32-C6 DevKit.md for pinout details
   led_strip_pin: GPIO0
-  garage_door_closed_switch_pin: GPIO4
-  garage_door_encoder_a_pin: GPIO5
-  garage_door_encoder_b_pin: GPIO6
+  garage_door_closed_switch_pin: GPIO1  # Changed from GPIO4 (JTAG MTMS) - GPIO1 is stable LP pin
+  garage_door_encoder_a_pin: GPIO2     # Changed from GPIO5 (JTAG MTDI) - GPIO2 is stable LP pin
+  garage_door_encoder_b_pin: GPIO3     # Changed from GPIO6 (JTAG MTCK) - GPIO3 is stable LP pin
   garage_door_relay_pin: GPIO10
   ld2450_front_rx_pin: GPIO16
   ld2450_front_tx_pin: GPIO17

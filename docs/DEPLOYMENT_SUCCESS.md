@@ -143,9 +143,9 @@ See `docs/calibration.md` for detailed instructions.
 
 ### Garage Door Not Responding
 
-1. **Check relay wiring** - GPIO12
-2. **Verify encoder connections** - GPIO5 (A), GPIO6 (B)
-3. **Check closed switch** - GPIO4
+1. **Check relay wiring** - GPIO10
+2. **Verify encoder connections** - GPIO2 (A), GPIO3 (B)
+3. **Check closed switch** - GPIO1
 
 ## Future Updates
 

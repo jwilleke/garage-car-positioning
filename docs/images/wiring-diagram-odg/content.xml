@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" 
+                         xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" 
+                         xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" 
+                         xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" 
+                         xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" 
+                         office:version="1.2">
+  <office:scripts/>
+  <office:font-face-decls/>
+  <office:automatic-styles>
+    <style:style style:name="ComponentBox" style:family="graphic">
+      <style:graphic-properties draw:fill="#e8f4f8" draw:stroke="#2c5aa0" svg:stroke-width="0.05cm" draw:stroke-linecap="round"/>
+    </style:style>
+    <style:style style:name="ESP32Box" style:family="graphic">
+      <style:graphic-properties draw:fill="#fff4e6" draw:stroke="#d4a574" svg:stroke-width="0.08cm" draw:stroke-linecap="round"/>
+    </style:style>
+    <style:style style:name="PinText" style:family="text">
+      <style:text-properties fo:font-size="10pt" fo:font-family="Arial"/>
+    </style:style>
+    <style:style style:name="ComponentText" style:family="text">
+      <style:text-properties fo:font-size="12pt" fo:font-family="Arial" fo:font-weight="bold"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:drawing>
+      <draw:page draw:name="Page1" draw:style-name="standard-page-style" draw:id="Page1">
+        
+        <!-- Title -->
+        <draw:text-box>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">ESP32-C6 Garage All-in-One Wiring Diagram</text:span>
+          </text:p>
+          <text:p>
+            <text:span text:style-name="PinText">Based on GPIO1/2/3 (LP pins) - Updated 2026-01-28</text:span>
+          </text:p>
+        </draw:text-box>
+        
+        <!-- ESP32-C6 DevKit Box -->
+        <draw:rect draw:style-name="ESP32Box" draw:text-style-name="Standard" 
+                   svg:width="8cm" svg:height="5cm" svg:x="12cm" svg:y="3cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">ESP32-C6 DevKit</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GPIO0 → LED Strip DIN</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GPIO1 → Door Switch</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GPIO2 → Hall Sensor A</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GPIO3 → Hall Sensor B</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GPIO10 → Relay IN</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GPIO16 (TX) ← Front LD2450</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GPIO17 (RX) → Front LD2450</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GPIO18 (TX) ← Rear LD2450</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GPIO19 (RX) → Rear LD2450</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">5V → Power Distribution</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GND → Common Ground</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Front LD2450 -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="3cm" svg:x="1cm" svg:y="10cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Front LD2450</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">BLACK (5V)</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">RED (RX)</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">WHITE (TX)</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">YELLOW (GND)</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Rear LD2450 -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="3cm" svg:x="24cm" svg:y="10cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Rear LD2450</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">BLACK (5V)</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">RED (RX)</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">WHITE (TX)</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">YELLOW (GND)</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- WS2812B LED Strip -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="2.5cm" svg:x="1cm" svg:y="15cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">WS2812B LED Strip</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">VCC (Red) → Ext 5V PSU</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GND → Shared GND</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">DIN (Green) → GPIO0</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- External 5V Power Supply -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="2cm" svg:x="1cm" svg:y="18cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">External 5V PSU</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">+ (Red) → LED Strip VCC</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">- (Black) → Shared GND</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Relay Module -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="3cm" svg:x="12cm" svg:y="15cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">5V Relay Module</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">VCC → Ext 5V PSU</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GND → Shared GND</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">IN → GPIO10</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Jumper: H (HIGH)</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Garage Door Opener -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="2cm" svg:x="12cm" svg:y="18.5cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Garage Door Opener</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Wall Button Terminals</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">NO &amp; COM ← Relay</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Door Closed Switch -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="2.5cm" svg:x="19cm" svg:y="15cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Reed Switch</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">NO (Black) → GPIO1</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">COM (White) → GND</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Mode: INPUT_PULLUP</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Hall Effect Sensor A -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="2.5cm" svg:x="19cm" svg:y="18cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Hall Sensor A</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Brown → 5V</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Blue → GND</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Black → GPIO2</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Hall Effect Sensor B -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="2.5cm" svg:x="19cm" svg:y="21cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Hall Sensor B</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Brown → 5V</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Blue → GND</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Black → GPIO3</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Connection Details Legend -->
+        <draw:text-box svg:width="28cm" svg:height="8cm" svg:x="1cm" svg:y="24cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Connection Details</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">ESP32-C6 Pin Assignments: GPIO0→LED Strip DIN, GPIO1→Door Switch, GPIO2→Hall Sensor A, GPIO3→Hall Sensor B, GPIO10→Relay IN, GPIO16→Front LD2450 TX (ESP32 RX), GPIO17→Front LD2450 RX (ESP32 TX), GPIO18→Rear LD2450 TX (ESP32 RX), GPIO19→Rear LD2450 RX (ESP32 TX), 5V→Power Distribution, GND→Common Ground</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Wire Colors: BLACK=5V/GND/Signal, RED=5V/RX, WHITE=TX/GND, YELLOW=GND, BROWN=5V (Hall Sensors), BLUE=GND (Hall Sensors), GREEN=LED Strip DIN</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Important: All GND connections must share a common ground. LED Strip and Relay require external 5V power supply (3A+ recommended). GPIO1/2/3 are Low Power (LP) pins - stable, avoid GPIO4/5/6 (JTAG). Relay jumper must be set to H (HIGH trigger).</text:span>
+          </text:p>
+        </draw:text-box>
+        
+      </draw:page>
+    </office:drawing>
+  </office:body>
+</office:document-content>

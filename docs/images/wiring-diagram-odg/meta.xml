@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-meta xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" 
+                       xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" 
+                       xmlns:dc="http://purl.org/dc/elements/1.1/" 
+                       xmlns:xlink="http://www.w3.org/1999/xlink" 
+                       office:version="1.2">
+  <office:meta>
+    <meta:generator>ESP32-C6 Garage Wiring Diagram Generator</meta:generator>
+    <dc:title>ESP32-C6 Garage All-in-One Wiring Diagram</dc:title>
+    <dc:description>Accurate wiring diagram for ESP32-C6 Garage Automation System using GPIO1/2/3 (LP pins)</dc:description>
+    <meta:creation-date>2026-01-28T00:00:00</meta:creation-date>
+  </office:meta>
+</office:document-meta>

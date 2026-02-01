@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+     width="1200" height="1600" viewBox="0 0 1200 1600">
+  
+  <defs>
+    <style>
+      .component-box { fill: #e8f4f8; stroke: #2c5aa0; stroke-width: 2; }
+      .esp32-box { fill: #fff4e6; stroke: #d4a574; stroke-width: 3; }
+      .pin-label { font-family: Arial, sans-serif; font-size: 11px; fill: #333; }
+      .component-label { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #000; }
+      .wire-red { stroke: #dc143c; stroke-width: 2; fill: none; }
+      .wire-black { stroke: #000; stroke-width: 2; fill: none; }
+      .wire-white { stroke: #c0c0c0; stroke-width: 2; fill: none; }
+      .wire-yellow { stroke: #ffd700; stroke-width: 2; fill: none; }
+      .wire-brown { stroke: #8b4513; stroke-width: 2; fill: none; }
+      .wire-blue { stroke: #0000ff; stroke-width: 2; fill: none; }
+      .wire-green { stroke: #00aa00; stroke-width: 2; fill: none; }
+      .wire-5v { stroke: #ff0000; stroke-width: 3; fill: none; }
+      .wire-gnd { stroke: #000000; stroke-width: 3; fill: none; }
+    </style>
+  </defs>
+  
+  <!-- Title -->
+  <text x="600" y="30" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">ESP32-C6 Garage All-in-One Wiring Diagram</text>
+  <text x="600" y="50" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">Based on GPIO1/2/3 (LP pins) - Updated 2026-01-28</text>
+  
+  <!-- ESP32-C6 DevKit -->
+  <rect x="450" y="100" width="300" height="200" class="esp32-box" rx="5"/>
+  <text x="600" y="125" text-anchor="middle" class="component-label">ESP32-C6 DevKit</text>
+  
+  <!-- ESP32 Pins - Left Side -->
+  <text x="460" y="150" class="pin-label">GPIO0 -&gt; LED Strip DIN</text>
+  <text x="460" y="170" class="pin-label">GPIO1 -&gt; Door Switch</text>
+  <text x="460" y="190" class="pin-label">GPIO2 -&gt; Hall Sensor A</text>
+  <text x="460" y="210" class="pin-label">GPIO3 -&gt; Hall Sensor B</text>
+  <text x="460" y="230" class="pin-label">GPIO10 -&gt; Relay IN</text>
+  <text x="460" y="250" class="pin-label">5V -&gt; Power Distribution</text>
+  <text x="460" y="270" class="pin-label">GND -&gt; Common Ground</text>
+  
+  <!-- ESP32 Pins - Right Side -->
+  <text x="680" y="150" class="pin-label">GPIO16 (TX) &lt;- Front LD2450</text>
+  <text x="680" y="170" class="pin-label">GPIO17 (RX) -&gt; Front LD2450</text>
+  <text x="680" y="190" class="pin-label">GPIO18 (TX) &lt;- Rear LD2450</text>
+  <text x="680" y="210" class="pin-label">GPIO19 (RX) -&gt; Rear LD2450</text>
+  
+  <!-- Front LD2450 Sensor -->
+  <rect x="50" y="400" width="200" height="120" class="component-box" rx="5"/>
+  <text x="150" y="425" text-anchor="middle" class="component-label">Front LD2450</text>
+  <text x="60" y="450" class="pin-label">BLACK (5V)</text>
+  <text x="60" y="470" class="pin-label">RED (RX)</text>
+  <text x="60" y="490" class="pin-label">WHITE (TX)</text>
+  <text x="60" y="510" class="pin-label">YELLOW (GND)</text>
+  
+  <!-- Rear LD2450 Sensor -->
+  <rect x="950" y="400" width="200" height="120" class="component-box" rx="5"/>
+  <text x="1050" y="425" text-anchor="middle" class="component-label">Rear LD2450</text>
+  <text x="960" y="450" class="pin-label">BLACK (5V)</text>
+  <text x="960" y="470" class="pin-label">RED (RX)</text>
+  <text x="960" y="490" class="pin-label">WHITE (TX)</text>
+  <text x="960" y="510" class="pin-label">YELLOW (GND)</text>
+  
+  <!-- WS2812B LED Strip -->
+  <rect x="50" y="600" width="200" height="100" class="component-box" rx="5"/>
+  <text x="150" y="625" text-anchor="middle" class="component-label">WS2812B LED Strip</text>
+  <text x="60" y="650" class="pin-label">VCC (Red) -&gt; Ext 5V PSU</text>
+  <text x="60" y="670" class="pin-label">GND -&gt; Shared GND</text>
+  <text x="60" y="690" class="pin-label">DIN (Green) -&gt; GPIO0</text>
+  
+  <!-- External 5V Power Supply -->
+  <rect x="50" y="750" width="200" height="80" class="component-box" rx="5"/>
+  <text x="150" y="775" text-anchor="middle" class="component-label">External 5V PSU</text>
+  <text x="60" y="800" class="pin-label">+ (Red) -&gt; LED Strip VCC</text>
+  <text x="60" y="820" class="pin-label">- (Black) -&gt; Shared GND</text>
+  
+  <!-- Relay Module -->
+  <rect x="450" y="600" width="200" height="120" class="component-box" rx="5"/>
+  <text x="550" y="625" text-anchor="middle" class="component-label">5V Relay Module</text>
+  <text x="460" y="650" class="pin-label">VCC -&gt; Ext 5V PSU</text>
+  <text x="460" y="670" class="pin-label">GND -&gt; Shared GND</text>
+  <text x="460" y="690" class="pin-label">IN -&gt; GPIO10</text>
+  <text x="460" y="710" class="pin-label">Jumper: H (HIGH)</text>
+  
+  <!-- Garage Door Opener -->
+  <rect x="450" y="750" width="200" height="80" class="component-box" rx="5"/>
+  <text x="550" y="775" text-anchor="middle" class="component-label">Garage Door Opener</text>
+  <text x="460" y="800" class="pin-label">Wall Button Terminals</text>
+  <text x="460" y="820" class="pin-label">NO &amp; COM &lt;- Relay</text>
+  
+  <!-- Door Closed Switch -->
+  <rect x="750" y="600" width="200" height="100" class="component-box" rx="5"/>
+  <text x="850" y="625" text-anchor="middle" class="component-label">Reed Switch</text>
+  <text x="760" y="650" class="pin-label">NO (Black) -&gt; GPIO1</text>
+  <text x="760" y="670" class="pin-label">COM (White) -&gt; GND</text>
+  <text x="760" y="690" class="pin-label">Mode: INPUT_PULLUP</text>
+  
+  <!-- Hall Effect Sensor A -->
+  <rect x="750" y="750" width="200" height="100" class="component-box" rx="5"/>
+  <text x="850" y="775" text-anchor="middle" class="component-label">Hall Sensor A</text>
+  <text x="760" y="800" class="pin-label">Brown -&gt; 5V</text>
+  <text x="760" y="820" class="pin-label">Blue -&gt; GND</text>
+  <text x="760" y="840" class="pin-label">Black -&gt; GPIO2</text>
+  
+  <!-- Hall Effect Sensor B -->
+  <rect x="750" y="900" width="200" height="100" class="component-box" rx="5"/>
+  <text x="850" y="925" text-anchor="middle" class="component-label">Hall Sensor B</text>
+  <text x="760" y="950" class="pin-label">Brown -&gt; 5V</text>
+  <text x="760" y="970" class="pin-label">Blue -&gt; GND</text>
+  <text x="760" y="990" class="pin-label">Black -&gt; GPIO3</text>
+  
+  <!-- Wiring Connections -->
+  
+  <!-- Front LD2450 to ESP32 -->
+  <line x1="250" y1="450" x2="600" y2="250" class="wire-black" marker-end="url(#arrowhead)"/>
+  <text x="400" y="340" class="pin-label" fill="#000">5V</text>
+  <line x1="250" y1="470" x2="680" y2="170" class="wire-red" marker-end="url(#arrowhead)"/>
+  <text x="450" y="310" class="pin-label" fill="#dc143c">RX-&gt;GPIO17</text>
+  <line x1="250" y1="490" x2="680" y2="150" class="wire-white" marker-end="url(#arrowhead)"/>
+  <text x="450" y="300" class="pin-label" fill="#666">TX&lt;-GPIO16</text>
+  <line x1="250" y1="510" x2="600" y2="270" class="wire-yellow" marker-end="url(#arrowhead)"/>
+  <text x="400" y="380" class="pin-label" fill="#666">GND</text>
+  
+  <!-- Rear LD2450 to ESP32 -->
+  <line x1="950" y1="450" x2="600" y2="250" class="wire-black" marker-end="url(#arrowhead)"/>
+  <text x="750" y="340" class="pin-label" fill="#000">5V</text>
+  <line x1="950" y1="470" x2="680" y2="210" class="wire-red" marker-end="url(#arrowhead)"/>
+  <text x="800" y="330" class="pin-label" fill="#dc143c">RX-&gt;GPIO19</text>
+  <line x1="950" y1="490" x2="680" y2="190" class="wire-white" marker-end="url(#arrowhead)"/>
+  <text x="800" y="280" class="pin-label" fill="#666">TX&lt;-GPIO18</text>
+  <line x1="950" y1="510" x2="600" y2="270" class="wire-yellow" marker-end="url(#arrowhead)"/>
+  <text x="750" y="380" class="pin-label" fill="#666">GND</text>
+  
+  <!-- LED Strip to ESP32 and PSU -->
+  <line x1="150" y1="650" x2="150" y2="800" class="wire-5v" marker-end="url(#arrowhead)"/>
+  <line x1="150" y1="670" x2="150" y2="820" class="wire-gnd"/>
+  <line x1="150" y1="690" x2="460" y2="150" class="wire-green" marker-end="url(#arrowhead)"/>
+  <text x="280" y="400" class="pin-label" fill="#00aa00">DIN-&gt;GPIO0</text>
+  <line x1="150" y1="670" x2="600" y2="270" class="wire-gnd"/>
+  
+  <!-- Relay to ESP32 and PSU -->
+  <line x1="450" y1="650" x2="150" y2="800" class="wire-5v"/>
+  <line x1="450" y1="670" x2="600" y2="270" class="wire-gnd"/>
+  <line x1="460" y1="690" x2="460" y2="230" class="wire-black" marker-end="url(#arrowhead)"/>
+  <text x="420" y="450" class="pin-label" fill="#000">IN-&gt;GPIO10</text>
+  
+  <!-- Door Switch to ESP32 -->
+  <line x1="750" y1="650" x2="460" y2="170" class="wire-black" marker-end="url(#arrowhead)"/>
+  <text x="580" y="400" class="pin-label" fill="#000">NO-&gt;GPIO1</text>
+  <line x1="750" y1="670" x2="600" y2="270" class="wire-white"/>
+  
+  <!-- Hall Sensor A to ESP32 -->
+  <line x1="750" y1="800" x2="600" y2="250" class="wire-brown"/>
+  <line x1="750" y1="820" x2="600" y2="270" class="wire-blue"/>
+  <line x1="760" y1="840" x2="460" y2="190" class="wire-black" marker-end="url(#arrowhead)"/>
+  <text x="580" y="500" class="pin-label" fill="#000">Black-&gt;GPIO2</text>
+  
+  <!-- Hall Sensor B to ESP32 -->
+  <line x1="750" y1="950" x2="600" y2="250" class="wire-brown"/>
+  <line x1="750" y1="970" x2="600" y2="270" class="wire-blue"/>
+  <line x1="760" y1="990" x2="460" y2="210" class="wire-black" marker-end="url(#arrowhead)"/>
+  <text x="580" y="580" class="pin-label" fill="#000">Black-&gt;GPIO3</text>
+  
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333" />
+    </marker>
+  </defs>
+  
+  <!-- Legend -->
+  <rect x="50" y="1050" width="1100" height="500" fill="#f9f9f9" stroke="#ccc" stroke-width="1" rx="5"/>
+  <text x="600" y="1080" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold">Connection Details</text>
+  
+  <!-- Pin Assignment Table -->
+  <text x="100" y="1110" font-family="Arial" font-size="14" font-weight="bold">ESP32-C6 Pin Assignments:</text>
+  <text x="120" y="1140" class="pin-label">GPIO0  -&gt; WS2812B LED Strip DIN (Green wire)</text>
+  <text x="120" y="1160" class="pin-label">GPIO1  -&gt; Door Closed Reed Switch NO (Black wire)</text>
+  <text x="120" y="1180" class="pin-label">GPIO2  -&gt; Hall Effect Sensor A Output (Black wire)</text>
+  <text x="120" y="1200" class="pin-label">GPIO3  -&gt; Hall Effect Sensor B Output (Black wire)</text>
+  <text x="120" y="1220" class="pin-label">GPIO10 -&gt; Relay Module IN</text>
+  <text x="120" y="1240" class="pin-label">GPIO16 &lt;- Front LD2450 TX (ESP32 RX) - WHITE wire</text>
+  <text x="120" y="1260" class="pin-label">GPIO17 -&gt; Front LD2450 RX (ESP32 TX) - RED wire</text>
+  <text x="120" y="1280" class="pin-label">GPIO18 &lt;- Rear LD2450 TX (ESP32 RX) - WHITE wire</text>
+  <text x="120" y="1300" class="pin-label">GPIO19 -&gt; Rear LD2450 RX (ESP32 TX) - RED wire</text>
+  <text x="120" y="1320" class="pin-label">5V     -&gt; Power Distribution (all 5V components)</text>
+  <text x="120" y="1340" class="pin-label">GND    -&gt; Common Ground (all components)</text>
+  
+  <!-- Wire Color Legend -->
+  <text x="100" y="1380" font-family="Arial" font-size="14" font-weight="bold">Wire Colors:</text>
+  <circle cx="120" cy="1400" r="8" fill="#000"/>
+  <text x="140" y="1405" class="pin-label">Black = 5V/GND/Signal</text>
+  <circle cx="320" cy="1400" r="8" fill="#dc143c"/>
+  <text x="340" y="1405" class="pin-label">Red = 5V/RX</text>
+  <circle cx="520" cy="1400" r="8" fill="#c0c0c0"/>
+  <text x="540" y="1405" class="pin-label">White = TX/GND</text>
+  <circle cx="720" cy="1400" r="8" fill="#ffd700"/>
+  <text x="740" y="1405" class="pin-label">Yellow = GND</text>
+  <circle cx="920" cy="1400" r="8" fill="#8b4513"/>
+  <text x="940" y="1405" class="pin-label">Brown = 5V (Hall Sensors)</text>
+  <circle cx="120" cy="1420" r="8" fill="#0000ff"/>
+  <text x="140" y="1425" class="pin-label">Blue = GND (Hall Sensors)</text>
+  <circle cx="320" cy="1420" r="8" fill="#00aa00"/>
+  <text x="340" y="1425" class="pin-label">Green = LED Strip DIN</text>
+  
+  <!-- Important Notes -->
+  <text x="100" y="1460" font-family="Arial" font-size="14" font-weight="bold">Important Notes:</text>
+  <text x="120" y="1490" class="pin-label">• All GND connections must share a common ground</text>
+  <text x="120" y="1510" class="pin-label">• LED Strip and Relay require external 5V power supply (3A+ recommended)</text>
+  <text x="120" y="1530" class="pin-label">• GPIO1, GPIO2, GPIO3 are Low Power (LP) pins - stable, avoid GPIO4/5/6 (JTAG)</text>
+  <text x="120" y="1550" class="pin-label">• Relay jumper must be set to H (HIGH trigger)</text>
+  <text x="120" y="1570" class="pin-label">• Door switch uses INPUT_PULLUP mode with inverted: true</text>
+  
+</svg>

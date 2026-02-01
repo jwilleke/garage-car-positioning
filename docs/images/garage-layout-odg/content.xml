@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" 
+                         xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" 
+                         xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" 
+                         xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" 
+                         xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" 
+                         office:version="1.2">
+  <office:scripts/>
+  <office:font-face-decls/>
+  <office:automatic-styles>
+    <style:style style:name="ComponentBox" style:family="graphic">
+      <style:graphic-properties draw:fill="#e8f4f8" draw:stroke="#2c5aa0" svg:stroke-width="0.05cm"/>
+    </style:style>
+    <style:style style:name="ESP32Box" style:family="graphic">
+      <style:graphic-properties draw:fill="#fff4e6" draw:stroke="#d4a574" svg:stroke-width="0.08cm"/>
+    </style:style>
+    <style:style style:name="GarageWall" style:family="graphic">
+      <style:graphic-properties draw:fill="#d3d3d3" draw:stroke="#666" svg:stroke-width="0.08cm"/>
+    </style:style>
+    <style:style style:name="GarageDoor" style:family="graphic">
+      <style:graphic-properties draw:fill="#8b7355" draw:stroke="#654321" svg:stroke-width="0.08cm"/>
+    </style:style>
+    <style:style style:name="WireBundle" style:family="graphic">
+      <style:graphic-properties draw:stroke="#333" svg:stroke-width="0.15cm" draw:fill="none"/>
+    </style:style>
+    <style:style style:name="PinText" style:family="text">
+      <style:text-properties fo:font-size="9pt" fo:font-family="Arial"/>
+    </style:style>
+    <style:style style:name="ComponentText" style:family="text">
+      <style:text-properties fo:font-size="11pt" fo:font-family="Arial" fo:font-weight="bold"/>
+    </style:style>
+    <style:style style:name="LocationText" style:family="text">
+      <style:text-properties fo:font-size="9pt" fo:font-family="Arial" fo:font-style="italic"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:drawing>
+      <draw:page draw:name="Page1" draw:style-name="standard-page-style" draw:id="Page1">
+        
+        <!-- Title -->
+        <draw:text-box svg:width="30cm" svg:height="1cm" svg:x="2cm" svg:y="0.5cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Garage Layout - All-in-One Wiring Diagram</text:span>
+          </text:p>
+          <text:p>
+            <text:span text:style-name="PinText">Components in Physical Locations with Wiring Bundles</text:span>
+          </text:p>
+        </draw:text-box>
+        
+        <!-- Garage Structure - Back Wall -->
+        <draw:rect draw:style-name="GarageWall" svg:width="30cm" svg:height="0.5cm" svg:x="2cm" svg:y="2cm"/>
+        <draw:text-box svg:width="30cm" svg:height="0.5cm" svg:x="2cm" svg:y="2cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="LocationText">Back Wall</text:span>
+          </text:p>
+        </draw:text-box>
+        
+        <!-- Garage Structure - Left Wall -->
+        <draw:rect draw:style-name="GarageWall" svg:width="0.5cm" svg:height="35cm" svg:x="2cm" svg:y="2cm"/>
+        
+        <!-- Garage Structure - Right Wall -->
+        <draw:rect draw:style-name="GarageWall" svg:width="0.5cm" svg:height="35cm" svg:x="31.5cm" svg:y="2cm"/>
+        
+        <!-- Garage Structure - Front Wall (above door) -->
+        <draw:rect draw:style-name="GarageWall" svg:width="30cm" svg:height="0.5cm" svg:x="2cm" svg:y="25cm"/>
+        <draw:text-box svg:width="30cm" svg:height="0.5cm" svg:x="2cm" svg:y="25cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="LocationText">Front Wall</text:span>
+          </text:p>
+        </draw:text-box>
+        
+        <!-- Garage Door (at bottom) -->
+        <draw:rect draw:style-name="GarageDoor" svg:width="30cm" svg:height="7cm" svg:x="2cm" svg:y="37cm"/>
+        <draw:text-box svg:width="30cm" svg:height="2cm" svg:x="2cm" svg:y="40cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">GARAGE DOOR (Overhead Door)</text:span>
+          </text:p>
+        </draw:text-box>
+        
+        <!-- ESP32-C6 Control Center (Top Center, near garage door opener) -->
+        <draw:rect draw:style-name="ESP32Box" draw:text-style-name="Standard" 
+                   svg:width="7cm" svg:height="4cm" svg:x="13.5cm" svg:y="4cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">ESP32-C6 Control Center</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="LocationText">(Near Garage Door Opener)</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">GPIO0-GPIO3, GPIO10, GPIO16-19</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">5V, GND Power Distribution</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- External 5V Power Supply -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="2cm" svg:x="22cm" svg:y="4cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">External 5V PSU</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">3A+ Recommended</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Front LD2450 Sensor (Front Wall) -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="2.5cm" svg:x="14cm" svg:y="22cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Front LD2450</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="LocationText">(Wall Mounted)</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">5V, GND, RX, TX</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Rear LD2450 Sensor (Ceiling) -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="2.5cm" svg:x="14cm" svg:y="3cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Rear LD2450</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="LocationText">(Ceiling Mounted)</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">5V, GND, RX, TX</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- LED Strip (Ceiling) -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="25cm" svg:height="1cm" svg:x="4cm" svg:y="12cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">WS2812B LED Strip (Ceiling, Parallel to Car)</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Car Position Indicator -->
+        <draw:rect draw:style-name="ComponentBox" svg:width="20cm" svg:height="7cm" svg:x="6cm" svg:y="14cm" 
+                   draw:stroke-dasharray="0.2cm 0.2cm" draw:fill="none"/>
+        <draw:text-box svg:width="20cm" svg:height="1cm" svg:x="6cm" svg:y="15cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Car Parking Position</text:span>
+          </text:p>
+        </draw:text-box>
+        
+        <!-- Garage Door Components -->
+        <!-- Rotary Encoder -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="6cm" svg:height="2cm" svg:x="4cm" svg:y="33cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Rotary Encoder (Torsion Bar)</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Hall Sensor A (GPIO2), Hall Sensor B (GPIO3)</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Reed Switch -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="2cm" svg:x="12cm" svg:y="33cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Reed Switch (Door Track)</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">NO (GPIO1), COM (GND)</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Relay Module -->
+        <draw:rect draw:style-name="ComponentBox" draw:text-style-name="Standard" 
+                   svg:width="5cm" svg:height="2.5cm" svg:x="13.5cm" svg:y="9cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">5V Relay Module</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">VCC, GND, IN (GPIO10)</text:span>
+          </text:p>
+        </draw:rect>
+        
+        <!-- Wiring Bundles -->
+        <!-- Bundle 1: To Front LD2450 -->
+        <draw:line draw:style-name="WireBundle" svg:x1="17cm" svg:y1="8cm" svg:x2="16.5cm" svg:y2="22cm"/>
+        <draw:text-box svg:width="4cm" svg:height="1cm" svg:x="18cm" svg:y="14cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Bundle 1: Front LD2450</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">4 wires: 5V, GND, RX, TX</text:span>
+          </text:p>
+        </draw:text-box>
+        
+        <!-- Bundle 2: To Rear LD2450 -->
+        <draw:line draw:style-name="WireBundle" svg:x1="17cm" svg:y1="8cm" svg:x2="16.5cm" svg:y2="3cm"/>
+        <draw:text-box svg:width="4cm" svg:height="1cm" svg:x="18cm" svg:y="5cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Bundle 2: Rear LD2450</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">4 wires: 5V, GND, RX, TX</text:span>
+          </text:p>
+        </draw:text-box>
+        
+        <!-- Bundle 3: To LED Strip -->
+        <draw:line draw:style-name="WireBundle" svg:x1="17cm" svg:y1="8cm" svg:x2="16.5cm" svg:y2="12cm"/>
+        <draw:text-box svg:width="4cm" svg:height="1cm" svg:x="18cm" svg:y="9cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Bundle 3: LED Strip</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">3 wires: 5V, GND, DIN</text:span>
+          </text:p>
+        </draw:text-box>
+        
+        <!-- Bundle 4: To Garage Door Area -->
+        <draw:line draw:style-name="WireBundle" svg:x1="10cm" svg:y1="8cm" svg:x2="7cm" svg:y2="33cm"/>
+        <draw:text-box svg:width="4cm" svg:height="1cm" svg:x="11cm" svg:y="18cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Bundle 4: Door Area</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">7 wires: 5V, GND, GPIO1-3</text:span>
+          </text:p>
+        </draw:text-box>
+        
+        <!-- Bundle 5: To Relay (short) -->
+        <draw:line draw:style-name="WireBundle" svg:x1="16cm" svg:y1="8cm" svg:x2="16cm" svg:y2="9cm"/>
+        <draw:text-box svg:width="4cm" svg:height="1cm" svg:x="17cm" svg:y="7cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Bundle 5: Relay</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">3 wires: 5V, GND, GPIO10</text:span>
+          </text:p>
+        </draw:text-box>
+        
+        <!-- Legend -->
+        <draw:text-box svg:width="32cm" svg:height="4cm" svg:x="2cm" svg:y="44cm">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="ComponentText">Wiring Bundle Details:</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Bundle 1 (Front LD2450): 5V, GND, RX (GPIO17), TX (GPIO16) | Bundle 2 (Rear LD2450): 5V, GND, RX (GPIO19), TX (GPIO18) | Bundle 3 (LED Strip): 5V (Ext PSU), GND, DIN (GPIO0) | Bundle 4 (Door Area): 5V, GND, GPIO1 (Reed Switch), GPIO2 (Hall A), GPIO3 (Hall B) | Bundle 5 (Relay): 5V (Ext PSU), GND, GPIO10</text:span>
+          </text:p>
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="PinText">Note: All GND wires must share common ground. External 5V PSU powers LED Strip &amp; Relay. ESP32-C6 provides 5V for sensors.</text:span>
+          </text:p>
+        </draw:text-box>
+        
+      </draw:page>
+    </office:drawing>
+  </office:body>
+</office:document-content>

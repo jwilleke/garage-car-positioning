@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-meta xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" 
+                       xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" 
+                       xmlns:dc="http://purl.org/dc/elements/1.1/" 
+                       xmlns:xlink="http://www.w3.org/1999/xlink" 
+                       office:version="1.2">
+  <office:meta>
+    <meta:generator>ESP32-C6 Garage Layout Wiring Diagram Generator</meta:generator>
+    <dc:title>Garage Layout - All-in-One Wiring Diagram</dc:title>
+    <dc:description>Garage layout showing components in physical locations with wiring bundles</dc:description>
+    <meta:creation-date>2026-01-28T00:00:00</meta:creation-date>
+  </office:meta>
+</office:document-meta>

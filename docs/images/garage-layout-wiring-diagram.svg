@@ -1,0 +1,181 @@
+<svg width="1400" height="1799.9999999999998" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <marker orient="auto" refY="3" refX="9" markerHeight="10" markerWidth="10" id="arrowhead">
+   <polygon id="svg_1" fill="#333" points="0 0, 10 3, 0 6"/>
+  </marker>
+ </defs>
+ <!-- Title -->
+ <!-- Garage Structure -->
+ <!-- Back Wall -->
+ <!-- Left Wall -->
+ <!-- Right Wall -->
+ <!-- Front Wall (above door) -->
+ <!-- Garage Floor -->
+ <!-- Garage Door Opening (at bottom) -->
+ <!-- ESP32-C6 Control Center (Near Garage Door Opener - Top Center) -->
+ <!-- External 5V Power Supply (Near ESP32) -->
+ <!-- Relay Module (Near Garage Door Opener) -->
+ <!-- Garage Door Opener Motor -->
+ <!-- Front LD2450 Sensor (Front Wall, near door) -->
+ <!-- Rear LD2450 Sensor (Ceiling, back of garage) -->
+ <!-- WS2812B LED Strip (Ceiling, parallel to car) -->
+ <!-- Car Position Indicator -->
+ <!-- Garage Door Opening Components -->
+ <!-- Rotary Encoder (Hall Sensors on Torsion Bar) -->
+ <!-- Door Closed Reed Switch (on track) -->
+ <!-- Wiring Bundles -->
+ <!-- Bundle 1: To Front LD2450 (4 wires) -->
+ <!-- Bundle 2: To Rear LD2450 (4 wires) -->
+ <!-- Bundle 3: To LED Strip (3 wires) -->
+ <!-- Bundle 4: To Garage Door Opening (7 wires) -->
+ <!-- Bundle 5: To Relay (short, local) -->
+ <!-- Power Distribution from PSU -->
+ <!-- Legend -->
+ <g>
+  <title>Layer 1</title>
+  <rect stroke="#888" id="svg_59" stroke-dasharray="5,5" stroke-width="2" fill="none" height="195.00001" width="800" y="804.99999" x="300"/>
+  <text id="svg_2" font-weight="bold" font-size="22" font-family="Arial" text-anchor="middle" y="30" x="700">Garage Layout - All-in-One Wiring Diagram</text>
+  <text id="svg_3" fill="#666" font-size="12" font-family="Arial" text-anchor="middle" y="50" x="700">Components in Physical Locations with Wiring Bundles</text>
+  <rect id="svg_4" stroke-width="3" stroke="#666" fill="#d3d3d3" class="garage-wall" height="20" width="1200" y="100" x="100"/>
+  <text id="svg_5" font-style="italic" fill="#555" font-size="11px" font-family="Arial, sans-serif" class="location-label" text-anchor="middle" y="118" x="700">Back Wall</text>
+  <rect id="svg_6" stroke-width="3" stroke="#666" fill="#d3d3d3" class="garage-wall" height="1400" width="20" y="100" x="100"/>
+  <rect id="svg_7" stroke-width="3" stroke="#666" fill="#d3d3d3" class="garage-wall" height="1400" width="20" y="100" x="1280"/>
+  <rect id="svg_8" stroke-width="3" stroke="#666" fill="#d3d3d3" class="garage-wall" height="20" width="1200" y="1200" x="100"/>
+  <path stroke="#999" id="svg_10" d="m123,103.21339l1160,0l0,1079.99998l-1160,0l0,-1079.99998z" opacity="undefined" stroke-width="2" fill="#f5f5f5"/>
+  <rect id="svg_11" stroke-width="3" stroke="#654321" fill="#8b7355" class="garage-door" height="300" width="1160" y="1500" x="120"/>
+  <text id="svg_12" fill="#fff" font-weight="bold" font-size="16" font-family="Arial" text-anchor="middle" y="1650" x="700">GARAGE DOOR</text>
+  <text id="svg_13" fill="#fff" font-size="12" font-family="Arial" text-anchor="middle" y="1670" x="700">(Overhead Door)</text>
+  <text id="svg_60" fill="#666" font-size="14" font-family="Arial" text-anchor="middle" y="74.78207" x="1024.25198">Car Parking Position</text>
+  <rect stroke="#2c5aa0" id="svg_61" stroke-width="2" fill="#e8f4f8" rx="5" class="component-box" height="122.56996" width="159.22186" y="1004.79726" x="754.13045"/>
+  <text style="cursor: move;" stroke="null" transform="matrix(0.978151 0 0 1 15.9231 0)" id="svg_62" fill="#000" font-weight="bold" font-size="12px" font-family="Arial, sans-serif" class="component-label" text-anchor="middle" y="1019.25243" x="804.82229">Rotary Encoders</text>
+  <text id="svg_64" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1033.55329" x="757.4911">Hall Sensor A (02-GPIO2)</text>
+  <text style="cursor: move;" id="svg_65" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1071.20518" x="757.10055">Hall Sensor B (03--GPIO3)</text>
+  <path id="svg_71" opacity="0.7" fill="none" stroke-width="4" stroke="#333" marker-end="url(#arrowhead)" class="wire-bundle" d="m75,454l0,800"/>
+  <text id="svg_72" font-weight="bold" fill="#000" font-size="10px" font-family="Arial, sans-serif" class="wire-bundle-label" y="840" x="31">Bundle 1: Front LD2450</text>
+  <text id="svg_73" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="855" x="31">4 wires: 5V, GND, RX, TX</text>
+  <path id="svg_74" opacity="0.7" fill="none" stroke-width="4" stroke="#333" marker-end="url(#arrowhead)" class="wire-bundle" d="m49,548l0,-200"/>
+  <text id="svg_75" font-weight="bold" fill="#000" font-size="10px" font-family="Arial, sans-serif" class="wire-bundle-label" y="631" x="166">Bundle 2: Rear LD2450</text>
+  <text id="svg_76" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="646" x="166">4 wires: 5V, GND, RX, TX</text>
+  <path id="svg_77" opacity="0.7" fill="none" stroke-width="4" stroke="#333" marker-end="url(#arrowhead)" class="wire-bundle" d="m115,490l0,250"/>
+  <text id="svg_78" font-weight="bold" fill="#000" font-size="10px" font-family="Arial, sans-serif" class="wire-bundle-label" y="533" x="148">Bundle 3: LED Strip</text>
+  <text id="svg_79" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="548" x="148">3 wires: 5V, GND, DIN</text>
+  <path id="svg_80" opacity="0.7" fill="none" stroke-width="4" stroke="#333" marker-end="url(#arrowhead)" class="wire-bundle" d="m85,347l0,1050"/>
+  <text id="svg_81" font-weight="bold" fill="#000" font-size="10px" font-family="Arial, sans-serif" class="wire-bundle-label" y="767" x="37">Bundle 4: Door Area</text>
+  <text id="svg_82" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="782" x="37">7 wires: 5V, GND, GPIO1, GPIO2, GPIO3</text>
+  <path id="svg_83" opacity="0.7" fill="none" stroke-width="4" stroke="#333" marker-end="url(#arrowhead)" class="wire-bundle" d="m54,265l0,50"/>
+  <text id="svg_84" font-weight="bold" fill="#000" font-size="10px" font-family="Arial, sans-serif" class="wire-bundle-label" y="584" x="141">Bundle 5: Relay</text>
+  <text id="svg_85" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="600" x="142">3 wires: 5V, GND, GPIO10</text>
+  <path id="svg_86" d="m347,36l-300,85" marker-end="url(#arrowhead)" opacity="undefined" stroke-width="2" stroke="#dc143c" fill="none"/>
+  <line id="svg_88" fill="none" stroke="#000" stroke-width="2" class="wire-black" y2="79" x2="79" y1="34" x1="379"/>
+  <rect id="svg_90" rx="5" stroke="#ccc" fill="#f9f9f9" height="180" width="1300" y="1600" x="50"/>
+  <text id="svg_91" font-weight="bold" font-size="16" font-family="Arial" text-anchor="middle" y="1630" x="700">Wiring Bundle Details</text>
+  <text id="svg_92" font-weight="bold" font-size="12" font-family="Arial" y="1660" x="100">Bundle 1 - Front LD2450 (Wall):</text>
+  <text id="svg_93" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1680" x="120">" 5V (Black wire) - Power</text>
+  <text id="svg_94" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1695" x="120">" GND (Yellow wire) - Ground</text>
+  <text id="svg_95" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1710" x="120">" RX (Red wire) - GPIO17 (ESP32 TX)</text>
+  <text id="svg_96" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1725" x="120">" TX (White wire) - GPIO16 (ESP32 RX)</text>
+  <text id="svg_97" font-weight="bold" font-size="12" font-family="Arial" y="1660" x="500">Bundle 2 - Rear LD2450 (Ceiling):</text>
+  <text id="svg_98" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1680" x="520">" 5V (Black wire) - Power</text>
+  <text id="svg_99" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1695" x="520">" GND (Yellow wire) - Ground</text>
+  <text id="svg_100" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1710" x="520">" RX (Red wire) - GPIO19 (ESP32 TX)</text>
+  <text id="svg_101" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1725" x="520">" TX (White wire) - GPIO18 (ESP32 RX)</text>
+  <text id="svg_102" font-weight="bold" font-size="12" font-family="Arial" y="1660" x="900">Bundle 3 - LED Strip (Ceiling):</text>
+  <text id="svg_103" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1680" x="920">" 5V (Red wire) - External PSU</text>
+  <text id="svg_104" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1695" x="920">" GND (Black/White) - Shared GND</text>
+  <text id="svg_105" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1710" x="920">" DIN (Green wire) - GPIO0</text>
+  <text id="svg_106" font-weight="bold" font-size="12" font-family="Arial" y="1750" x="100">Bundle 4 - Garage Door Area:</text>
+  <text id="svg_107" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1770" x="120">" 5V (Brown) - Hall Sensors power</text>
+  <text id="svg_108" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1785" x="120">" GND (Blue) - Common ground</text>
+  <text id="svg_109" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1800" x="120">" GPIO1 (Black) - Reed Switch NO</text>
+  <text id="svg_110" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1815" x="120">" GPIO2 (Black) - Hall Sensor A</text>
+  <text id="svg_111" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1830" x="120">" GPIO3 (Black) - Hall Sensor B</text>
+  <text id="svg_112" font-weight="bold" font-size="12" font-family="Arial" y="1750" x="500">Bundle 5 - Relay Module:</text>
+  <text id="svg_113" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1770" x="520">" 5V (Red) - External PSU</text>
+  <text id="svg_114" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1785" x="520">" GND (Black) - Shared GND</text>
+  <text id="svg_115" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1800" x="520">" GPIO10 - Relay IN signal</text>
+  <text id="svg_116" font-weight="bold" font-size="12" font-family="Arial" y="1750" x="900">Notes:</text>
+  <text id="svg_117" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1770" x="920">" All GND wires must share common ground</text>
+  <text id="svg_118" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1785" x="920">" External 5V PSU powers LED Strip &amp; Relay</text>
+  <text id="svg_119" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1800" x="920">" ESP32-C6 provides 5V for sensors</text>
+  <g id="svg_120">
+   <rect stroke="#2c5aa0" id="svg_42" stroke-width="2" fill="#e8f4f8" rx="5" class="component-box" height="100" width="104" y="989" x="1173"/>
+   <text id="svg_43" fill="#000" font-weight="bold" font-size="12px" font-family="Arial, sans-serif" class="component-label" text-anchor="middle" y="1004" x="1218.34375">Front LD2450</text>
+   <text id="svg_44" font-style="italic" fill="#555" font-size="11px" font-family="Arial, sans-serif" class="location-label" text-anchor="middle" y="1020" x="1217.29688">(Wall Mounted)</text>
+   <text id="svg_45" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1039" x="1180">BLACK (5V)</text>
+   <text id="svg_46" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1054" x="1180">RED (RX)</text>
+   <text id="svg_47" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1069" x="1180">WHITE (TX)</text>
+   <text id="svg_48" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1084" x="1180">YELLOW (GND)</text>
+  </g>
+  <g id="svg_122">
+   <rect stroke="#C48157" id="svg_121" stroke-width="3" fill="#DDDDDD" class="garage-wall" height="20" width="948" y="1187" x="218.00001"/>
+   <text font-weight="bold" id="svg_9" font-style="italic" fill="#555" font-size="11px" font-family="Arial, sans-serif" class="location-label" text-anchor="middle" y="1201" x="553">Overhead Door</text>
+  </g>
+  <g id="svg_123">
+   <rect transform="rotate(90 618 177.963)" stroke="#2c5aa0" id="svg_56" stroke-width="2" fill="#e8f4f8" rx="5" class="component-box" height="40" width="142" y="157.96254" x="547"/>
+   <text transform="rotate(90 617.158 177.963)" id="svg_57" fill="#000" font-weight="bold" font-size="12px" font-family="Arial, sans-serif" class="component-label" text-anchor="middle" y="182.12039" x="617.15785">WS2812B LED Strip</text>
+  </g>
+  <g id="svg_125">
+   <rect stroke="#2c5aa0" id="svg_38" stroke-width="2" fill="#e8f4f8" rx="5" class="component-box" height="83" width="131" y="706.30193" x="793.20773"/>
+   <text id="svg_39" fill="#000" font-weight="bold" font-size="12px" font-family="Arial, sans-serif" class="component-label" text-anchor="middle" y="728.30193" x="857.20773">Garage Door Opener</text>
+   <text id="svg_40" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="746.30193" x="798.19211">Wall Button Terminals</text>
+   <text id="svg_41" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="761.30193" x="798.19211">NO &lt;- Relay</text>
+   <text id="svg_124" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="777.30193" x="798.19211">COM &lt;- Relay</text>
+  </g>
+  <g id="svg_126">
+   <rect stroke="#2c5aa0" id="svg_32" stroke-width="2" fill="#e8f4f8" rx="5" class="component-box" height="80" width="109" y="515.09988" x="841.3042"/>
+   <text id="svg_33" fill="#000" font-weight="bold" font-size="12px" font-family="Arial, sans-serif" class="component-label" text-anchor="middle" y="535.09988" x="895.9917">5V Relay Module</text>
+   <text id="svg_34" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="554.09988" x="848.3042">VCC - Ext 5V PSU</text>
+   <text id="svg_35" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="571.09988" x="848.3042">GND - Shared GND</text>
+   <text id="svg_36" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="588.09988" x="848.3042">IN - GPIO10</text>
+  </g>
+  <g id="svg_127">
+   <rect stroke="#2c5aa0" id="svg_27" stroke-width="2" fill="#e8f4f8" rx="5" class="component-box" height="80" width="137" y="704.90918" x="481.32349"/>
+   <text id="svg_28" fill="#000" font-weight="bold" font-size="12px" font-family="Arial, sans-serif" class="component-label" text-anchor="middle" y="723.90918" x="535.01099">External 5V PSU</text>
+   <text id="svg_29" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="743.90918" x="488.32349">3A+ Recommended</text>
+   <text id="svg_30" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="759.90918" x="488.32349">+ (Red) - Power Distribution</text>
+   <text id="svg_31" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="775.90918" x="488.32349">- (Black) - Shared GND</text>
+  </g>
+  <g id="svg_136">
+   <rect stroke="#2c5aa0" id="svg_49" stroke-width="2" fill="#e8f4f8" rx="5" class="component-box" height="100" width="108" y="270.36436" x="626.08969"/>
+   <text id="svg_50" fill="#000" font-weight="bold" font-size="12px" font-family="Arial, sans-serif" class="component-label" text-anchor="middle" y="285.36436" x="675.44907">Rear LD2450</text>
+   <text id="svg_51" font-style="italic" fill="#555" font-size="11px" font-family="Arial, sans-serif" class="location-label" text-anchor="middle" y="300.36436" x="682.51157">(Ceiling Mounted)</text>
+   <text id="svg_52" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="320.36436" x="639.08969">BLACK (5V)</text>
+   <text id="svg_53" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="335.36436" x="639.08969">RED (RX)</text>
+   <text id="svg_54" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="350.36436" x="639.08969">WHITE (TX)</text>
+   <text id="svg_55" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="365.36436" x="639.08969">YELLOW (GND)</text>
+  </g>
+  <g id="svg_139">
+   <rect stroke="#d4a574" id="svg_137" stroke-width="3" fill="#fff4e6" rx="5" class="esp32-box" height="150" width="139" y="706" x="636"/>
+   <text font-weight="bold" id="svg_138" font-style="italic" fill="#555" font-size="11px" font-family="Arial, sans-serif" class="location-label" text-anchor="middle" y="783" x="707">Garage Door Opener</text>
+  </g>
+  <g id="svg_146">
+   <rect stroke="#d4a574" id="svg_14" stroke-width="3" fill="#fff4e6" rx="5" class="esp32-box" height="198.66632" width="285.33343" y="474.66464" x="546.00005"/>
+   <text id="svg_15" fill="#000" font-weight="bold" font-size="12px" font-family="Arial, sans-serif" class="component-label" text-anchor="middle" y="491.33132" x="683.00012">ESP32-C6 Control Center</text>
+   <text id="svg_16" font-style="italic" fill="#555" font-size="11px" font-family="Arial, sans-serif" class="location-label" text-anchor="middle" y="508.33132" x="680.33344">(Near Garage Door Opener)</text>
+   <text id="svg_17" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="558.05193" x="551.16863">(07) GPIO0 - LED Strip DIN</text>
+   <text id="svg_18" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="573.05193" x="551.16863">(08) GPIO1 - Door Switch</text>
+   <text id="svg_19" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="586.99785" x="551.17704">(02) GPIO2 - Hall Sensor A</text>
+   <text id="svg_20" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="601.99785" x="551.17704">(03) GPIO3 - Hall Sensor B</text>
+   <text id="svg_21" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="616.99785" x="551.17704">(10) GPIO10 - Relay IN</text>
+   <text id="svg_22" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="556.99785" x="682.67718">(02) GPIO16 - Front LD2450 TX</text>
+   <text id="svg_23" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="571.99785" x="682.67718">(03) GPIO17 - Front LD2450 RX</text>
+   <text id="svg_24" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="602.99773" x="682.66675">(10) GPIO18 - Rear LD2450 TX</text>
+   <text id="svg_25" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="586.66463" x="682.66675">(09) GPIO19 - Rear LD2450 RX</text>
+   <text id="svg_26" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="632.33107" x="551.17803">(14) 5V - OUT</text>
+   <text id="svg_140" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="647.66429" x="551.16763">(15) GND - Common</text>
+   <text id="svg_141" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="543.38582" x="551.16964">(01) 3.3V - OUT</text>
+   <text id="svg_142" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="618.33117" x="682.66675">(14) GND - Common</text>
+   <text id="svg_143" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="542.33173" x="682.67714">(01) GND - Common</text>
+   <text id="svg_144" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="663.66418" x="551.17801">(16) NC</text>
+   <text id="svg_145" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="633.6644" x="682.66674">(16) NC</text>
+  </g>
+  <g id="svg_147">
+   <rect stroke="#2c5aa0" id="svg_66" stroke-width="2" fill="#e8f4f8" rx="5" class="component-box" height="80" width="106.56867" y="1097.86493" x="491.50624"/>
+   <text id="svg_67" fill="#000" font-weight="bold" font-size="12px" font-family="Arial, sans-serif" class="component-label" text-anchor="middle" y="1118.01135" x="535.69013">Reed Switch</text>
+   <text stroke="null" id="svg_68" font-style="italic" fill="#555" font-size="11px" font-family="Arial, sans-serif" class="location-label" text-anchor="middle" y="1134.22475" x="528.45981">(Door Track)</text>
+   <text id="svg_69" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1157.86493" x="500.0116">NO (Black) - GPIO1</text>
+   <text id="svg_70" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1172.86493" x="500.0116">COM (White) - GND</text>
+  </g>
+  <text style="cursor: text;" id="svg_148" fill="#333" font-size="10px" font-family="Arial, sans-serif" class="pin-label" y="1046.44143" x="757.4911">5V-BLK</text>
+ </g>
+</svg>

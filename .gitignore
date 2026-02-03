@@ -25,6 +25,9 @@ esphome_venv/
 .DS_Store
 Thumbs.db
 
+# Node
+node_modules/
+
 # Build artifacts
 *.bin
 *.elf

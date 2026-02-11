@@ -8,7 +8,7 @@ I used the ESPRESSIF brand model: X003L5ZDBX ESP32-C6-DevKit-1-N8
 
 TOP
 
-### Left Side
+### Left Side (J1)
 
 | Screw# | Pin Label | Primary Function | Secondary Functions | Component Connection |
 | ---- | ---- | ---- | ---- | ---- |
@@ -19,30 +19,30 @@ TOP
 | 5 | 6 | GPIO6 | "MTCK , LP_GPIO6, LP_I2C_SDA, ADC1_CH6" | ⚠️ JTAG PIN - AVOID |
 | 6 | 7 | GPIO7 | "MTDO , LP_GPIO7, LP_I2C_SCL, FSPID" | ⚠️ JTAG PIN - AVOID |
 | 7 | 0 | GPIO0 | "XTAL_32K_P,  LP_GPIO0,  LP_UART_DTRN, ADC1_CH0" | WS2812B LED Strip - Data In (DIN) |
-| 8 | 1 | GPIO1 | "XTAL_32K_N, LP_GPIO1, LP_UART_DSRN, ADC1_CH1" | Closed Door Switch Signal - Use internal pull-up. Connect other leg to GND. |
+| 8 | 1 | GPIO1 | "XTAL_32K_N, LP_GPIO1, LP_UART_DSRN, ADC1_CH1" | Closed Door Switch Signal WHT-???- Use internal pull-up. Connect other leg to GND. |
 | 9 | 8 | GPIO8 | "RGB LED, ROM, BOOT Strapping Pin" -  ⚠️ Avoid (if possible) | NC |
 | 0 | 10 | GPIO10 | General Purpose IO | Relay Module - IN |
 | 1 | 11 | GPIO11 | General Purpose IO | NC |
-| 2 | 2 | GPIO2 | "LP_GPIO2, LP_UART_RTSN, ADC1_CH2, FSPIQ" | Hall Effect Sensor A (black wire) |
-| 3 | 3 | GPIO3 | "LP_GPIO3, LP_UART_CTSN, ADC1_CH3" | Hall Effect Sensor B (black wire) |
+| 2 | 2 | GPIO2 | "LP_GPIO2, LP_UART_RTSN, ADC1_CH2, FSPIQ" | HES-A (BRN-BLK wire) |
+| 3 | 3 | GPIO3 | "LP_GPIO3, LP_UART_CTSN, ADC1_CH3" | HES-B (ORG-BLK wire) |
 | 4 | 5V | Power | 5V Power Supply (Input or Output) | Provide 5V to all 5V components. |
 | 5 | GND | Ground | Common Ground | Common ground for all components. |
 | 6 | - | - | NC to Chip Board only | NC |
 
-### Right Side
+### Right Side (J3)
 
 | Screw# | Pin Label | Primary Function | Secondary Functions | Component Connection |
 | ---- | ---- | ---- | ---- | ---- |
 | 1 | G | Ground | Common Ground | Common ground for all components. |
-| 2 | TX | GPIO16 | "U0TXD, FSPICS0" | Front LD2450 TX (ESP32 RX) - WHITE wire |
-| 3 | RX | GPIO17 | "U0RXD, FSPICS1" | Front LD2450 RX (ESP32 TX) - RED wire |
+| 2 | TX | GPIO16 | "U0TXD, FSPICS0" | Front LD2450 TX (ESP32 RX) - PUR-WHT wire |
+| 3 | RX | GPIO17 | "U0RXD, FSPICS1" | Front LD2450 RX (ESP32 TX) - YEL-RED wire |
 | 4 | 15 | GPIO15 | JTAG Function | NC |
 | 5 | 23 | GPIO23 | SDIO_DATA3 | NC |
 | 6 | 22 | GPIO22 | SDIO_DATA2 | NC |
 | 7 | 21 | GPIO21 | "SDIO_DATA1, FSPICS5" | NC |
 | 8 | 20 | GPIO20 | "SDIO_DATA0, FSPICS4" | NC |
-| 9 | 19 | GPIO19 | "SDIO_CLK, FSPICS3" | Rear LD2450 RX (ESP32 TX) - RED wire |
-| 0 | 18 | GPIO18 | "SDIO_CMD, FSPICS2" | Rear LD2450 TX (ESP32 RX) - WHITE wire |
+| 9 | 19 | GPIO19 | "SDIO_CLK, FSPICS3" | Rear LD2450 RX (ESP32 TX) - YEL-RED wire |
+| 0 | 18 | GPIO18 | "SDIO_CMD, FSPICS2" | Rear LD2450 TX (ESP32 RX) - BLU-WHT wire |
 | 1 | 9 | GPIO9 | BOOT Strapping Pin Avoid (if possible) | NC |
 | 2 | 13 | GPIO13 | USB_D+ | ⚠️ JTAG PIN - AVOID - Permanently tied to USB Serial/JTAG controller |
 | 3 | 12 | GPIO12 | USB_D- | ⚠️ JTAG PIN - AVOID - Permanently tied to USB Serial/JTAG controller |
@@ -89,7 +89,7 @@ External 5V PSU (+) ─────────── VCC (LED Strip)
 External 5V PSU (-) ──┬──────── GND (LED Strip)
                       │
 ESP32-C6 GND ─────────┘
-ESP32-C6 GPIO0 ──────────────── DIN (LED Strip)
+ESP32-C6 GPIO0 (L-PIN 10) ──────────────── DIN (LED Strip)
 ```
 
 ## Relay Module Wiring

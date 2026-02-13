@@ -108,7 +108,7 @@ Seven (seven conductors)
 - NO
 - GRN
 
-### Rotary Encoder Wires
+### NJK-5002C Hall Effect Sensors
 
 We need 4 wires to the Rotary Encoder(s)
 
@@ -117,6 +117,12 @@ We need 4 wires to the Rotary Encoder(s)
 - Rotary Encoder Channel A (black wire)
 - Rotary Encoder Channel B (black wire)
 
+## Wires
+
+- brown wire connects the GPIO header for the +5V supply.
+- blue wire connects the GPIO header for the ground connection.
+- black wire connects to pin 8 (or any input of your choice -- configure your software to match.)
+
 ### Front LD2450 Sensor - Wall Mounted
 
 | LEFT | RIGHT |
@@ -124,3 +130,4 @@ We need 4 wires to the Rotary Encoder(s)
 | 3.3V | RX |
 | PA9  | DM |
 | GND  | OK |
+

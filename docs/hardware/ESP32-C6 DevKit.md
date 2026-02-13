@@ -179,3 +179,28 @@ If you are seeing "noise" when a pin is tied to 3.3V, it may be due to the DevKi
   - as well as the communication with the ESP32-C6 chip via the on-board USB-to-UART bridge.
 - RGB LED - Addressable RGB LED, driven by GPIO8.
 - J5 Used for current measurement. See details in Section Current
+
+## Dhip ID
+
+```zsh
+esptool --port /dev/cu.usbmodem31101 chip-id
+
+esptool v5.1.0
+Connected to ESP32-C6 on /dev/cu.usbmodem31101:
+Chip type:          ESP32-C6 (QFN40) (revision v0.2)
+Features:           Wi-Fi 6, BT 5 (LE), IEEE802.15.4, Single Core + LP Core, 160MHz
+Crystal frequency:  40MHz
+USB mode:           USB-Serial/JTAG
+MAC:                98:a3:16:ff:fe:b1:d0:88
+BASE MAC:           98:a3:16:b1:d0:88
+MAC_EXT:            ff:fe
+
+Stub flasher running.
+
+Warning: ESP32-C6 has no chip ID. Reading MAC address instead.
+MAC:                98:a3:16:ff:fe:b1:d0:88
+BASE MAC:           98:a3:16:b1:d0:88
+MAC_EXT:            ff:fe
+
+Hard resetting via RTS pin...
+```

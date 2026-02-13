@@ -87,3 +87,42 @@ python3 calc_encoder.py 5.0
 📡 Sensor Offset:     0.491" (dist. between Sensor A & B)
 🎯 Door Resolution:   0.491" per count
 ```
+
+## Spacing for Magnets
+
+Angular spacing: 360° ÷ 6 = 60° apart
+
+Hole Positions (from disk center)
+┌──────┬───────┬────────┬────────┐
+│ Hole │ Angle │ X (mm) │ Y (mm) │
+├──────┼───────┼────────┼────────┤
+│ 1│ 0°│ +63.5│ 0│
+├──────┼───────┼────────┼────────┤
+│ 2│ 60° │ +31.75 │ +55.0│
+├──────┼───────┼────────┼────────┤
+│ 3│ 120°│ -31.75 │ +55.0│
+├──────┼───────┼────────┼────────┤
+│ 4│ 180°│ -63.5│ 0│
+├──────┼───────┼────────┼────────┤
+│ 5│ 240°│ -31.75 │ -55.0│
+├──────┼───────┼────────┼────────┤
+│ 6│ 300°│ +31.75 │ -55.0│
+└──────┴───────┴────────┴────────┘
+Easy Layout Method (no protractor needed)
+
+For a 6-hole pattern, there's a nice shortcut: the chord length between adjacent holes equals the radius.
+
+1. Find and mark the center
+2. Set a compass to 63.5mm (2.5") and draw a circle
+3. Set dividers to 63.5mm (same as the radius)
+4. Pick any starting point on the circle
+5. "Walk" the dividers around the circle — it will land exactly on all 6 hole positions
+
+Drill Size
+
+* Drill holes at 12.334mm for a press fit, or
+* 12.5mm / ½" for a slip fit (easier assembly, backing plate holds them in)
+
+Edge Clearance Check
+
+Disk radius (75.2mm) − hole center (63.5mm) − magnet radius (6.2mm) = 5.5mm clearance to edge

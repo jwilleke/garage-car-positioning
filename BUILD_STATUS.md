@@ -2,6 +2,12 @@
 
 ## Current Status
 
+## 2026-02-14
+
+REAR LD2450 not working at all. See private/2026-02-14-startup.log
+
+See <https://github.com/jwilleke/garage-car-positioning/issues/2>
+
 ## 2026-01-19-01
 
 Added UART config for Front LD2450 (GPIO16/GPIO17 at 256000 baud)

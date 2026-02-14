@@ -34,15 +34,15 @@ TOP
 | Screw# | Pin Label | Primary Function | Secondary Functions | Component Connection |
 | ---- | ---- | ---- | ---- | ---- |
 | 1 | G | Ground | Common Ground | Common ground for all components. |
-| 2 | TX | GPIO16 | "U0TXD, FSPICS0" | Front LD2450 TX (ESP32 RX) - PUR-WHT wire |
-| 3 | RX | GPIO17 | "U0RXD, FSPICS1" | Front LD2450 RX (ESP32 TX) - YEL-RED wire |
+| 2 | TX | GPIO16 | "U0TXD, FSPICS0" | Front LD2450 TX (ESP32 RX) - PUR-WHT-WHT wire |
+| 3 | RX | GPIO17 | "U0RXD, FSPICS1" | Front LD2450 RX (ESP32 TX) - YEL-ORG-RED wire |
 | 4 | 15 | GPIO15 | JTAG Function | NC |
 | 5 | 23 | GPIO23 | SDIO_DATA3 | NC |
 | 6 | 22 | GPIO22 | SDIO_DATA2 | NC |
 | 7 | 21 | GPIO21 | "SDIO_DATA1, FSPICS5" | NC |
 | 8 | 20 | GPIO20 | "SDIO_DATA0, FSPICS4" | NC |
-| 9 | 19 | GPIO19 | "SDIO_CLK, FSPICS3" | Rear LD2450 RX (ESP32 TX) - YEL-RED wire |
-| 0 | 18 | GPIO18 | "SDIO_CMD, FSPICS2" | Rear LD2450 TX (ESP32 RX) - BLU-WHT wire |
+| 9 | 19 | GPIO19 | "SDIO_CLK, FSPICS3" | Rear LD2450 RX (ESP32 TX) - YEL-ORG-RED wire |
+| 0 | 18 | GPIO18 | "SDIO_CMD, FSPICS2" | Rear LD2450 TX (ESP32 RX) - BLU-WHT-WHT wire |
 | 1 | 9 | GPIO9 | BOOT Strapping Pin Avoid (if possible) | NC |
 | 2 | 13 | GPIO13 | USB_D+ | ⚠️ JTAG PIN - AVOID - Permanently tied to USB Serial/JTAG controller |
 | 3 | 12 | GPIO12 | USB_D- | ⚠️ JTAG PIN - AVOID - Permanently tied to USB Serial/JTAG controller |
@@ -59,18 +59,18 @@ Using JST ZH 1.5mm 4Pin connector (see [LD2450 documentation](LD2450/LD2450.md))
 | Wire Color | c Pin | Connect To |
 | ---- | ---- | ---- |
 | BLK-BLU-RED | 5V | ESP32-C6 5V |
-| RED-ORG-YEL | RX | ESP32-C6 GPIO17 (RX) (GPIO19) |
-| WHT-WHT-BLU | TX | ESP32-C6 GPIO16 (TX) (GPIO18) |
-| YEL-YEL--GRN | GND | ESP32-C6 GND |
+| RED-ORG-YEL | RX | ESP32-C6 GPIO17 (RX) (GPIO16) (Pin 2) |
+| WHT-WHT-BLU | TX | ESP32-C6 GPIO16 (TX) (GPIO17) (Pin 3) |
+| YEL-YEL-GRN | GND | ESP32-C6 GND |
 
 ### Rear LD2450
 
 | Wire Color | LD2450 Pin | Connect To |
 | ---- | ---- | ---- |
-| BLACK | 5V | ESP32-C6 5V |
-| RED | RX | ESP32-C6 GPIO19 |
-| WHITE | TX | ESP32-C6 GPIO18 |
-| YELLOW | GND | ESP32-C6 GND |
+| BLK-BLU-RED | 5V | ESP32-C6 5V |
+| RED-ORG-YEL | RX | ESP32-C6 GPIO19 (Pin 9) |
+| WHT-WHT-BLU | TX | ESP32-C6 GPIO18 (Pin 10) |
+| YEL-YEL-GRN | GND | ESP32-C6 GND |
 
 ## WS2812B LED Strip Wiring
 

@@ -56,12 +56,12 @@ Using JST ZH 1.5mm 4Pin connector (see [LD2450 documentation](LD2450/LD2450.md))
 
 ### Front LD2450
 
-| Wire Color | LD2450 Pin | Connect To |
+| Wire Color | c Pin | Connect To |
 | ---- | ---- | ---- |
-| BLACK | 5V | ESP32-C6 5V |
-| RED | RX | ESP32-C6 GPIO17 (RX) |
-| WHITE | TX | ESP32-C6 GPIO16 (TX) |
-| YELLOW | GND | ESP32-C6 GND |
+| BLK-BLU-RED | 5V | ESP32-C6 5V |
+| RED-ORG-YEL | RX | ESP32-C6 GPIO17 (RX) (GPIO19) |
+| WHT-WHT-BLU | TX | ESP32-C6 GPIO16 (TX) (GPIO18) |
+| YEL-YEL--GRN | GND | ESP32-C6 GND |
 
 ### Rear LD2450
 

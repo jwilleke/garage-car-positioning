@@ -130,4 +130,3 @@ We need 4 wires to the Rotary Encoder(s)
 | 3.3V | RX |
 | PA9  | DM |
 | GND  | OK |
-

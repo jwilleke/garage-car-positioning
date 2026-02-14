@@ -6,6 +6,9 @@
 
 REAR LD2450 not working at all. See private/2026-02-14-startup.log
 
+Have swapped front and rear LD2450 modules NO change.
+Double checked wiring.
+
 See <https://github.com/jwilleke/garage-car-positioning/issues/2>
 
 ## 2026-01-19-01

@@ -24,6 +24,40 @@ AI agent session tracking. See [CHANGELOG.md](./CHANGELOG.md) for version histor
 
 ---
 
+## 2026-02-15-01
+
+- Agent: Claude Opus 4.5
+- Subject: ESPHome refactoring and issue #2 fixes
+- Key Decision: Use ESPHome packages to eliminate code duplication
+- Current Issue: Rear LD2450 not working - resolved (bad solder joint on TX wire to GPIO18)
+- Testing:
+  - esphome config: All 3 main configs validate successfully
+- Work Done:
+  - Diagnosed rear LD2450 issue (wiring fault on extended cable)
+  - Created ESPHome package structure (base.yaml, car-sensor.yaml, garage-door.yaml)
+  - Fixed broken esp32_rmt platform in garage-car-sensor.yaml
+  - Fixed Color() wrapper in LED lambdas
+  - Fixed X=0 validity check (now uses distance > 0)
+  - Added NaN guards in parking logic
+  - Added restore_mode: ALWAYS_OFF to relay and LED strip
+  - Fixed typos in simple-wifi.yaml
+  - Changed ap_timeout from 0s to 1min
+  - Added secrets.yaml.example
+  - Added comment to GitHub issue #2 with findings
+- Commits: 360176f
+- Files Modified:
+  - esphome/packages/base.yaml (new)
+  - esphome/packages/car-sensor.yaml (new)
+  - esphome/packages/garage-door.yaml (new)
+  - esphome/secrets.yaml.example (new)
+  - esphome/all-in-one.yaml
+  - esphome/garage-car-sensor.yaml
+  - esphome/esp32-garage-door.yaml
+  - esphome/simple-wifi.yaml
+  - BUILD_STATUS.md
+
+---
+
 ## 2026-02-13-01
 
 - Agent: Jim

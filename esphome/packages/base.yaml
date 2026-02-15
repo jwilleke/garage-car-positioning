@@ -4,6 +4,7 @@
 # Required substitutions (define in main config):
 #   device_name: Device hostname
 #   friendly_name: Human-readable name
+#   firmware_version: Semantic version (e.g., "0.1.1")
 
 esp32:
   board: esp32-c6-devkitc-1
@@ -31,4 +32,16 @@ web_server:
 
 button:
   - platform: restart
-    name: "Restart Device"
+    name: "System - Restart"
+    icon: "mdi:restart"
+
+text_sensor:
+  - platform: template
+    name: "System - Firmware Version"
+    icon: "mdi:tag"
+    lambda: 'return {"${firmware_version}"};'
+    update_interval: never
+
+  - platform: version
+    name: "System - ESPHome Version"
+    icon: "mdi:home-assistant"

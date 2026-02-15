@@ -1,6 +1,7 @@
 substitutions:
   device_name: garage-car-sensor
   friendly_name: "Garage Car Sensor"
+  firmware_version: "0.1.1"
 
   # Car Positioning Settings
   target_y_min: "1800"

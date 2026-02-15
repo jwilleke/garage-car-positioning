@@ -1,6 +1,7 @@
 substitutions:
   device_name: esp32-garage-door
   friendly_name: "Garage Door Controller"
+  firmware_version: "0.1.1"
 
   # GPIO Assignments for ESP32-C6 DevKit
   # See docs/hardware/ESP32-C6 DevKit.md for pinout details

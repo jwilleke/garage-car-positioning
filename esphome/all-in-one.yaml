@@ -1,6 +1,7 @@
 substitutions:
   device_name: esp32-garage-all-in-one
   friendly_name: "Garage All-in-One"
+  firmware_version: "0.1.1"
 
   # Car Positioning Settings
   target_y_min: "1800"

@@ -1,0 +1,60 @@
+# Garage door controller package
+# Rotary encoder position tracking with relay control
+#
+# Required substitutions (define in main config):
+#   garage_door_relay_pin: GPIO for relay (e.g., GPIO10)
+#   garage_door_closed_switch_pin: GPIO for reed switch (e.g., GPIO1)
+#   garage_door_encoder_a_pin: GPIO for encoder A (e.g., GPIO2)
+#   garage_door_encoder_b_pin: GPIO for encoder B (e.g., GPIO3)
+#   garage_door_full_open_counts: Encoder counts when fully open (e.g., "10000")
+
+switch:
+  - platform: gpio
+    name: "Garage Door Relay"
+    pin: ${garage_door_relay_pin}
+    id: garage_door_relay
+    restore_mode: ALWAYS_OFF
+    on_turn_on:
+      - delay: 200ms
+      - switch.turn_off: garage_door_relay
+
+binary_sensor:
+  - platform: gpio
+    name: "Garage Door Closed Switch"
+    id: garage_door_closed_switch
+    pin:
+      number: ${garage_door_closed_switch_pin}
+      mode: INPUT_PULLUP
+      inverted: true
+    device_class: door
+    on_press:
+      - sensor.rotary_encoder.set_value:
+          id: garage_door_encoder
+          value: 0
+
+sensor:
+  - platform: rotary_encoder
+    name: "Garage Door Position Encoder"
+    id: garage_door_encoder
+    pin_a: ${garage_door_encoder_a_pin}
+    pin_b: ${garage_door_encoder_b_pin}
+
+cover:
+  - platform: template
+    name: "Garage Door"
+    id: garage_door
+    device_class: garage
+    open_action:
+      - switch.turn_on: garage_door_relay
+    close_action:
+      - switch.turn_on: garage_door_relay
+    stop_action:
+      - switch.turn_on: garage_door_relay
+    lambda: |-
+      if (id(garage_door_closed_switch).state) {
+        return 0.0;
+      }
+      float val = clamp((float)id(garage_door_encoder).state, 0.0f, (float)${garage_door_full_open_counts});
+      return val / (float)${garage_door_full_open_counts};
+    optimistic: false
+    assumed_state: false

@@ -2,6 +2,38 @@
 
 ## Current Status
 
+## 2026-02-15
+
+### Rear LD2450 Issue Resolved
+
+Root cause: Bad solder joint on extended wiring (TX wire to GPIO18).
+
+### ESPHome Refactoring Complete
+
+Addressed GitHub issue #2 - created package structure to reduce code duplication:
+
+```
+esphome/packages/
+├── base.yaml        # ESP32-C6, logger, api, ota, web_server, restart
+├── car-sensor.yaml  # LD2450 sensors, LED strip, parking logic
+└── garage-door.yaml # Encoder, relay, cover, door switch
+```
+
+**Code reduction:** Main config files reduced by ~80% (291→55, 225→34, 98→31 lines).
+
+**Bugs fixed:**
+
+- `garage-car-sensor.yaml`: Fixed broken `esp32_rmt` platform → `esp32_rmt_led_strip`
+- Fixed `Color()` wrapper in LED lambdas
+- Fixed X=0 validity check (now uses distance > 0)
+- Added NaN guards in parking logic
+- Added `restore_mode: ALWAYS_OFF` to relay and LED strip
+- Fixed typos in `simple-wifi.yaml`
+- Changed `ap_timeout: 0s` → `1min`
+- Added `secrets.yaml.example`
+
+**All configs validated successfully.**
+
 ## 2026-02-14
 
 REAR LD2450 not working at all. See private/2026-02-14-startup.log

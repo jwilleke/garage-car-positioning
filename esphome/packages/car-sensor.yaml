@@ -1,0 +1,193 @@
+# Car positioning sensor package
+# Dual LD2450 mmWave radar sensors with LED parking guidance
+#
+# Required substitutions (define in main config):
+#   ld2450_front_rx_pin: GPIO for front sensor RX (e.g., GPIO16)
+#   ld2450_front_tx_pin: GPIO for front sensor TX (e.g., GPIO17)
+#   ld2450_rear_rx_pin: GPIO for rear sensor RX (e.g., GPIO18)
+#   ld2450_rear_tx_pin: GPIO for rear sensor TX (e.g., GPIO19)
+#   led_strip_pin: GPIO for WS2812B data (e.g., GPIO0)
+#   num_leds: Number of LEDs in strip (e.g., "30")
+#   target_y_min: Minimum Y position for correct parking (mm)
+#   target_y_max: Maximum Y position for correct parking (mm)
+#   target_x_tolerance: Maximum X deviation from center (mm)
+
+uart:
+  - id: uart_ld2450_front
+    rx_pin: ${ld2450_front_rx_pin}
+    tx_pin: ${ld2450_front_tx_pin}
+    baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
+  - id: uart_ld2450_rear
+    rx_pin: ${ld2450_rear_rx_pin}
+    tx_pin: ${ld2450_rear_tx_pin}
+    baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
+
+ld2450:
+  - id: ld2450_front
+    uart_id: uart_ld2450_front
+  - id: ld2450_rear
+    uart_id: uart_ld2450_rear
+
+sensor:
+  # LD2450 Front Sensor
+  - platform: ld2450
+    ld2450_id: ld2450_front
+    target_count:
+      name: "Front Sensor Target Count"
+    target_1:
+      x:
+        name: "Front Target X"
+        id: front_x
+      y:
+        name: "Front Target Y"
+        id: front_y
+      distance:
+        name: "Front Target Distance"
+        id: front_distance
+
+  # LD2450 Rear Sensor
+  - platform: ld2450
+    ld2450_id: ld2450_rear
+    target_count:
+      name: "Rear Sensor Target Count"
+    target_1:
+      x:
+        name: "Rear Target X"
+        id: rear_x
+      y:
+        name: "Rear Target Y"
+        id: rear_y
+      distance:
+        name: "Rear Target Distance"
+        id: rear_distance
+
+  # Car Position Template Sensors
+  - platform: template
+    name: "Car Center X Position"
+    id: car_center_x
+    unit_of_measurement: "mm"
+    lambda: |-
+      // Use distance > 0 to validate (avoids X=0 false negative)
+      bool front_valid = !isnan(id(front_distance).state) && id(front_distance).state > 0;
+      bool rear_valid = !isnan(id(rear_distance).state) && id(rear_distance).state > 0;
+      if (front_valid && rear_valid) {
+        return (id(front_x).state + id(rear_x).state) / 2.0;
+      } else if (front_valid) {
+        return id(front_x).state;
+      } else if (rear_valid) {
+        return id(rear_x).state;
+      }
+      return NAN;
+    update_interval: 500ms
+
+  - platform: template
+    name: "Car Center Y Position"
+    id: car_center_y
+    unit_of_measurement: "mm"
+    lambda: |-
+      // Use distance > 0 to validate (avoids Y=0 false negative)
+      bool front_valid = !isnan(id(front_distance).state) && id(front_distance).state > 0;
+      bool rear_valid = !isnan(id(rear_distance).state) && id(rear_distance).state > 0;
+      if (front_valid && rear_valid) {
+        return (id(front_y).state + id(rear_y).state) / 2.0;
+      } else if (front_valid) {
+        return id(front_y).state;
+      } else if (rear_valid) {
+        return id(rear_y).state;
+      }
+      return NAN;
+    update_interval: 500ms
+
+binary_sensor:
+  - platform: template
+    name: "Car Detected"
+    id: car_detected
+    device_class: occupancy
+    lambda: |-
+      float front_dist = id(front_distance).state;
+      float rear_dist = id(rear_distance).state;
+      bool front_valid = !isnan(front_dist) && front_dist > 100;
+      bool rear_valid = !isnan(rear_dist) && rear_dist > 100;
+      return front_valid || rear_valid;
+    filters:
+      - delayed_on: 1s
+      - delayed_off: 5s
+
+  - platform: template
+    name: "Car Correctly Parked"
+    id: car_correctly_parked
+    device_class: occupancy
+    lambda: |-
+      if (!id(car_detected).state) return false;
+      float y = id(car_center_y).state;
+      float x = id(car_center_x).state;
+      // Guard against NaN values
+      if (isnan(y) || isnan(x)) return false;
+      bool y_ok = (y >= ${target_y_min}) && (y <= ${target_y_max});
+      bool x_ok = abs(x) <= ${target_x_tolerance};
+      return y_ok && x_ok;
+
+text_sensor:
+  - platform: template
+    name: "Parking Guidance"
+    lambda: |-
+      if (!id(car_detected).state) {
+        return {"No car detected"};
+      }
+      if (id(car_correctly_parked).state) {
+        return {"Perfect!"};
+      }
+      float y = id(car_center_y).state;
+      if (isnan(y)) return {"Acquiring position..."};
+      float target = (${target_y_min} + ${target_y_max}) / 2.0;
+      if (y < target - 100) return {"Move FORWARD"};
+      if (y > target + 100) return {"Move BACK"};
+      return {"Minor adjustment"};
+    update_interval: 500ms
+
+light:
+  - platform: esp32_rmt_led_strip
+    name: "Garage Parking LED Strip"
+    chipset: WS2812
+    pin: ${led_strip_pin}
+    num_leds: ${num_leds}
+    rgb_order: GRB
+    id: garage_parking_led
+    restore_mode: ALWAYS_OFF
+    default_transition_length: 1s
+    effects:
+      - addressable_lambda:
+          name: Parking Guidance Effect
+          update_interval: 200ms
+          lambda: |-
+            if (!id(car_detected).state) {
+              it.all().set(Color(0, 0, 0)); // Off
+            } else if (id(car_correctly_parked).state) {
+              it.all().set(Color(0, 255, 0)); // Green
+            } else {
+              float y = id(car_center_y).state;
+              if (isnan(y)) {
+                it.all().set(Color(128, 128, 128)); // Gray - acquiring
+                return;
+              }
+              float target_y_min_f = ${target_y_min};
+              float target_y_max_f = ${target_y_max};
+              float target_y_mid = (target_y_min_f + target_y_max_f) / 2.0;
+              float perfect_zone_half_width = (target_y_max_f - target_y_min_f) / 2.0;
+              float approach_zone_half_width = perfect_zone_half_width + 300.0;
+              if (y < target_y_mid - approach_zone_half_width) {
+                it.all().set(Color(0, 0, 255)); // Blue (Move FORWARD)
+              } else if (y > target_y_mid + approach_zone_half_width) {
+                it.all().set(Color(255, 69, 0)); // OrangeRed (Move BACK)
+              } else if (y < target_y_mid - perfect_zone_half_width) {
+                it.all().set(Color(0, 255, 255)); // Cyan (Minor FORWARD)
+              } else if (y > target_y_mid + perfect_zone_half_width) {
+                it.all().set(Color(255, 255, 0)); // Yellow (Minor BACK)
+              } else {
+                it.all().set(Color(255, 255, 255)); // White (in zone but X off)
+              }
+            }

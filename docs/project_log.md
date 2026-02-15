@@ -1,6 +1,6 @@
 # Project Log
 
-AI agent session tracking. See [CHANGELOG.md](./CHANGELOG.md) for version history.
+AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version history.
 
 ## Format
 
@@ -21,6 +21,37 @@ AI agent session tracking. See [CHANGELOG.md](./CHANGELOG.md) for version histor
   - [file1.js]
   - [file2.md]
 ```
+
+---
+
+## 2026-02-15-02
+
+- Agent: Claude Opus 4.5
+- Subject: Portal improvements (issue #1) and SEMVER setup
+- Key Decision: Use naming prefixes for portal sections; shell script for version management
+- Testing:
+  - esphome config: All 4 configs validate successfully
+  - Firmware built and uploaded to device
+- Work Done:
+  - Implemented portal sections via naming prefixes (Car Position, Garage Door, System)
+  - Added LED scan animations (Move Forward/Back, blue/orange/cyan/yellow)
+  - Added person detection with red flash alert
+  - Added speed sensors for front/rear LD2450
+  - Added parking guidance text sensor
+  - Set up SEMVER versioning (v0.1.1)
+  - Created VERSION file and CHANGELOG.md
+  - Added firmware_version to all ESPHome configs
+  - Created scripts/version.sh for version management
+- Commits: 6da5de3, 070fba0
+- Files Modified:
+  - VERSION (new)
+  - CHANGELOG.md (new)
+  - scripts/version.sh (new)
+  - esphome/simple-wifi.yaml (major update)
+  - esphome/packages/base.yaml
+  - esphome/all-in-one.yaml
+  - esphome/garage-car-sensor.yaml
+  - esphome/esp32-garage-door.yaml
 
 ---
 
@@ -69,4 +100,3 @@ AI agent session tracking. See [CHANGELOG.md](./CHANGELOG.md) for version histor
 - Commits: ec0962b
 
 - Files Modified
-  -

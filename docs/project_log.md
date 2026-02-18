@@ -24,6 +24,27 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-02-18-01
+
+- Agent: Claude Opus 4.5
+- Subject: LD2450 documentation and danger zone person detection
+- Key Decision: Use Target 2 from LD2450 sensors to detect people in front/rear of car
+- Testing:
+  - Documentation review only (no firmware upload this session)
+- Work Done:
+  - Expanded LD2450.md with sensor capabilities and placement guidance
+  - Added dual sensor configuration docs (Front Sensor, Rear Sensor)
+  - Added person detection documentation with multi-target tracking table
+  - Added danger zone detection feature to simple-wifi.yaml
+  - Implemented Target 2 sensors for front and rear LD2450
+  - Added "Person in Danger Zone" binary sensor with red flash trigger
+  - Added danger zone diagram and ESPHome configuration examples
+- Files Modified:
+  - docs/hardware/LD2450/LD2450.md (major update)
+  - esphome/simple-wifi.yaml (danger zone feature)
+
+---
+
 ## 2026-02-15-02
 
 - Agent: Claude Opus 4.5

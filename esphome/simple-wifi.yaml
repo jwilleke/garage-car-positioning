@@ -1,9 +1,14 @@
 # simple-wifi-test.yaml is intended to be a simple file to test component configuration, code and connections. No calibration is done.
 #
 # Web Portal Sections (organized by name prefix):
-#   - Car Position: LED strip, front/rear sensors, parking guidance
+#   - Car Position: LED strip, front/rear sensors, parking guidance, danger zone
 #   - Garage Door: Door switch, relay, hall sensors
 #   - System: Boot count, uptime, restart, MAC address
+#
+# Safety Features:
+#   - Person in Danger Zone: Detects secondary targets (people) in front/rear of car
+#   - Triggers red flashing LED when someone is in path of vehicle
+#   - Uses Target 2 from LD2450 sensors (Target 1 = car, Target 2 = person)
 #
 # Debug Logs:
 #   Access via web portal at http://<device-ip>/logs
@@ -22,6 +27,10 @@ substitutions:
 
   # Person detection: targets closer than this with small "size" are likely people
   person_max_distance: "1500"
+
+  # Danger zone: max distance (mm) from sensor where a person triggers alert
+  # People in front or rear of car while parking triggers red flash
+  danger_zone_distance: "3000"
 
 esphome:
   name: ${device_name}
@@ -128,21 +137,34 @@ sensor:
       id: front_target_count
     target_1:
       x:
-        name: "Car Position - Front X"
+        name: "Car Position - Front T1 X"
         id: front_x
         unit_of_measurement: "mm"
       y:
-        name: "Car Position - Front Y"
+        name: "Car Position - Front T1 Y"
         id: front_y
         unit_of_measurement: "mm"
       distance:
-        name: "Car Position - Front Distance"
+        name: "Car Position - Front T1 Distance"
         id: front_distance
         unit_of_measurement: "mm"
       speed:
-        name: "Car Position - Front Speed"
+        name: "Car Position - Front T1 Speed"
         id: front_speed
         unit_of_measurement: "cm/s"
+    target_2:
+      x:
+        name: "Car Position - Front T2 X"
+        id: front_t2_x
+        unit_of_measurement: "mm"
+      y:
+        name: "Car Position - Front T2 Y"
+        id: front_t2_y
+        unit_of_measurement: "mm"
+      distance:
+        name: "Car Position - Front T2 Distance"
+        id: front_t2_distance
+        unit_of_measurement: "mm"
 
   # === CAR POSITION - REAR SENSORS ===
   - platform: ld2450
@@ -152,21 +174,34 @@ sensor:
       id: rear_target_count
     target_1:
       x:
-        name: "Car Position - Rear X"
+        name: "Car Position - Rear T1 X"
         id: rear_x
         unit_of_measurement: "mm"
       y:
-        name: "Car Position - Rear Y"
+        name: "Car Position - Rear T1 Y"
         id: rear_y
         unit_of_measurement: "mm"
       distance:
-        name: "Car Position - Rear Distance"
+        name: "Car Position - Rear T1 Distance"
         id: rear_distance
         unit_of_measurement: "mm"
       speed:
-        name: "Car Position - Rear Speed"
+        name: "Car Position - Rear T1 Speed"
         id: rear_speed
         unit_of_measurement: "cm/s"
+    target_2:
+      x:
+        name: "Car Position - Rear T2 X"
+        id: rear_t2_x
+        unit_of_measurement: "mm"
+      y:
+        name: "Car Position - Rear T2 Y"
+        id: rear_t2_y
+        unit_of_measurement: "mm"
+      distance:
+        name: "Car Position - Rear T2 Distance"
+        id: rear_t2_distance
+        unit_of_measurement: "mm"
 
   # === CAR POSITION - COMPUTED ===
   - platform: template
@@ -245,6 +280,42 @@ binary_sensor:
     filters:
       - delayed_on: 500ms
       - delayed_off: 2s
+
+  - platform: template
+    name: "Car Position - Person in Danger Zone"
+    id: person_in_danger_zone
+    device_class: safety
+    icon: "mdi:alert"
+    lambda: |-
+      // Danger zone: person (Target 2) detected in front or rear of car
+      // while vehicle is present - triggers red flash warning
+      if (!id(car_detected).state) return false;
+
+      float danger_dist = ${danger_zone_distance};
+
+      // Check front sensor Target 2 (person in front of car)
+      float front_t2_dist = id(front_t2_distance).state;
+      bool front_danger = !isnan(front_t2_dist) && front_t2_dist > 100 && front_t2_dist < danger_dist;
+
+      // Check rear sensor Target 2 (person behind car)
+      float rear_t2_dist = id(rear_t2_distance).state;
+      bool rear_danger = !isnan(rear_t2_dist) && rear_t2_dist > 100 && rear_t2_dist < danger_dist;
+
+      return front_danger || rear_danger;
+    filters:
+      - delayed_on: 300ms
+      - delayed_off: 1s
+    on_press:
+      - logger.log:
+          format: "*** DANGER: Person in danger zone! ***"
+          level: WARN
+      - light.turn_on:
+          id: led_strip
+          effect: "Person Alert (Red Flash)"
+    on_release:
+      - logger.log:
+          format: "*** Danger zone clear ***"
+          level: INFO
 
   - platform: template
     name: "Car Position - Correctly Parked"
@@ -586,6 +657,10 @@ text_sensor:
     id: parking_guidance
     icon: "mdi:parking"
     lambda: |-
+      // DANGER ZONE takes highest priority
+      if (id(person_in_danger_zone).state) {
+        return {"!!! STOP - PERSON !!!"};
+      }
       if (id(person_detected).state) {
         return {"PERSON DETECTED"};
       }

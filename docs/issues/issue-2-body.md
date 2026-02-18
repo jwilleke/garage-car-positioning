@@ -1,12 +1,3 @@
-# ESPHome review and recommendations — Issue #2 Body
-
-**To add this to GitHub Issue #2:**
-
-1. **Web UI:** Open [Issue #2](https://github.com/jwilleke/garage-car-positioning/issues/2) → Edit → paste the content below.
-2. **CLI:** From repo root: `gh issue edit 2 --body-file issue-2-body.md`
-
----
-
 ## Summary
 
 Review of the `esphome/` directory for the garage-car-positioning project. Findings include one **broken config**, several consistency improvements, and recommendations for maintainability.
@@ -73,7 +64,7 @@ Review of the `esphome/` directory for the garage-car-positioning project. Findi
 ## Config status overview
 
 | File | Purpose | Status |
-|------|---------|--------|
+| ------ | --------- | -------- |
 | `all-in-one.yaml` | Primary combined config | Valid |
 | `esp32-garage-door.yaml` | Door-only config | Valid |
 | `garage-car-sensor.yaml` | Car sensor only | Broken (invalid LED platform) |

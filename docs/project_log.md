@@ -39,6 +39,7 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
   - Implemented Target 2 sensors for front and rear LD2450
   - Added "Person in Danger Zone" binary sensor with red flash trigger
   - Added danger zone diagram and ESPHome configuration examples
+- Commits: ced1873
 - Files Modified:
   - docs/hardware/LD2450/LD2450.md (major update)
   - esphome/simple-wifi.yaml (danger zone feature)

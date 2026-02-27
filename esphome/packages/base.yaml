@@ -29,13 +29,78 @@ captive_portal:
 
 web_server:
   port: 80
+  version: 3
+  include_internal: false
 
 button:
   - platform: restart
-    name: "System - Restart"
+    name: "System - Restart Device"
     icon: "mdi:restart"
 
+sensor:
+  - platform: uptime
+    name: "System - Uptime Seconds"
+    id: uptime_sensor
+    internal: true
+
+  - platform: template
+    name: "System - Boot Count"
+    id: boot_count_sensor
+    icon: "mdi:counter"
+    accuracy_decimals: 0
+    lambda: |-
+      return id(boot_count);
+    update_interval: 60s
+
 text_sensor:
+  - platform: wifi_info
+    mac_address:
+      name: "System - MAC Address"
+      icon: "mdi:network"
+
+  - platform: template
+    name: "System - Reset Reason"
+    id: reset_reason_sensor
+    icon: "mdi:information"
+    lambda: |-
+      switch (esp_reset_reason()) {
+        case ESP_RST_POWERON: return std::string("Power-on");
+        case ESP_RST_EXT: return std::string("External pin");
+        case ESP_RST_SW: return std::string("Software reset");
+        case ESP_RST_PANIC: return std::string("Exception/panic");
+        case ESP_RST_INT_WDT: return std::string("Interrupt watchdog");
+        case ESP_RST_TASK_WDT: return std::string("Task watchdog");
+        case ESP_RST_WDT: return std::string("Other watchdog");
+        case ESP_RST_DEEPSLEEP: return std::string("Deep sleep wake");
+        case ESP_RST_BROWNOUT: return std::string("Brownout");
+        case ESP_RST_SDIO: return std::string("SDIO");
+        default: return std::string("Unknown");
+      }
+    update_interval: never
+
+  - platform: template
+    name: "System - Uptime"
+    icon: "mdi:clock-outline"
+    lambda: |-
+      int seconds = (int) id(uptime_sensor).state;
+      int weeks = seconds / 604800;
+      seconds = seconds % 604800;
+      int days = seconds / 86400;
+      seconds = seconds % 86400;
+      int hours = seconds / 3600;
+      seconds = seconds % 3600;
+      int minutes = seconds / 60;
+      if (weeks > 0) {
+        return str_sprintf("%dw %dd %dh %dm", weeks, days, hours, minutes);
+      } else if (days > 0) {
+        return str_sprintf("%dd %dh %dm", days, hours, minutes);
+      } else if (hours > 0) {
+        return str_sprintf("%dh %dm", hours, minutes);
+      } else {
+        return str_sprintf("%dm", minutes);
+      }
+    update_interval: 60s
+
   - platform: template
     name: "System - Firmware Version"
     icon: "mdi:tag"

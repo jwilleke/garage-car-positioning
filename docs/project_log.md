@@ -24,6 +24,36 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-02-27-01
+
+- Agent: Claude Sonnet 4.6
+- Subject: Merge simple-wifi.yaml features into all-in-one production config
+- Key Decision: Distribute new features across all-in-one.yaml and packages rather than inlining
+- Testing:
+  - esphome config esphome/all-in-one.yaml: Configuration is valid!
+- Work Done:
+  - Added `person_max_distance` substitution to all-in-one.yaml
+  - Added `esphome.comment` and `on_boot` (boot counter + LED off) to all-in-one.yaml
+  - Added `globals` (boot_count, scan_position, scan_forward) to all-in-one.yaml
+  - Removed static IP (`manual_ip`) from all-in-one.yaml wifi config
+  - Updated base.yaml: web_server to version 3 with include_internal: false
+  - Updated base.yaml: added system sensors (uptime, boot count, MAC address, reset reason, formatted uptime)
+  - Updated base.yaml: renamed restart button to "System - Restart Device"
+  - Updated car-sensor.yaml: added speed sensors (front_speed, rear_speed)
+  - Updated car-sensor.yaml: renamed all entities with "Car Position -" prefix
+  - Updated car-sensor.yaml: added active_led_count number slider
+  - Updated car-sensor.yaml: added Person Detected binary sensor
+  - Updated car-sensor.yaml: updated car_detected distance threshold (100 → 500 mm)
+  - Updated car-sensor.yaml: improved Parking Guidance text sensor with person detection + directional messages
+  - Updated car-sensor.yaml: replaced single LED effect with 9 effects (Parking Guidance, Solid, Parked Green, Move Forward Blue Scan, Move Forward Minor Cyan Scan, Move Back Orange Scan, Move Back Minor Yellow Scan, Person Alert Red Flash, Rainbow, Pulse)
+- Commits: f1b428f, 65aca70
+- Files Modified:
+  - esphome/all-in-one.yaml
+  - esphome/packages/base.yaml
+  - esphome/packages/car-sensor.yaml
+
+---
+
 ## 2026-02-18-01
 
 - Agent: Claude Opus 4.5

@@ -11,6 +11,7 @@
 #   target_y_min: Minimum Y position for correct parking (mm)
 #   target_y_max: Maximum Y position for correct parking (mm)
 #   target_x_tolerance: Maximum X deviation from center (mm)
+#   person_max_distance: Targets closer than this are likely people (mm)
 
 uart:
   - id: uart_ld2450_front
@@ -32,46 +33,77 @@ ld2450:
   - id: ld2450_rear
     uart_id: uart_ld2450_rear
 
+number:
+  - platform: template
+    name: "Car Position - LED Active Count"
+    id: active_led_count
+    icon: "mdi:led-on"
+    min_value: 1
+    max_value: 60
+    step: 1
+    initial_value: 30
+    restore_value: true
+    optimistic: true
+    set_action:
+      - logger.log:
+          format: "LED count set to %.0f"
+          args: ['x']
+
 sensor:
-  # LD2450 Front Sensor
+  # === FRONT SENSOR ===
   - platform: ld2450
     ld2450_id: ld2450_front
     target_count:
-      name: "Front Sensor Target Count"
+      name: "Car Position - Front Target Count"
+      id: front_target_count
     target_1:
       x:
-        name: "Front Target X"
+        name: "Car Position - Front X"
         id: front_x
+        unit_of_measurement: "mm"
       y:
-        name: "Front Target Y"
+        name: "Car Position - Front Y"
         id: front_y
+        unit_of_measurement: "mm"
       distance:
-        name: "Front Target Distance"
+        name: "Car Position - Front Distance"
         id: front_distance
+        unit_of_measurement: "mm"
+      speed:
+        name: "Car Position - Front Speed"
+        id: front_speed
+        unit_of_measurement: "cm/s"
 
-  # LD2450 Rear Sensor
+  # === REAR SENSOR ===
   - platform: ld2450
     ld2450_id: ld2450_rear
     target_count:
-      name: "Rear Sensor Target Count"
+      name: "Car Position - Rear Target Count"
+      id: rear_target_count
     target_1:
       x:
-        name: "Rear Target X"
+        name: "Car Position - Rear X"
         id: rear_x
+        unit_of_measurement: "mm"
       y:
-        name: "Rear Target Y"
+        name: "Car Position - Rear Y"
         id: rear_y
+        unit_of_measurement: "mm"
       distance:
-        name: "Rear Target Distance"
+        name: "Car Position - Rear Distance"
         id: rear_distance
+        unit_of_measurement: "mm"
+      speed:
+        name: "Car Position - Rear Speed"
+        id: rear_speed
+        unit_of_measurement: "cm/s"
 
-  # Car Position Template Sensors
+  # === COMPUTED POSITION ===
   - platform: template
-    name: "Car Center X Position"
+    name: "Car Position - Center X"
     id: car_center_x
     unit_of_measurement: "mm"
     lambda: |-
-      // Use distance > 0 to validate (avoids X=0 false negative)
       bool front_valid = !isnan(id(front_distance).state) && id(front_distance).state > 0;
       bool rear_valid = !isnan(id(rear_distance).state) && id(rear_distance).state > 0;
       if (front_valid && rear_valid) {
@@ -85,11 +117,11 @@ sensor:
     update_interval: 500ms
 
   - platform: template
-    name: "Car Center Y Position"
+    name: "Car Position - Center Y"
     id: car_center_y
     unit_of_measurement: "mm"
+    icon: "mdi:car"
     lambda: |-
-      // Use distance > 0 to validate (avoids Y=0 false negative)
       bool front_valid = !isnan(id(front_distance).state) && id(front_distance).state > 0;
       bool rear_valid = !isnan(id(rear_distance).state) && id(rear_distance).state > 0;
       if (front_valid && rear_valid) {
@@ -104,28 +136,47 @@ sensor:
 
 binary_sensor:
   - platform: template
-    name: "Car Detected"
+    name: "Car Position - Vehicle Detected"
     id: car_detected
     device_class: occupancy
+    icon: "mdi:car"
     lambda: |-
       float front_dist = id(front_distance).state;
       float rear_dist = id(rear_distance).state;
-      bool front_valid = !isnan(front_dist) && front_dist > 100;
-      bool rear_valid = !isnan(rear_dist) && rear_dist > 100;
+      bool front_valid = !isnan(front_dist) && front_dist > 500;
+      bool rear_valid = !isnan(rear_dist) && rear_dist > 500;
       return front_valid || rear_valid;
     filters:
       - delayed_on: 1s
       - delayed_off: 5s
 
   - platform: template
-    name: "Car Correctly Parked"
+    name: "Car Position - Person Detected"
+    id: person_detected
+    device_class: motion
+    icon: "mdi:walk"
+    lambda: |-
+      float front_dist = id(front_distance).state;
+      float rear_dist = id(rear_distance).state;
+      float front_spd = abs(id(front_speed).state);
+      float rear_spd = abs(id(rear_speed).state);
+      float max_dist = ${person_max_distance};
+      bool front_person = !isnan(front_dist) && front_dist > 100 && front_dist < max_dist && front_spd < 50;
+      bool rear_person = !isnan(rear_dist) && rear_dist > 100 && rear_dist < max_dist && rear_spd < 50;
+      return (front_person || rear_person) && !id(car_detected).state;
+    filters:
+      - delayed_on: 500ms
+      - delayed_off: 2s
+
+  - platform: template
+    name: "Car Position - Correctly Parked"
     id: car_correctly_parked
     device_class: occupancy
+    icon: "mdi:car-select"
     lambda: |-
       if (!id(car_detected).state) return false;
       float y = id(car_center_y).state;
       float x = id(car_center_x).state;
-      // Guard against NaN values
       if (isnan(y) || isnan(x)) return false;
       bool y_ok = (y >= ${target_y_min}) && (y <= ${target_y_max});
       bool x_ok = abs(x) <= ${target_x_tolerance};
@@ -133,61 +184,197 @@ binary_sensor:
 
 text_sensor:
   - platform: template
-    name: "Parking Guidance"
+    name: "Car Position - Parking Guidance"
+    id: parking_guidance
+    icon: "mdi:parking"
     lambda: |-
+      if (id(person_detected).state) {
+        return {"PERSON DETECTED"};
+      }
       if (!id(car_detected).state) {
-        return {"No car detected"};
+        return {"No vehicle"};
       }
       if (id(car_correctly_parked).state) {
-        return {"Perfect!"};
+        return {"PARKED"};
       }
       float y = id(car_center_y).state;
-      if (isnan(y)) return {"Acquiring position..."};
+      if (isnan(y)) return {"Acquiring..."};
       float target = (${target_y_min} + ${target_y_max}) / 2.0;
-      if (y < target - 100) return {"Move FORWARD"};
-      if (y > target + 100) return {"Move BACK"};
-      return {"Minor adjustment"};
+      float zone = (${target_y_max} - ${target_y_min}) / 2.0;
+      if (y < target - zone - 300) return {"MOVE FORWARD >>>"};
+      if (y < target - zone) return {"Move forward >"};
+      if (y > target + zone + 300) return {"<<< MOVE BACK"};
+      if (y > target + zone) return {"< Move back"};
+      return {"Almost there..."};
     update_interval: 500ms
 
 light:
   - platform: esp32_rmt_led_strip
-    name: "Garage Parking LED Strip"
-    chipset: WS2812
+    name: "Car Position - LED Strip"
+    id: garage_parking_led
     pin: ${led_strip_pin}
     num_leds: ${num_leds}
-    rgb_order: GRB
-    id: garage_parking_led
+    chipset: WS2812
     restore_mode: ALWAYS_OFF
-    default_transition_length: 1s
+    rgb_order: GRB
+    default_transition_length: 500ms
     effects:
       - addressable_lambda:
-          name: Parking Guidance Effect
+          name: "Parking Guidance"
           update_interval: 200ms
           lambda: |-
+            int count = id(active_led_count).state;
             if (!id(car_detected).state) {
-              it.all().set(Color(0, 0, 0)); // Off
+              for (int i = 0; i < it.size(); i++) it[i] = Color::BLACK;
             } else if (id(car_correctly_parked).state) {
-              it.all().set(Color(0, 255, 0)); // Green
+              for (int i = 0; i < it.size(); i++)
+                it[i] = (i < count) ? Color(0, 255, 0) : Color::BLACK;
             } else {
               float y = id(car_center_y).state;
               if (isnan(y)) {
-                it.all().set(Color(128, 128, 128)); // Gray - acquiring
+                for (int i = 0; i < it.size(); i++)
+                  it[i] = (i < count) ? Color(128, 128, 128) : Color::BLACK;
                 return;
               }
-              float target_y_min_f = ${target_y_min};
-              float target_y_max_f = ${target_y_max};
-              float target_y_mid = (target_y_min_f + target_y_max_f) / 2.0;
-              float perfect_zone_half_width = (target_y_max_f - target_y_min_f) / 2.0;
-              float approach_zone_half_width = perfect_zone_half_width + 300.0;
-              if (y < target_y_mid - approach_zone_half_width) {
-                it.all().set(Color(0, 0, 255)); // Blue (Move FORWARD)
-              } else if (y > target_y_mid + approach_zone_half_width) {
-                it.all().set(Color(255, 69, 0)); // OrangeRed (Move BACK)
-              } else if (y < target_y_mid - perfect_zone_half_width) {
-                it.all().set(Color(0, 255, 255)); // Cyan (Minor FORWARD)
-              } else if (y > target_y_mid + perfect_zone_half_width) {
-                it.all().set(Color(255, 255, 0)); // Yellow (Minor BACK)
-              } else {
-                it.all().set(Color(255, 255, 255)); // White (in zone but X off)
+              float target = (${target_y_min} + ${target_y_max}) / 2.0;
+              float zone = (${target_y_max} - ${target_y_min}) / 2.0;
+              Color c;
+              if (y < target - zone - 300) c = Color(0, 0, 255);
+              else if (y > target + zone + 300) c = Color(255, 69, 0);
+              else if (y < target - zone) c = Color(0, 255, 255);
+              else if (y > target + zone) c = Color(255, 255, 0);
+              else c = Color(255, 255, 255);
+              for (int i = 0; i < it.size(); i++)
+                it[i] = (i < count) ? c : Color::BLACK;
+            }
+
+      - addressable_lambda:
+          name: "Solid"
+          update_interval: 100ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            for (int i = 0; i < it.size(); i++)
+              it[i] = (i < count) ? current_color : Color::BLACK;
+
+      - addressable_lambda:
+          name: "Parked (Green)"
+          update_interval: 100ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            for (int i = 0; i < it.size(); i++)
+              it[i] = (i < count) ? Color(0, 255, 0) : Color::BLACK;
+
+      - addressable_lambda:
+          name: "Move Forward (Blue Scan)"
+          update_interval: 40ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            it.all() = Color::BLACK;
+            int pos = id(scan_position);
+            int trail_length = 5;
+            for (int i = 0; i < trail_length && (pos - i) >= 0; i++) {
+              int idx = pos - i;
+              if (idx < count) {
+                uint8_t brightness = 255 - (i * 40);
+                it[idx] = Color(0, 0, brightness);
               }
             }
+            id(scan_position) = (pos + 1) % count;
+
+      - addressable_lambda:
+          name: "Move Forward Minor (Cyan Scan)"
+          update_interval: 80ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            it.all() = Color::BLACK;
+            int pos = id(scan_position);
+            int trail_length = 3;
+            for (int i = 0; i < trail_length && (pos - i) >= 0; i++) {
+              int idx = pos - i;
+              if (idx < count) {
+                uint8_t brightness = 255 - (i * 60);
+                it[idx] = Color(0, brightness, brightness);
+              }
+            }
+            id(scan_position) = (pos + 1) % count;
+
+      - addressable_lambda:
+          name: "Move Back (Orange Scan)"
+          update_interval: 40ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            it.all() = Color::BLACK;
+            int pos = id(scan_position);
+            int trail_length = 5;
+            for (int i = 0; i < trail_length && (pos + i) < count; i++) {
+              int idx = pos + i;
+              if (idx >= 0) {
+                uint8_t brightness = 255 - (i * 40);
+                it[idx] = Color(brightness, brightness / 4, 0);
+              }
+            }
+            id(scan_position) = pos - 1;
+            if (id(scan_position) < 0) id(scan_position) = count - 1;
+
+      - addressable_lambda:
+          name: "Move Back Minor (Yellow Scan)"
+          update_interval: 80ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            it.all() = Color::BLACK;
+            int pos = id(scan_position);
+            int trail_length = 3;
+            for (int i = 0; i < trail_length && (pos + i) < count; i++) {
+              int idx = pos + i;
+              if (idx >= 0) {
+                uint8_t brightness = 255 - (i * 60);
+                it[idx] = Color(brightness, brightness, 0);
+              }
+            }
+            id(scan_position) = pos - 1;
+            if (id(scan_position) < 0) id(scan_position) = count - 1;
+
+      - addressable_lambda:
+          name: "Person Alert (Red Flash)"
+          update_interval: 250ms
+          lambda: |-
+            static bool flash_on = false;
+            int count = id(active_led_count).state;
+            flash_on = !flash_on;
+            Color c = flash_on ? Color(255, 0, 0) : Color::BLACK;
+            for (int i = 0; i < it.size(); i++)
+              it[i] = (i < count) ? c : Color::BLACK;
+
+      - addressable_lambda:
+          name: "Rainbow"
+          update_interval: 50ms
+          lambda: |-
+            static int offset = 0;
+            int count = id(active_led_count).state;
+            for (int i = 0; i < it.size(); i++) {
+              if (i < count) {
+                int hue = (i * 255 / count + offset) % 256;
+                int region = hue / 43;
+                int remainder = (hue - (region * 43)) * 6;
+                uint8_t q = 255 - remainder;
+                uint8_t t = remainder;
+                uint8_t r, g, b;
+                switch (region) {
+                  case 0: r = 255; g = t; b = 0; break;
+                  case 1: r = q; g = 255; b = 0; break;
+                  case 2: r = 0; g = 255; b = t; break;
+                  case 3: r = 0; g = q; b = 255; break;
+                  case 4: r = t; g = 0; b = 255; break;
+                  default: r = 255; g = 0; b = q; break;
+                }
+                it[i] = Color(r, g, b);
+              } else {
+                it[i] = Color::BLACK;
+              }
+            }
+            offset = (offset + 2) % 256;
+
+      - pulse:
+          name: "Pulse"
+          min_brightness: 20%
+          max_brightness: 100%

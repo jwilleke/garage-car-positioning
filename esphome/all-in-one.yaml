@@ -8,6 +8,7 @@ substitutions:
   target_y_max: "2200"
   target_x_tolerance: "300"
   num_leds: "30"
+  person_max_distance: "1500"
 
   # Garage Door Settings
   garage_door_full_open_counts: "10000"
@@ -32,8 +33,28 @@ packages:
 esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
+  comment: "Garage all-in-one: car positioning + door control v${firmware_version}"
   platformio_options:
     board_build.flash_mode: dio
+  on_boot:
+    priority: -100
+    then:
+      - lambda: |-
+          id(boot_count) += 1;
+          ESP_LOGI("boot", "Boot count: %d", id(boot_count));
+      - light.turn_off: garage_parking_led
+
+globals:
+  - id: boot_count
+    type: int
+    restore_value: true
+    initial_value: '0'
+  - id: scan_position
+    type: int
+    initial_value: '0'
+  - id: scan_forward
+    type: bool
+    initial_value: 'true'
 
 wifi:
   ssid: !secret wifi_ssid
@@ -46,10 +67,3 @@ wifi:
     password: !secret ap_password
     ap_timeout: 1min
 
-  # Static IP configuration
-  # Update these values for your network
-  manual_ip:
-    static_ip: 192.168.68.100
-    gateway: 192.168.68.1
-    subnet: 255.255.255.0
-    dns1: 192.168.68.1

@@ -24,6 +24,32 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-02-27-02
+
+- Agent: Claude Sonnet 4.6
+- Subject: WiFi debugging, faulty hardware discovery, all-in-one inline refactor
+- Key Decision: Inline all-in-one.yaml (remove packages); use connect.yaml + utility script for MAC-based device provisioning
+- Current Issue: None — all-in-one.yaml connected to WiFi and under review for deployment
+- Testing:
+  - Discovered ESP32-C6-DevKit-1 unit with failed WiFi hardware — persistent Association Failed / Authentication Failed errors regardless of config
+  - Replaced with second unit (MAC 98:A3:16:B1:D0:88); WiFi connects successfully to SWIT2
+  - esphome/connect.yaml flashed and confirmed connected (IP 192.168.68.151)
+- Work Done:
+  - Diagnosed WPA3/WPA2 association failures; added sdkconfig_options to disable WPA3 in all configs
+  - Created esphome/connect.yaml — standalone WiFi connectivity test config
+  - Created esphome/all-connect.yaml — minimal full config for WiFi testing
+  - Created utility/connect.sh — reads MAC via esptool.py, passes as substitution to esphome run; device names itself by full MAC address
+  - Refactored esphome/all-in-one.yaml: removed all package includes, inlined all content from simple-wifi.yaml using substitution variables for all GPIO pins
+  - Added danger_zone_distance substitution to all-in-one.yaml
+  - Updated num_leds substitution to 60
+- Files Modified:
+  - esphome/all-in-one.yaml
+  - esphome/connect.yaml (new)
+  - esphome/all-connect.yaml (new)
+  - utility/connect.sh (new)
+
+---
+
 ## 2026-02-27-01
 
 - Agent: Claude Sonnet 4.6

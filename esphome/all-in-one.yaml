@@ -51,6 +51,10 @@ globals:
   - id: scan_forward
     type: bool
     initial_value: 'true'
+  - id: led_auto_mode
+    type: bool
+    restore_value: true
+    initial_value: 'true'
 
 esp32:
   board: esp32-c6-devkitc-1
@@ -311,6 +315,7 @@ binary_sensor:
       - logger.log:
           format: "*** Danger zone clear ***"
           level: INFO
+      - light.turn_off: garage_parking_led
 
   - platform: template
     name: "Car Position - Correctly Parked"
@@ -389,8 +394,25 @@ button:
     name: "System - Restart Device"
     icon: "mdi:restart"
 
-# Garage Door Relay
 switch:
+  - platform: template
+    name: "Car Position - LED Auto Mode"
+    id: led_auto_mode_switch
+    icon: "mdi:led-on"
+    optimistic: false
+    lambda: |-
+      return id(led_auto_mode);
+    turn_on_action:
+      - globals.set:
+          id: led_auto_mode
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: led_auto_mode
+          value: 'false'
+      - light.turn_off: garage_parking_led
+
+  # Garage Door Relay
   - platform: gpio
     name: "Garage Door - Relay"
     pin: ${garage_door_relay_pin}
@@ -657,3 +679,41 @@ text_sensor:
       if (y > target + zone) return {"< Move back"};
       return {"Almost there..."};
     update_interval: 500ms
+    on_value:
+      - if:
+          condition:
+            lambda: 'return id(led_auto_mode);'
+          then:
+            - if:
+                condition:
+                  lambda: 'return x == "PARKED";'
+                then:
+                  - light.turn_on:
+                      id: garage_parking_led
+                      effect: "Parked (Green)"
+            - if:
+                condition:
+                  lambda: 'return x == "MOVE FORWARD >>>" || x == "Move forward >";'
+                then:
+                  - light.turn_on:
+                      id: garage_parking_led
+                      effect: "Move Forward (Blue Scan)"
+            - if:
+                condition:
+                  lambda: 'return x == "<<< MOVE BACK" || x == "< Move back";'
+                then:
+                  - light.turn_on:
+                      id: garage_parking_led
+                      effect: "Move Back (Orange Scan)"
+            - if:
+                condition:
+                  lambda: 'return x == "Almost there...";'
+                then:
+                  - light.turn_on:
+                      id: garage_parking_led
+                      effect: "Move Forward Minor (Cyan Scan)"
+            - if:
+                condition:
+                  lambda: 'return x == "No vehicle" || x == "Acquiring...";'
+                then:
+                  - light.turn_off: garage_parking_led

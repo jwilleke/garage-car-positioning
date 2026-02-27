@@ -38,6 +38,10 @@ sensor:
     id: garage_door_encoder
     pin_a: ${garage_door_encoder_a_pin}
     pin_b: ${garage_door_encoder_b_pin}
+    resolution: 4
+    publish_initial_value: false
+    filters:
+      - debounce: 10ms
 
 cover:
   - platform: template

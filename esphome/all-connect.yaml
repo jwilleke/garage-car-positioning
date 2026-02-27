@@ -1,0 +1,54 @@
+substitutions:
+  device_name: esp32-garage-all-in-one
+  friendly_name: "Garage All-in-One"
+  firmware_version: "0.1.1"
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  comment: "Garage all-in-one: car positioning + door control v${firmware_version}"
+
+esp32:
+  board: esp32-c6-devkitc-1
+  variant: esp32c6
+  framework:
+    type: esp-idf
+    version: recommended
+    sdkconfig_options:
+      CONFIG_ESP_WIFI_ENABLE_WPA3_SAE: "n"
+      CONFIG_ESP_WIFI_ENABLE_SAE_PK: "n"
+      CONFIG_ESP_WIFI_SOFTAP_SAE_SUPPORT: "n"
+      CONFIG_ESP_WIFI_ENABLE_WPA3_OWE_STA: "n"
+
+logger:
+  level: DEBUG
+  hardware_uart: USB_SERIAL_JTAG
+
+wifi:
+  min_auth_mode: WPA2
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  reboot_timeout: 15min
+  power_save_mode: none
+  enable_on_boot: true
+  fast_connect: on
+  output_power: 8.5dBm   # try 5–11 dBm range if needed
+  # Access point 
+  ap:
+    ssid: "garage-all-in-one"
+    password: !secret ap_password
+
+api:
+  encryption:
+    key: !secret api_encryption_key
+  reboot_timeout: 0s
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+captive_portal:
+
+web_server:
+  port: 80
+  version: 3

@@ -7,8 +7,9 @@ substitutions:
   target_y_min: "1800"
   target_y_max: "2200"
   target_x_tolerance: "300"
-  num_leds: "30"
+  num_leds: "60"
   person_max_distance: "1500"
+  danger_zone_distance: "3000"
 
   # Garage Door Settings
   garage_door_full_open_counts: "10000"
@@ -24,11 +25,6 @@ substitutions:
   ld2450_front_tx_pin: GPIO17
   ld2450_rear_rx_pin: GPIO18
   ld2450_rear_tx_pin: GPIO19
-
-packages:
-  base: !include packages/base.yaml
-  car_sensor: !include packages/car-sensor.yaml
-  garage_door: !include packages/garage-door.yaml
 
 esphome:
   name: ${device_name}
@@ -56,14 +52,608 @@ globals:
     type: bool
     initial_value: 'true'
 
+esp32:
+  board: esp32-c6-devkitc-1
+  variant: esp32c6
+  framework:
+    type: esp-idf
+    version: recommended
+    sdkconfig_options:
+      CONFIG_ESP_WIFI_ENABLE_WPA3_SAE: "n"
+      CONFIG_ESP_WIFI_ENABLE_SAE_PK: "n"
+      CONFIG_ESP_WIFI_SOFTAP_SAE_SUPPORT: "n"
+      CONFIG_ESP_WIFI_ENABLE_WPA3_OWE_STA: "n"
+
+logger:
+  level: DEBUG
+  hardware_uart: USB_SERIAL_JTAG
+
+# Front LD2450 UART - GPIO16 (RX from sensor TX), GPIO17 (TX to sensor RX)
+# Rear LD2450 UART - GPIO18 (RX from sensor TX), GPIO19 (TX to sensor RX)
+uart:
+  - id: uart_ld2450_front
+    rx_pin: ${ld2450_front_rx_pin}
+    tx_pin: ${ld2450_front_tx_pin}
+    baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
+
+  - id: uart_ld2450_rear
+    rx_pin: ${ld2450_rear_rx_pin}
+    tx_pin: ${ld2450_rear_tx_pin}
+    baud_rate: 256000
+    parity: NONE
+    stop_bits: 1
+
+ld2450:
+  - id: ld2450_front
+    uart_id: uart_ld2450_front
+  - id: ld2450_rear
+    uart_id: uart_ld2450_rear
+
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  fast_connect: true
+  reboot_timeout: 15min
   power_save_mode: none
-  reboot_timeout: 5min
+  enable_on_boot: true
+  fast_connect: on
+  output_power: 8.5dBm
   ap:
-    ssid: "garage-aio"
+    ssid: "garage-all-in-one"
     password: !secret ap_password
-    ap_timeout: 1min
 
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+captive_portal:
+
+web_server:
+  port: 80
+  version: 3
+  include_internal: false
+
+sensor:
+  # === SYSTEM SENSORS ===
+  - platform: uptime
+    name: "System - Uptime Seconds"
+    id: uptime_sensor
+    internal: true
+
+  - platform: template
+    name: "System - Boot Count"
+    id: boot_count_sensor
+    icon: "mdi:counter"
+    accuracy_decimals: 0
+    lambda: |-
+      return id(boot_count);
+    update_interval: 60s
+
+  # === CAR POSITION - FRONT SENSORS ===
+  - platform: ld2450
+    ld2450_id: ld2450_front
+    target_count:
+      name: "Car Position - Front Target Count"
+      id: front_target_count
+    target_1:
+      x:
+        name: "Car Position - Front T1 X"
+        id: front_x
+        unit_of_measurement: "mm"
+      y:
+        name: "Car Position - Front T1 Y"
+        id: front_y
+        unit_of_measurement: "mm"
+      distance:
+        name: "Car Position - Front T1 Distance"
+        id: front_distance
+        unit_of_measurement: "mm"
+      speed:
+        name: "Car Position - Front T1 Speed"
+        id: front_speed
+        unit_of_measurement: "cm/s"
+    target_2:
+      x:
+        name: "Car Position - Front T2 X"
+        id: front_t2_x
+        unit_of_measurement: "mm"
+      y:
+        name: "Car Position - Front T2 Y"
+        id: front_t2_y
+        unit_of_measurement: "mm"
+      distance:
+        name: "Car Position - Front T2 Distance"
+        id: front_t2_distance
+        unit_of_measurement: "mm"
+
+  # === CAR POSITION - REAR SENSORS ===
+  - platform: ld2450
+    ld2450_id: ld2450_rear
+    target_count:
+      name: "Car Position - Rear Target Count"
+      id: rear_target_count
+    target_1:
+      x:
+        name: "Car Position - Rear T1 X"
+        id: rear_x
+        unit_of_measurement: "mm"
+      y:
+        name: "Car Position - Rear T1 Y"
+        id: rear_y
+        unit_of_measurement: "mm"
+      distance:
+        name: "Car Position - Rear T1 Distance"
+        id: rear_distance
+        unit_of_measurement: "mm"
+      speed:
+        name: "Car Position - Rear T1 Speed"
+        id: rear_speed
+        unit_of_measurement: "cm/s"
+    target_2:
+      x:
+        name: "Car Position - Rear T2 X"
+        id: rear_t2_x
+        unit_of_measurement: "mm"
+      y:
+        name: "Car Position - Rear T2 Y"
+        id: rear_t2_y
+        unit_of_measurement: "mm"
+      distance:
+        name: "Car Position - Rear T2 Distance"
+        id: rear_t2_distance
+        unit_of_measurement: "mm"
+
+  # === CAR POSITION - COMPUTED ===
+  - platform: template
+    name: "Car Position - Center Y"
+    id: car_center_y
+    unit_of_measurement: "mm"
+    icon: "mdi:car"
+    lambda: |-
+      bool front_valid = !isnan(id(front_distance).state) && id(front_distance).state > 0;
+      bool rear_valid = !isnan(id(rear_distance).state) && id(rear_distance).state > 0;
+      if (front_valid && rear_valid) {
+        return (id(front_y).state + id(rear_y).state) / 2.0;
+      } else if (front_valid) {
+        return id(front_y).state;
+      } else if (rear_valid) {
+        return id(rear_y).state;
+      }
+      return NAN;
+    update_interval: 500ms
+
+number:
+  - platform: template
+    name: "Car Position - LED Active Count"
+    id: active_led_count
+    icon: "mdi:led-on"
+    min_value: 1
+    max_value: 60
+    step: 1
+    initial_value: ${num_leds}
+    restore_value: true
+    optimistic: true
+    set_action:
+      - logger.log:
+          format: "LED count set to %.0f"
+          args: ['x']
+
+binary_sensor:
+  # === CAR POSITION - DETECTION ===
+  - platform: template
+    name: "Car Position - Vehicle Detected"
+    id: car_detected
+    device_class: occupancy
+    icon: "mdi:car"
+    lambda: |-
+      float front_dist = id(front_distance).state;
+      float rear_dist = id(rear_distance).state;
+      bool front_valid = !isnan(front_dist) && front_dist > 500;
+      bool rear_valid = !isnan(rear_dist) && rear_dist > 500;
+      return front_valid || rear_valid;
+    filters:
+      - delayed_on: 1s
+      - delayed_off: 5s
+
+  - platform: template
+    name: "Car Position - Person Detected"
+    id: person_detected
+    device_class: motion
+    icon: "mdi:walk"
+    lambda: |-
+      float front_dist = id(front_distance).state;
+      float rear_dist = id(rear_distance).state;
+      float front_spd = abs(id(front_speed).state);
+      float rear_spd = abs(id(rear_speed).state);
+      float max_dist = ${person_max_distance};
+
+      bool front_person = !isnan(front_dist) && front_dist > 100 && front_dist < max_dist && front_spd < 50;
+      bool rear_person = !isnan(rear_dist) && rear_dist > 100 && rear_dist < max_dist && rear_spd < 50;
+
+      return (front_person || rear_person) && !id(car_detected).state;
+    filters:
+      - delayed_on: 500ms
+      - delayed_off: 2s
+
+  - platform: template
+    name: "Car Position - Person in Danger Zone"
+    id: person_in_danger_zone
+    device_class: safety
+    icon: "mdi:alert"
+    lambda: |-
+      if (!id(car_detected).state) return false;
+
+      float danger_dist = ${danger_zone_distance};
+
+      float front_t2_dist = id(front_t2_distance).state;
+      bool front_danger = !isnan(front_t2_dist) && front_t2_dist > 100 && front_t2_dist < danger_dist;
+
+      float rear_t2_dist = id(rear_t2_distance).state;
+      bool rear_danger = !isnan(rear_t2_dist) && rear_t2_dist > 100 && rear_t2_dist < danger_dist;
+
+      return front_danger || rear_danger;
+    filters:
+      - delayed_on: 300ms
+      - delayed_off: 1s
+    on_press:
+      - logger.log:
+          format: "*** DANGER: Person in danger zone! ***"
+          level: WARN
+      - light.turn_on:
+          id: garage_parking_led
+          effect: "Person Alert (Red Flash)"
+    on_release:
+      - logger.log:
+          format: "*** Danger zone clear ***"
+          level: INFO
+
+  - platform: template
+    name: "Car Position - Correctly Parked"
+    id: car_correctly_parked
+    device_class: occupancy
+    icon: "mdi:car-select"
+    lambda: |-
+      if (!id(car_detected).state) return false;
+      float y = id(car_center_y).state;
+      if (isnan(y)) return false;
+      return (y >= ${target_y_min}) && (y <= ${target_y_max});
+
+  # === GARAGE DOOR SENSORS ===
+  - platform: gpio
+    name: "Garage Door - Closed Switch"
+    id: garage_door_closed_switch
+    pin:
+      number: ${garage_door_closed_switch_pin}
+      mode: INPUT_PULLUP
+      inverted: true
+    device_class: door
+    on_press:
+      - logger.log:
+          format: "*** Garage Door: CLOSED ***"
+          level: INFO
+    on_release:
+      - logger.log:
+          format: "*** Garage Door: OPENED ***"
+          level: INFO
+    filters:
+      - delayed_on: 50ms
+      - delayed_off: 50ms
+
+  - platform: gpio
+    name: "Garage Door - Hall Sensor A"
+    id: hall_sensor_a
+    pin:
+      number: ${garage_door_encoder_a_pin}
+      mode: INPUT_PULLUP
+      inverted: true
+    device_class: occupancy
+    on_press:
+      - logger.log:
+          format: "*** Hall Sensor A: TRIGGERED ***"
+          level: INFO
+    on_release:
+      - logger.log:
+          format: "*** Hall Sensor A: CLEARED ***"
+          level: INFO
+    filters:
+      - delayed_on: 50ms
+      - delayed_off: 50ms
+
+  - platform: gpio
+    name: "Garage Door - Hall Sensor B"
+    id: hall_sensor_b
+    pin:
+      number: ${garage_door_encoder_b_pin}
+      mode: INPUT_PULLUP
+      inverted: true
+    device_class: occupancy
+    on_press:
+      - logger.log:
+          format: "*** Hall Sensor B: TRIGGERED ***"
+          level: INFO
+    on_release:
+      - logger.log:
+          format: "*** Hall Sensor B: CLEARED ***"
+          level: INFO
+    filters:
+      - delayed_on: 50ms
+      - delayed_off: 50ms
+
+button:
+  - platform: restart
+    name: "System - Restart Device"
+    icon: "mdi:restart"
+
+# Garage Door Relay
+switch:
+  - platform: gpio
+    name: "Garage Door - Relay"
+    pin: ${garage_door_relay_pin}
+    id: garage_door_relay
+    icon: "mdi:garage"
+    restore_mode: ALWAYS_OFF
+    on_turn_on:
+      - delay: 200ms
+      - switch.turn_off: garage_door_relay
+
+# LED Strip
+light:
+  - platform: esp32_rmt_led_strip
+    name: "Car Position - LED Strip"
+    id: garage_parking_led
+    pin: ${led_strip_pin}
+    num_leds: ${num_leds}
+    chipset: WS2812
+    restore_mode: ALWAYS_OFF
+    rgb_order: GRB
+    default_transition_length: 500ms
+    effects:
+      - addressable_lambda:
+          name: "Solid"
+          update_interval: 100ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            for (int i = 0; i < it.size(); i++) {
+              if (i < count) {
+                it[i] = current_color;
+              } else {
+                it[i] = Color::BLACK;
+              }
+            }
+
+      - addressable_lambda:
+          name: "Parked (Green)"
+          update_interval: 100ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            for (int i = 0; i < it.size(); i++) {
+              it[i] = (i < count) ? Color(0, 255, 0) : Color::BLACK;
+            }
+
+      - addressable_lambda:
+          name: "Move Forward (Blue Scan)"
+          update_interval: 40ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            it.all() = Color::BLACK;
+
+            int pos = id(scan_position);
+            int trail_length = 5;
+
+            for (int i = 0; i < trail_length && (pos - i) >= 0; i++) {
+              int idx = pos - i;
+              if (idx < count) {
+                uint8_t brightness = 255 - (i * 40);
+                it[idx] = Color(0, 0, brightness);
+              }
+            }
+
+            id(scan_position) = (pos + 1) % count;
+
+      - addressable_lambda:
+          name: "Move Forward Minor (Cyan Scan)"
+          update_interval: 80ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            it.all() = Color::BLACK;
+
+            int pos = id(scan_position);
+            int trail_length = 3;
+
+            for (int i = 0; i < trail_length && (pos - i) >= 0; i++) {
+              int idx = pos - i;
+              if (idx < count) {
+                uint8_t brightness = 255 - (i * 60);
+                it[idx] = Color(0, brightness, brightness);
+              }
+            }
+
+            id(scan_position) = (pos + 1) % count;
+
+      - addressable_lambda:
+          name: "Move Back (Orange Scan)"
+          update_interval: 40ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            it.all() = Color::BLACK;
+
+            int pos = id(scan_position);
+            int trail_length = 5;
+
+            for (int i = 0; i < trail_length && (pos + i) < count; i++) {
+              int idx = pos + i;
+              if (idx >= 0) {
+                uint8_t brightness = 255 - (i * 40);
+                it[idx] = Color(brightness, brightness / 4, 0);
+              }
+            }
+
+            id(scan_position) = pos - 1;
+            if (id(scan_position) < 0) {
+              id(scan_position) = count - 1;
+            }
+
+      - addressable_lambda:
+          name: "Move Back Minor (Yellow Scan)"
+          update_interval: 80ms
+          lambda: |-
+            int count = id(active_led_count).state;
+            it.all() = Color::BLACK;
+
+            int pos = id(scan_position);
+            int trail_length = 3;
+
+            for (int i = 0; i < trail_length && (pos + i) < count; i++) {
+              int idx = pos + i;
+              if (idx >= 0) {
+                uint8_t brightness = 255 - (i * 60);
+                it[idx] = Color(brightness, brightness, 0);
+              }
+            }
+
+            id(scan_position) = pos - 1;
+            if (id(scan_position) < 0) {
+              id(scan_position) = count - 1;
+            }
+
+      - addressable_lambda:
+          name: "Person Alert (Red Flash)"
+          update_interval: 250ms
+          lambda: |-
+            static bool flash_on = false;
+            int count = id(active_led_count).state;
+
+            flash_on = !flash_on;
+            Color c = flash_on ? Color(255, 0, 0) : Color::BLACK;
+
+            for (int i = 0; i < it.size(); i++) {
+              it[i] = (i < count) ? c : Color::BLACK;
+            }
+
+      - addressable_lambda:
+          name: "Rainbow"
+          update_interval: 50ms
+          lambda: |-
+            static int offset = 0;
+            int count = id(active_led_count).state;
+            for (int i = 0; i < it.size(); i++) {
+              if (i < count) {
+                int hue = (i * 255 / count + offset) % 256;
+                int region = hue / 43;
+                int remainder = (hue - (region * 43)) * 6;
+                uint8_t q = 255 - remainder;
+                uint8_t t = remainder;
+                uint8_t r, g, b;
+                switch (region) {
+                  case 0: r = 255; g = t; b = 0; break;
+                  case 1: r = q; g = 255; b = 0; break;
+                  case 2: r = 0; g = 255; b = t; break;
+                  case 3: r = 0; g = q; b = 255; break;
+                  case 4: r = t; g = 0; b = 255; break;
+                  default: r = 255; g = 0; b = q; break;
+                }
+                it[i] = Color(r, g, b);
+              } else {
+                it[i] = Color::BLACK;
+              }
+            }
+            offset = (offset + 2) % 256;
+
+      - pulse:
+          name: "Pulse"
+          min_brightness: 20%
+          max_brightness: 100%
+
+text_sensor:
+  # === SYSTEM TEXT SENSORS ===
+  - platform: wifi_info
+    mac_address:
+      name: "System - MAC Address"
+      icon: "mdi:network"
+
+  - platform: template
+    name: "System - Reset Reason"
+    id: reset_reason_sensor
+    icon: "mdi:information"
+    lambda: |-
+      switch (esp_reset_reason()) {
+        case ESP_RST_POWERON: return std::string("Power-on");
+        case ESP_RST_EXT: return std::string("External pin");
+        case ESP_RST_SW: return std::string("Software reset");
+        case ESP_RST_PANIC: return std::string("Exception/panic");
+        case ESP_RST_INT_WDT: return std::string("Interrupt watchdog");
+        case ESP_RST_TASK_WDT: return std::string("Task watchdog");
+        case ESP_RST_WDT: return std::string("Other watchdog");
+        case ESP_RST_DEEPSLEEP: return std::string("Deep sleep wake");
+        case ESP_RST_BROWNOUT: return std::string("Brownout");
+        case ESP_RST_SDIO: return std::string("SDIO");
+        default: return std::string("Unknown");
+      }
+    update_interval: never
+
+  - platform: template
+    name: "System - Uptime"
+    icon: "mdi:clock-outline"
+    lambda: |-
+      int seconds = (int) id(uptime_sensor).state;
+      int weeks = seconds / 604800;
+      seconds = seconds % 604800;
+      int days = seconds / 86400;
+      seconds = seconds % 86400;
+      int hours = seconds / 3600;
+      seconds = seconds % 3600;
+      int minutes = seconds / 60;
+      if (weeks > 0) {
+        return str_sprintf("%dw %dd %dh %dm", weeks, days, hours, minutes);
+      } else if (days > 0) {
+        return str_sprintf("%dd %dh %dm", days, hours, minutes);
+      } else if (hours > 0) {
+        return str_sprintf("%dh %dm", hours, minutes);
+      } else {
+        return str_sprintf("%dm", minutes);
+      }
+    update_interval: 60s
+
+  - platform: version
+    name: "System - ESPHome Version"
+    icon: "mdi:home-assistant"
+
+  - platform: template
+    name: "System - Firmware Version"
+    icon: "mdi:tag"
+    lambda: 'return {"${firmware_version}"};'
+    update_interval: never
+
+  # === CAR POSITION TEXT SENSORS ===
+  - platform: template
+    name: "Car Position - Parking Guidance"
+    id: parking_guidance
+    icon: "mdi:parking"
+    lambda: |-
+      if (id(person_in_danger_zone).state) {
+        return {"!!! STOP - PERSON !!!"};
+      }
+      if (id(person_detected).state) {
+        return {"PERSON DETECTED"};
+      }
+      if (!id(car_detected).state) {
+        return {"No vehicle"};
+      }
+      if (id(car_correctly_parked).state) {
+        return {"PARKED"};
+      }
+      float y = id(car_center_y).state;
+      if (isnan(y)) return {"Acquiring..."};
+      float target = (${target_y_min} + ${target_y_max}) / 2.0;
+      float zone = (${target_y_max} - ${target_y_min}) / 2.0;
+      if (y < target - zone - 300) return {"MOVE FORWARD >>>"};
+      if (y < target - zone) return {"Move forward >"};
+      if (y > target + zone + 300) return {"<<< MOVE BACK"};
+      if (y > target + zone) return {"< Move back"};
+      return {"Almost there..."};
+    update_interval: 500ms

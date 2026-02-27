@@ -12,6 +12,11 @@ esp32:
   framework:
     type: esp-idf
     version: recommended
+    sdkconfig_options:
+      CONFIG_ESP_WIFI_ENABLE_WPA3_SAE: "n"
+      CONFIG_ESP_WIFI_ENABLE_SAE_PK: "n"
+      CONFIG_ESP_WIFI_SOFTAP_SAE_SUPPORT: "n"
+      CONFIG_ESP_WIFI_ENABLE_WPA3_OWE_STA: "n"
 
 logger:
   level: DEBUG

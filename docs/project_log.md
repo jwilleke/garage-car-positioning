@@ -24,6 +24,30 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-02-28-02
+
+- Agent: Claude Sonnet 4.6
+- Subject: Door position tracking, status display, debug logging toggle, web portal polish
+- Key Decision: Relay moved to Configuration group to prevent accidental door trigger; logger defaults to WARN (quiet), toggle enables DEBUG
+- Current Issue: `garage_door_full_open_counts` is a placeholder ("64") — must be calibrated by opening door fully and reading encoder count from HA
+- Testing:
+  - esphome config esphome/all-in-one.yaml: Configuration is valid!
+- Work Done:
+  - Added `door_counts` global (int, restore: true) for quadrature encoder position tracking
+  - Added A/B hall sensor quadrature counting logic: A rising + B low = count up; A rising + B high = count down; vice versa on falling edge
+  - Added `door_counts = 0` reset on garage_door_closed_switch on_press and on_boot (if closed)
+  - Added Garage Door - Position sensor (%, group_door weight 3) computed from door_counts
+  - Added Garage Door - Status text sensor (group_door weight 1) showing "Closed" or "Open X%"
+  - Changed logger base level from DEBUG to WARN (quiet default)
+  - Added System - Debug Logging switch (default OFF, group_config weight 5); turns DEBUG on when enabled
+  - Moved Garage Door - Open / Close relay from group_door to group_config (weight 4)
+  - Updated GitHub issue #4 with revised 4-group layout table and design decisions
+- Commits: c935136
+- Files Modified:
+  - esphome/all-in-one.yaml
+
+---
+
 ## 2026-02-28-01
 
 - Agent: Claude Sonnet 4.6

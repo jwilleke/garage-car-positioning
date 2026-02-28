@@ -42,7 +42,7 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
   - Fixed broken relative links in docs/Installation.md (../hardware/ → hardware/)
   - Rewrote docs/light-strip-operation.md: effects are scanning animations not solid colors; red = person alert not distance; yellow effect unused; added summary table
   - Updated docs/calibration.md: entity names, inch units, and file references updated for all-in-one.yaml
-- Commits: TBD
+- Commits: 6b5dd48
 - Files Modified:
   - esphome/testing.yaml
   - README.md

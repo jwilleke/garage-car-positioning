@@ -24,6 +24,32 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-02-28-03
+
+- Agent: Claude Sonnet 4.6
+- Subject: Log level dropdown, LED defaults on, web portal polish
+- Key Decision: Compile logger at DEBUG max, default to WARN at runtime via on_boot; use select dropdown instead of binary switch for log level
+- Current Issue: None — firmware uploaded and running
+- Testing:
+  - esphome config esphome/all-in-one.yaml: Configuration is valid!
+  - Compiled and uploaded via USB /dev/cu.usbmodem31101
+- Work Done:
+  - Replaced debug logging binary switch with System - Log Level select dropdown (Off/WARN/INFO/DEBUG)
+  - Fixed "Cannot set log level higher than pre-compiled WARN" — changed compiled level to DEBUG, set WARN at boot via on_boot action
+  - Forced `id(led_auto_mode) = true` in on_boot lambda (always ON after restart regardless of previous state)
+  - Renamed light "Car Position - Parking LED" → "Car Position - LED Strip"
+  - Changed LED strip restore_mode from ALWAYS_OFF to RESTORE_DEFAULT_ON (boots on)
+  - Removed explicit light.turn_off from on_boot (LED auto mode handles state within 500ms)
+  - Fixed web_server group sorting_weight order (user corrected to 10/20/30/40 ascending = lower is first)
+  - Updated packages/car-sensor.yaml: Front→Garage Door, Rear→Inside Wall entity name renames; inch conversion filters
+  - Updated GitHub issue #4 with final 4-group layout
+- Commits: 50333b4
+- Files Modified:
+  - esphome/all-in-one.yaml
+  - esphome/packages/car-sensor.yaml
+
+---
+
 ## 2026-02-28-02
 
 - Agent: Claude Sonnet 4.6

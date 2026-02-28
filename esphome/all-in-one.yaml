@@ -40,13 +40,15 @@ esphome:
   on_boot:
     priority: -100
     then:
+      - logger.set_level:
+          level: WARN
       - lambda: |-
           id(boot_count) += 1;
+          id(led_auto_mode) = true;
           ESP_LOGI("boot", "Boot count: %d", id(boot_count));
           if (id(garage_door_closed_switch).state) {
             id(door_counts) = 0;
           }
-      - light.turn_off: garage_parking_led
 
 globals:
   - id: boot_count
@@ -81,7 +83,7 @@ esp32:
       CONFIG_ESP_WIFI_ENABLE_WPA3_OWE_STA: "n"
 
 logger:
-  level: WARN
+  level: DEBUG  # compile-time max; runtime level set to WARN on boot (toggle via Debug Logging switch)
   hardware_uart: USB_SERIAL_JTAG
 
 # Garage Door LD2450 UART - GPIO16 (RX from sensor TX), GPIO17 (TX to sensor RX)
@@ -136,16 +138,16 @@ web_server:
   sorting_groups:
     - id: group_car
       name: "Car Positioning"
-      sorting_weight: 1
+      sorting_weight: 10
     - id: group_door
       name: "Garage Door"
-      sorting_weight: 2
+      sorting_weight: 20
     - id: group_config
       name: "Configuration"
-      sorting_weight: 3
+      sorting_weight: 30
     - id: group_diag
       name: "Diagnostic"
-      sorting_weight: 4
+      sorting_weight: 40
 
 sensor:
   # === SYSTEM SENSORS ===
@@ -619,18 +621,45 @@ switch:
       - delay: 200ms
       - switch.turn_off: garage_door_relay
 
+
+select:
   - platform: template
-    name: "System - Debug Logging"
-    id: debug_logging_switch
+    name: "System - Log Level"
+    id: log_level_select
     icon: "mdi:bug"
+    options:
+      - "Off"
+      - "WARN"
+      - "INFO"
+      - "DEBUG"
+    initial_option: "Off"
+    restore_value: false
     optimistic: true
-    restore_mode: RESTORE_DEFAULT_OFF
-    turn_on_action:
-      - logger.set_level:
-          level: DEBUG
-    turn_off_action:
-      - logger.set_level:
-          level: WARN
+    set_action:
+      - if:
+          condition:
+            lambda: 'return x == "WARN";'
+          then:
+            - logger.set_level:
+                level: WARN
+      - if:
+          condition:
+            lambda: 'return x == "INFO";'
+          then:
+            - logger.set_level:
+                level: INFO
+      - if:
+          condition:
+            lambda: 'return x == "DEBUG";'
+          then:
+            - logger.set_level:
+                level: DEBUG
+      - if:
+          condition:
+            lambda: 'return x == "Off";'
+          then:
+            - logger.set_level:
+                level: WARN
     web_server:
       sorting_group_id: group_config
       sorting_weight: 5
@@ -638,12 +667,12 @@ switch:
 # LED Strip
 light:
   - platform: esp32_rmt_led_strip
-    name: "Car Position - Parking LED"
+    name: "Car Position - LED Strip"
     id: garage_parking_led
     pin: ${led_strip_pin}
     num_leds: ${num_leds}
     chipset: WS2812
-    restore_mode: ALWAYS_OFF
+    restore_mode: RESTORE_DEFAULT_ON
     rgb_order: GRB
     default_transition_length: 500ms
     web_server:

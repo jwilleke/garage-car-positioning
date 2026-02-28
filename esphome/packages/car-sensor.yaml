@@ -61,57 +61,84 @@ sensor:
   - platform: ld2450
     ld2450_id: ld2450_front
     target_count:
-      name: "Car Position - Front Target Count"
+      name: "Car Position - Garage Door Target Count"
       id: front_target_count
     target_1:
       x:
-        name: "Car Position - Front X"
+        name: "Car Position - Garage Door X"
         id: front_x
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
       y:
-        name: "Car Position - Front Y"
+        name: "Car Position - Garage Door Y"
         id: front_y
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
       distance:
-        name: "Car Position - Front Distance"
+        name: "Car Position - Garage Door Distance"
         id: front_distance
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
       speed:
-        name: "Car Position - Front Speed"
+        name: "Car Position - Garage Door Speed"
         id: front_speed
-        unit_of_measurement: "cm/s"
+        unit_of_measurement: "in/s"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.3937
 
   # === REAR SENSOR ===
   - platform: ld2450
     ld2450_id: ld2450_rear
     target_count:
-      name: "Car Position - Rear Target Count"
+      name: "Car Position - Inside Wall Target Count"
       id: rear_target_count
     target_1:
       x:
-        name: "Car Position - Rear X"
+        name: "Car Position - Inside Wall X"
         id: rear_x
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
       y:
-        name: "Car Position - Rear Y"
+        name: "Car Position - Inside Wall Y"
         id: rear_y
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
       distance:
-        name: "Car Position - Rear Distance"
+        name: "Car Position - Inside Wall Distance"
         id: rear_distance
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
       speed:
-        name: "Car Position - Rear Speed"
+        name: "Car Position - Inside Wall Speed"
         id: rear_speed
-        unit_of_measurement: "cm/s"
+        unit_of_measurement: "in/s"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.3937
 
   # === COMPUTED POSITION ===
-  # car_center_x: front (ceiling) sensor X — lateral offset of the car.
+  # car_center_x: front (ceiling) sensor X — lateral offset of the car in inches.
+  # Positive = one side, negative = other side (confirm direction by testing on hardware).
   # Falls back to rear X only when front is unavailable.
   - platform: template
-    name: "Car Position - Center X"
+    name: "Car Centering"
     id: car_center_x
-    unit_of_measurement: "mm"
+    unit_of_measurement: "in"
+    accuracy_decimals: 1
+    icon: "mdi:car-side"
     lambda: |-
       bool front_valid = !isnan(id(front_distance).state) && id(front_distance).state > 0;
       bool rear_valid = !isnan(id(rear_distance).state) && id(rear_distance).state > 0;
@@ -124,9 +151,10 @@ sensor:
   # This is the physically meaningful depth axis for parking guidance.
   # Falls back to front Y only when rear is unavailable.
   - platform: template
-    name: "Car Position - Center Y"
+    name: "Car Position - Distance from Inside Wall"
     id: car_center_y
-    unit_of_measurement: "mm"
+    unit_of_measurement: "in"
+    accuracy_decimals: 1
     icon: "mdi:car"
     lambda: |-
       bool rear_valid = !isnan(id(rear_distance).state) && id(rear_distance).state > 0;
@@ -145,8 +173,8 @@ binary_sensor:
     lambda: |-
       float front_dist = id(front_distance).state;
       float rear_dist = id(rear_distance).state;
-      bool front_valid = !isnan(front_dist) && front_dist > 500;
-      bool rear_valid = !isnan(rear_dist) && rear_dist > 500;
+      bool front_valid = !isnan(front_dist) && front_dist > 20;
+      bool rear_valid = !isnan(rear_dist) && rear_dist > 20;
       return front_valid || rear_valid;
     filters:
       - delayed_on: 1s
@@ -163,8 +191,8 @@ binary_sensor:
       float front_spd = abs(id(front_speed).state);
       float rear_spd = abs(id(rear_speed).state);
       float max_dist = ${person_max_distance};
-      bool front_person = !isnan(front_dist) && front_dist > 100 && front_dist < max_dist && front_spd < 50;
-      bool rear_person = !isnan(rear_dist) && rear_dist > 100 && rear_dist < max_dist && rear_spd < 50;
+      bool front_person = !isnan(front_dist) && front_dist > 4 && front_dist < max_dist && front_spd < 20;
+      bool rear_person = !isnan(rear_dist) && rear_dist > 4 && rear_dist < max_dist && rear_spd < 20;
       return (front_person || rear_person) && !id(car_detected).state;
     filters:
       - delayed_on: 500ms
@@ -210,9 +238,9 @@ text_sensor:
       if (isnan(y)) return {"Acquiring..."};
       float target = (${rear_target_y_min} + ${rear_target_y_max}) / 2.0;
       float zone = (${rear_target_y_max} - ${rear_target_y_min}) / 2.0;
-      if (y < target - zone - 300) return {"MOVE FORWARD >>>"};
+      if (y < target - zone - 12) return {"MOVE FORWARD >>>"};
       if (y < target - zone) return {"Move forward >"};
-      if (y > target + zone + 300) return {"<<< MOVE BACK"};
+      if (y > target + zone + 12) return {"<<< MOVE BACK"};
       if (y > target + zone) return {"< Move back"};
       return {"Almost there..."};
     update_interval: 500ms
@@ -249,8 +277,8 @@ light:
               float target = (${rear_target_y_min} + ${rear_target_y_max}) / 2.0;
               float zone = (${rear_target_y_max} - ${rear_target_y_min}) / 2.0;
               Color c;
-              if (y < target - zone - 300) c = Color(0, 0, 255);
-              else if (y > target + zone + 300) c = Color(255, 69, 0);
+              if (y < target - zone - 12) c = Color(0, 0, 255);
+              else if (y > target + zone + 12) c = Color(255, 69, 0);
               else if (y < target - zone) c = Color(0, 255, 255);
               else if (y > target + zone) c = Color(255, 255, 0);
               else c = Color(255, 255, 255);

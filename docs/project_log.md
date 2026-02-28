@@ -24,6 +24,34 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-02-28-01
+
+- Agent: Claude Sonnet 4.6
+- Subject: Dual-sensor coordinate mismatch fix; Hall Effect sensor docs; GitHub issues
+- Key Decision: Front sensor (ceiling-mounted) and rear sensor (wall-mounted) have incompatible Y axes — cannot be averaged. Split into per-sensor substitutions; use rear Y for parking depth guidance.
+- Current Issue: None — placeholder calibration values in substitutions; must be measured on hardware before deployment
+- Testing:
+  - No firmware upload this session — config validation recommended before flash
+- Work Done:
+  - Created GitHub issue #3: Thread & Matter protocol support discussion (ESP32-C6)
+  - Added Quadrature Encoder Calculations section to docs/hardware/NJK-5002C Hall Effect Sensor/NJK-5002C Hall Effect Sensor.md (6 magnets at 5" radius, two sensors, derived spacing/offset/counts/resolution, firmware lookup table, general formula)
+  - Fixed dual-sensor coordinate system mismatch in all car positioning configs:
+    - Replaced single `target_y_min/max/x_tolerance` with per-sensor `front_target_*` and `rear_target_*` substitutions in all-in-one.yaml and garage-car-sensor.yaml
+    - Updated `car_center_y` to return rear sensor Y (wall = depth into garage) instead of averaged Y
+    - Added `car_center_x` sensor (was missing from all-in-one.yaml) returning front sensor X (ceiling = lateral offset)
+    - Updated `car_correctly_parked` to check each sensor against its own coordinate zone independently
+    - Updated `parking_guidance` text sensor and LED effect to use rear sensor Y for move-forward/back direction
+    - Updated packages/car-sensor.yaml with identical fixes + updated header comment documenting sensor mounting and axes
+    - Updated garage-car-sensor.yaml substitutions; added missing `person_max_distance`
+- Commits: TBD
+- Files Modified:
+  - esphome/all-in-one.yaml
+  - esphome/packages/car-sensor.yaml
+  - esphome/garage-car-sensor.yaml
+  - docs/hardware/NJK-5002C Hall Effect Sensor/NJK-5002C Hall Effect Sensor.md
+
+---
+
 ## 2026-02-27-02
 
 - Agent: Claude Sonnet 4.6

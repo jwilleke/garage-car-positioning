@@ -4,9 +4,14 @@ substitutions:
   firmware_version: "0.1.1"
   
   # Car Positioning Settings
-  target_y_min: "1800"
-  target_y_max: "2200"
-  target_x_tolerance: "300"
+  # Front sensor is ceiling-mounted: Y = distance from ceiling to car top; X = lateral offset
+  front_target_y_min: "500"    # calibrate: ceiling_height_mm - car_height_mm - tolerance
+  front_target_y_max: "800"
+  front_target_x_tolerance: "200"
+  # Rear sensor is wall-mounted: Y = distance from back wall into garage; X = height
+  rear_target_y_min: "1800"    # desired parking depth from back wall
+  rear_target_y_max: "2200"
+  rear_target_x_tolerance: "300"
   num_leds: "60"
   person_max_distance: "1500"
   danger_zone_distance: "3000"
@@ -213,21 +218,33 @@ sensor:
         unit_of_measurement: "mm"
 
   # === CAR POSITION - COMPUTED ===
+  # car_center_y reports the rear (wall-mounted) sensor Y: distance from back wall into garage.
+  # This is the physically meaningful depth axis for parking guidance.
+  # Falls back to front (ceiling) Y only when rear is unavailable.
   - platform: template
     name: "Car Position - Center Y"
     id: car_center_y
     unit_of_measurement: "mm"
     icon: "mdi:car"
     lambda: |-
+      bool rear_valid = !isnan(id(rear_distance).state) && id(rear_distance).state > 0;
+      bool front_valid = !isnan(id(front_distance).state) && id(front_distance).state > 0;
+      if (rear_valid) return id(rear_y).state;
+      if (front_valid) return id(front_y).state;
+      return NAN;
+    update_interval: 500ms
+
+  # car_center_x reports the front (ceiling-mounted) sensor X: lateral offset of the car.
+  # Falls back to rear X only when front is unavailable.
+  - platform: template
+    name: "Car Position - Center X"
+    id: car_center_x
+    unit_of_measurement: "mm"
+    lambda: |-
       bool front_valid = !isnan(id(front_distance).state) && id(front_distance).state > 0;
       bool rear_valid = !isnan(id(rear_distance).state) && id(rear_distance).state > 0;
-      if (front_valid && rear_valid) {
-        return (id(front_y).state + id(rear_y).state) / 2.0;
-      } else if (front_valid) {
-        return id(front_y).state;
-      } else if (rear_valid) {
-        return id(rear_y).state;
-      }
+      if (front_valid) return id(front_x).state;
+      if (rear_valid) return id(rear_x).state;
       return NAN;
     update_interval: 500ms
 
@@ -324,9 +341,18 @@ binary_sensor:
     icon: "mdi:car-select"
     lambda: |-
       if (!id(car_detected).state) return false;
-      float y = id(car_center_y).state;
-      if (isnan(y)) return false;
-      return (y >= ${target_y_min}) && (y <= ${target_y_max});
+      bool front_valid = !isnan(id(front_distance).state) && id(front_distance).state > 0;
+      bool rear_valid  = !isnan(id(rear_distance).state)  && id(rear_distance).state  > 0;
+      // Front sensor (ceiling): Y = ceiling-to-car-top distance; X = lateral offset
+      bool front_ok = front_valid
+        && (id(front_y).state >= ${front_target_y_min})
+        && (id(front_y).state <= ${front_target_y_max})
+        && abs(id(front_x).state) <= ${front_target_x_tolerance};
+      // Rear sensor (wall): Y = depth from back wall; X = height (not used for parking check)
+      bool rear_ok = rear_valid
+        && (id(rear_y).state >= ${rear_target_y_min})
+        && (id(rear_y).state <= ${rear_target_y_max});
+      return front_ok && rear_ok;
 
   # === GARAGE DOOR SENSORS ===
   - platform: gpio
@@ -669,10 +695,11 @@ text_sensor:
       if (id(car_correctly_parked).state) {
         return {"PARKED"};
       }
-      float y = id(car_center_y).state;
+      // Use rear sensor Y (wall-mounted) for depth guidance — measures parking distance from back wall
+      float y = id(rear_y).state;
       if (isnan(y)) return {"Acquiring..."};
-      float target = (${target_y_min} + ${target_y_max}) / 2.0;
-      float zone = (${target_y_max} - ${target_y_min}) / 2.0;
+      float target = (${rear_target_y_min} + ${rear_target_y_max}) / 2.0;
+      float zone = (${rear_target_y_max} - ${rear_target_y_min}) / 2.0;
       if (y < target - zone - 300) return {"MOVE FORWARD >>>"};
       if (y < target - zone) return {"Move forward >"};
       if (y > target + zone + 300) return {"<<< MOVE BACK"};

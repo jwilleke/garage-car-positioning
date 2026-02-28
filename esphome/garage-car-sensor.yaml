@@ -4,10 +4,16 @@ substitutions:
   firmware_version: "0.1.1"
 
   # Car Positioning Settings
-  target_y_min: "1800"
-  target_y_max: "2200"
-  target_x_tolerance: "300"
+  # Front sensor (ceiling-mounted): Y = distance from ceiling to car top; X = lateral offset
+  front_target_y_min: "500"    # calibrate: ceiling_height_mm - car_height_mm - tolerance
+  front_target_y_max: "800"
+  front_target_x_tolerance: "200"
+  # Rear sensor (wall-mounted): Y = distance from back wall into garage; X = height
+  rear_target_y_min: "1800"    # desired parking depth from back wall
+  rear_target_y_max: "2200"
+  rear_target_x_tolerance: "300"
   num_leds: "30"
+  person_max_distance: "1500"
 
   # GPIO Assignments for ESP32-C6 DevKit
   led_strip_pin: GPIO0

@@ -42,7 +42,7 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
   - Added globals `api_reboot_allowed` and `api_no_client_secs`
   - Fixed init bug: changed `api_reboot_allowed` to `restore_value: false`, forced `true` in `on_boot`
   - Created GitHub issue #6 documenting the restore_value/NVS initialization bug
-- Commits: TBD
+- Commits: cbe68ce
 - Files Modified:
   - esphome/all-in-one.yaml
 

@@ -4,17 +4,17 @@ substitutions:
   firmware_version: "0.1.1"
   
   # Car Positioning Settings
-  # Front sensor is ceiling-mounted: Y = distance from ceiling to car top; X = lateral offset
-  front_target_y_min: "500"    # calibrate: ceiling_height_mm - car_height_mm - tolerance
-  front_target_y_max: "800"
-  front_target_x_tolerance: "200"
-  # Rear sensor is wall-mounted: Y = distance from back wall into garage; X = height
-  rear_target_y_min: "1800"    # desired parking depth from back wall
-  rear_target_y_max: "2200"
-  rear_target_x_tolerance: "300"
+  # Garage Door sensor is ceiling-mounted: Y = distance from ceiling to car top; X = lateral offset
+  front_target_y_min: "19.7"   # calibrate: (ceiling_height_in - car_height_in) - tolerance
+  front_target_y_max: "31.5"
+  front_target_x_tolerance: "7.9"
+  # Inside Wall sensor is wall-mounted: Y = distance from inside wall into garage; X = height
+  rear_target_y_min: "70.9"    # desired parking depth from back wall (inches)
+  rear_target_y_max: "86.6"
+  rear_target_x_tolerance: "11.8"
   num_leds: "60"
-  person_max_distance: "1500"
-  danger_zone_distance: "3000"
+  person_max_distance: "59.1"
+  danger_zone_distance: "118.1"
 
   # Garage Door Settings
   garage_door_full_open_counts: "64"   # adjust to your measured door travel
@@ -43,6 +43,9 @@ esphome:
       - lambda: |-
           id(boot_count) += 1;
           ESP_LOGI("boot", "Boot count: %d", id(boot_count));
+          if (id(garage_door_closed_switch).state) {
+            id(door_counts) = 0;
+          }
       - light.turn_off: garage_parking_led
 
 globals:
@@ -60,6 +63,10 @@ globals:
     type: bool
     restore_value: false
     initial_value: 'true'
+  - id: door_counts
+    type: int
+    restore_value: true
+    initial_value: '0'
 
 esp32:
   board: esp32-c6-devkitc-1
@@ -74,11 +81,11 @@ esp32:
       CONFIG_ESP_WIFI_ENABLE_WPA3_OWE_STA: "n"
 
 logger:
-  level: DEBUG
+  level: WARN
   hardware_uart: USB_SERIAL_JTAG
 
-# Front LD2450 UART - GPIO16 (RX from sensor TX), GPIO17 (TX to sensor RX)
-# Rear LD2450 UART - GPIO18 (RX from sensor TX), GPIO19 (TX to sensor RX)
+# Garage Door LD2450 UART - GPIO16 (RX from sensor TX), GPIO17 (TX to sensor RX)
+# Inside Wall LD2450 UART - GPIO18 (RX from sensor TX), GPIO19 (TX to sensor RX)
 uart:
   - id: uart_ld2450_front
     rx_pin: ${ld2450_front_rx_pin}
@@ -126,6 +133,19 @@ web_server:
   port: 80
   version: 3
   include_internal: false
+  sorting_groups:
+    - id: group_car
+      name: "Car Positioning"
+      sorting_weight: 1
+    - id: group_door
+      name: "Garage Door"
+      sorting_weight: 2
+    - id: group_config
+      name: "Configuration"
+      sorting_weight: 3
+    - id: group_diag
+      name: "Diagnostic"
+      sorting_weight: 4
 
 sensor:
   # === SYSTEM SENSORS ===
@@ -142,89 +162,171 @@ sensor:
     lambda: |-
       return id(boot_count);
     update_interval: 60s
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 3
 
-  # === CAR POSITION - FRONT SENSORS ===
+  # === CAR POSITION - GARAGE DOOR SENSORS ===
   - platform: ld2450
     ld2450_id: ld2450_front
     target_count:
-      name: "Car Position - Front Target Count"
+      name: "Car Position - Garage Door Target Count"
       id: front_target_count
+      web_server:
+        sorting_group_id: group_diag
+        sorting_weight: 10
     target_1:
       x:
-        name: "Car Position - Front T1 X"
+        name: "Car Position - Garage Door T1 X"
         id: front_x
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 11
       y:
-        name: "Car Position - Front T1 Y"
+        name: "Car Position - Garage Door T1 Y"
         id: front_y
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 12
       distance:
-        name: "Car Position - Front T1 Distance"
+        name: "Car Position - Garage Door T1 Distance"
         id: front_distance
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 13
       speed:
-        name: "Car Position - Front T1 Speed"
+        name: "Car Position - Garage Door T1 Speed"
         id: front_speed
-        unit_of_measurement: "cm/s"
+        unit_of_measurement: "in/s"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.3937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 14
     target_2:
       x:
-        name: "Car Position - Front T2 X"
+        name: "Car Position - Garage Door T2 X"
         id: front_t2_x
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        filters:
+          - multiply: 0.03937
+        internal: true
       y:
-        name: "Car Position - Front T2 Y"
+        name: "Car Position - Garage Door T2 Y"
         id: front_t2_y
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        filters:
+          - multiply: 0.03937
+        internal: true
       distance:
-        name: "Car Position - Front T2 Distance"
+        name: "Car Position - Garage Door T2 Distance"
         id: front_t2_distance
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 15
 
-  # === CAR POSITION - REAR SENSORS ===
+  # === CAR POSITION - INSIDE WALL SENSORS ===
   - platform: ld2450
     ld2450_id: ld2450_rear
     target_count:
-      name: "Car Position - Rear Target Count"
+      name: "Car Position - Inside Wall Target Count"
       id: rear_target_count
+      web_server:
+        sorting_group_id: group_diag
+        sorting_weight: 20
     target_1:
       x:
-        name: "Car Position - Rear T1 X"
+        name: "Car Position - Inside Wall T1 X"
         id: rear_x
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 21
       y:
-        name: "Car Position - Rear T1 Y"
+        name: "Car Position - Inside Wall T1 Y"
         id: rear_y
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 22
       distance:
-        name: "Car Position - Rear T1 Distance"
+        name: "Car Position - Inside Wall T1 Distance"
         id: rear_distance
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 23
       speed:
-        name: "Car Position - Rear T1 Speed"
+        name: "Car Position - Inside Wall T1 Speed"
         id: rear_speed
-        unit_of_measurement: "cm/s"
+        unit_of_measurement: "in/s"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.3937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 24
     target_2:
       x:
-        name: "Car Position - Rear T2 X"
+        name: "Car Position - Inside Wall T2 X"
         id: rear_t2_x
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        filters:
+          - multiply: 0.03937
+        internal: true
       y:
-        name: "Car Position - Rear T2 Y"
+        name: "Car Position - Inside Wall T2 Y"
         id: rear_t2_y
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        filters:
+          - multiply: 0.03937
+        internal: true
       distance:
-        name: "Car Position - Rear T2 Distance"
+        name: "Car Position - Inside Wall T2 Distance"
         id: rear_t2_distance
-        unit_of_measurement: "mm"
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 25
 
   # === CAR POSITION - COMPUTED ===
   # car_center_y reports the rear (wall-mounted) sensor Y: distance from back wall into garage.
   # This is the physically meaningful depth axis for parking guidance.
   # Falls back to front (ceiling) Y only when rear is unavailable.
   - platform: template
-    name: "Car Position - Center Y"
+    name: "Car Position - Distance from Inside Wall"
     id: car_center_y
-    unit_of_measurement: "mm"
+    unit_of_measurement: "in"
+    accuracy_decimals: 1
     icon: "mdi:car"
     lambda: |-
       bool rear_valid = !isnan(id(rear_distance).state) && id(rear_distance).state > 0;
@@ -233,13 +335,19 @@ sensor:
       if (front_valid) return id(front_y).state;
       return NAN;
     update_interval: 500ms
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 6
 
   # car_center_x reports the front (ceiling-mounted) sensor X: lateral offset of the car.
+  # Positive = one side, negative = other side (confirm direction by testing on hardware).
   # Falls back to rear X only when front is unavailable.
   - platform: template
-    name: "Car Position - Center X"
+    name: "Car Centering"
     id: car_center_x
-    unit_of_measurement: "mm"
+    unit_of_measurement: "in"
+    accuracy_decimals: 1
+    icon: "mdi:car-side"
     lambda: |-
       bool front_valid = !isnan(id(front_distance).state) && id(front_distance).state > 0;
       bool rear_valid = !isnan(id(rear_distance).state) && id(rear_distance).state > 0;
@@ -247,6 +355,26 @@ sensor:
       if (rear_valid) return id(rear_x).state;
       return NAN;
     update_interval: 500ms
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 7
+
+  # === GARAGE DOOR POSITION ===
+  # Quadrature encoder: counts A-sensor edges, direction determined by B-sensor state.
+  # Resets to 0 when closed switch triggers. Calibrate via garage_door_full_open_counts.
+  - platform: template
+    name: "Garage Door - Position"
+    id: door_position_pct
+    unit_of_measurement: "%"
+    icon: "mdi:garage"
+    accuracy_decimals: 0
+    lambda: |-
+      float pct = (float)id(door_counts) / (float)${garage_door_full_open_counts} * 100.0f;
+      return std::min(100.0f, std::max(0.0f, pct));
+    update_interval: 500ms
+    web_server:
+      sorting_group_id: group_door
+      sorting_weight: 3
 
 number:
   - platform: template
@@ -263,6 +391,9 @@ number:
       - logger.log:
           format: "LED count set to %.0f"
           args: ['x']
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 2
 
 binary_sensor:
   # === CAR POSITION - DETECTION ===
@@ -274,12 +405,15 @@ binary_sensor:
     lambda: |-
       float front_dist = id(front_distance).state;
       float rear_dist = id(rear_distance).state;
-      bool front_valid = !isnan(front_dist) && front_dist > 500;
-      bool rear_valid = !isnan(rear_dist) && rear_dist > 500;
+      bool front_valid = !isnan(front_dist) && front_dist > 20;
+      bool rear_valid = !isnan(rear_dist) && rear_dist > 20;
       return front_valid || rear_valid;
     filters:
       - delayed_on: 1s
       - delayed_off: 5s
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 3
 
   - platform: template
     name: "Car Position - Person Detected"
@@ -293,13 +427,16 @@ binary_sensor:
       float rear_spd = abs(id(rear_speed).state);
       float max_dist = ${person_max_distance};
 
-      bool front_person = !isnan(front_dist) && front_dist > 100 && front_dist < max_dist && front_spd < 50;
-      bool rear_person = !isnan(rear_dist) && rear_dist > 100 && rear_dist < max_dist && rear_spd < 50;
+      bool front_person = !isnan(front_dist) && front_dist > 4 && front_dist < max_dist && front_spd < 20;
+      bool rear_person = !isnan(rear_dist) && rear_dist > 4 && rear_dist < max_dist && rear_spd < 20;
 
       return (front_person || rear_person) && !id(car_detected).state;
     filters:
       - delayed_on: 500ms
       - delayed_off: 2s
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 4
 
   - platform: template
     name: "Car Position - Person in Danger Zone"
@@ -312,15 +449,18 @@ binary_sensor:
       float danger_dist = ${danger_zone_distance};
 
       float front_t2_dist = id(front_t2_distance).state;
-      bool front_danger = !isnan(front_t2_dist) && front_t2_dist > 100 && front_t2_dist < danger_dist;
+      bool front_danger = !isnan(front_t2_dist) && front_t2_dist > 4 && front_t2_dist < danger_dist;
 
       float rear_t2_dist = id(rear_t2_distance).state;
-      bool rear_danger = !isnan(rear_t2_dist) && rear_t2_dist > 100 && rear_t2_dist < danger_dist;
+      bool rear_danger = !isnan(rear_t2_dist) && rear_t2_dist > 4 && rear_t2_dist < danger_dist;
 
       return front_danger || rear_danger;
     filters:
       - delayed_on: 300ms
       - delayed_off: 1s
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 5
     on_press:
       - logger.log:
           format: "*** DANGER: Person in danger zone! ***"
@@ -353,6 +493,9 @@ binary_sensor:
         && (id(rear_y).state >= ${rear_target_y_min})
         && (id(rear_y).state <= ${rear_target_y_max});
       return front_ok && rear_ok;
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 2
 
   # === GARAGE DOOR SENSORS ===
   - platform: gpio
@@ -367,6 +510,7 @@ binary_sensor:
       - logger.log:
           format: "*** Garage Door: CLOSED ***"
           level: INFO
+      - lambda: 'id(door_counts) = 0;'
     on_release:
       - logger.log:
           format: "*** Garage Door: OPENED ***"
@@ -374,6 +518,9 @@ binary_sensor:
     filters:
       - delayed_on: 50ms
       - delayed_off: 50ms
+    web_server:
+      sorting_group_id: group_door
+      sorting_weight: 2
 
   - platform: gpio
     name: "Garage Door - Hall Sensor A"
@@ -387,13 +534,24 @@ binary_sensor:
       - logger.log:
           format: "*** Hall Sensor A: TRIGGERED ***"
           level: INFO
+      - lambda: |-
+          int delta = id(hall_sensor_b).state ? -1 : 1;
+          id(door_counts) = std::max(0, id(door_counts) + delta);
+          ESP_LOGD("door", "Door counts: %d (A high, B %s)", id(door_counts), id(hall_sensor_b).state ? "high" : "low");
     on_release:
       - logger.log:
           format: "*** Hall Sensor A: CLEARED ***"
           level: INFO
+      - lambda: |-
+          int delta = id(hall_sensor_b).state ? 1 : -1;
+          id(door_counts) = std::max(0, id(door_counts) + delta);
+          ESP_LOGD("door", "Door counts: %d (A low, B %s)", id(door_counts), id(hall_sensor_b).state ? "high" : "low");
     filters:
       - delayed_on: 50ms
       - delayed_off: 50ms
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 30
 
   - platform: gpio
     name: "Garage Door - Hall Sensor B"
@@ -414,11 +572,17 @@ binary_sensor:
     filters:
       - delayed_on: 50ms
       - delayed_off: 50ms
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 31
 
 button:
   - platform: restart
     name: "System - Restart Device"
     icon: "mdi:restart"
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 2
 
 switch:
   - platform: template
@@ -437,6 +601,9 @@ switch:
           id: led_auto_mode
           value: 'false'
       - light.turn_off: garage_parking_led
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 1
 
   # Garage Door Relay — momentary pulse, auto-off after 200ms
   - platform: gpio
@@ -445,9 +612,28 @@ switch:
     id: garage_door_relay
     icon: "mdi:garage-open-variant"
     restore_mode: ALWAYS_OFF
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 4
     on_turn_on:
       - delay: 200ms
       - switch.turn_off: garage_door_relay
+
+  - platform: template
+    name: "System - Debug Logging"
+    id: debug_logging_switch
+    icon: "mdi:bug"
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    turn_on_action:
+      - logger.set_level:
+          level: DEBUG
+    turn_off_action:
+      - logger.set_level:
+          level: WARN
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 5
 
 # LED Strip
 light:
@@ -460,6 +646,9 @@ light:
     restore_mode: ALWAYS_OFF
     rgb_order: GRB
     default_transition_length: 500ms
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 3
     effects:
       - addressable_lambda:
           name: "Solid"
@@ -623,6 +812,9 @@ text_sensor:
     mac_address:
       name: "System - MAC Address"
       icon: "mdi:network"
+      web_server:
+        sorting_group_id: group_diag
+        sorting_weight: 4
 
   - platform: template
     name: "System - Reset Reason"
@@ -643,6 +835,9 @@ text_sensor:
         default: return std::string("Unknown");
       }
     update_interval: never
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 5
 
   - platform: template
     name: "System - Uptime"
@@ -666,22 +861,48 @@ text_sensor:
         return str_sprintf("%dm", minutes);
       }
     update_interval: 60s
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 1
 
   - platform: version
     name: "System - ESPHome Version"
     icon: "mdi:home-assistant"
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 6
 
   - platform: template
     name: "System - Firmware Version"
     icon: "mdi:tag"
     lambda: 'return {"${firmware_version}"};'
     update_interval: never
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 7
+
+  # === GARAGE DOOR STATUS ===
+  - platform: template
+    name: "Garage Door - Status"
+    id: door_status
+    icon: "mdi:garage"
+    lambda: |-
+      if (id(garage_door_closed_switch).state) return {"Closed"};
+      int pct = (int)id(door_position_pct).state;
+      return str_sprintf("Open %d%%", pct);
+    update_interval: 500ms
+    web_server:
+      sorting_group_id: group_door
+      sorting_weight: 1
 
   # === CAR POSITION TEXT SENSORS ===
   - platform: template
     name: "Car Position - Parking Guidance"
     id: parking_guidance
     icon: "mdi:parking"
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 1
     lambda: |-
       if (id(person_in_danger_zone).state) {
         return {"!!! STOP - PERSON !!!"};
@@ -700,9 +921,9 @@ text_sensor:
       if (isnan(y)) return {"Acquiring..."};
       float target = (${rear_target_y_min} + ${rear_target_y_max}) / 2.0;
       float zone = (${rear_target_y_max} - ${rear_target_y_min}) / 2.0;
-      if (y < target - zone - 300) return {"MOVE FORWARD >>>"};
+      if (y < target - zone - 12) return {"MOVE FORWARD >>>"};
       if (y < target - zone) return {"Move forward >"};
-      if (y > target + zone + 300) return {"<<< MOVE BACK"};
+      if (y > target + zone + 12) return {"<<< MOVE BACK"};
       if (y > target + zone) return {"< Move back"};
       return {"Almost there..."};
     update_interval: 500ms

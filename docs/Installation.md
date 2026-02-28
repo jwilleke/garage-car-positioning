@@ -14,13 +14,13 @@ This project can be built in three different ways, depending on your needs. Befo
 
 Once you have chosen your build path, gather the necessary components. The specific parts required for each of the three options are detailed in the Bill of Materials.
 
-➡️ See the [Bill of Materials](../hardware/BOM.md) for a complete component list.
+➡️ See the [Bill of Materials](hardware/BOM.md) for a complete component list.
 
 ## Step 3: Hardware Assembly
 
 Connect all your components according to the wiring diagram that corresponds to your chosen build path.
 
-➡️ See the [Wiring Diagrams](../hardware/wiring-diagram.md) for detailed connection tables.
+➡️ See the [Wiring Diagrams](hardware/wiring-diagram.md) for detailed connection tables.
 
 > ⚠️ CRITICAL SAFETY WARNING (For Garage Door Controller Builds): The garage door's torsion spring system is under extreme tension and can cause serious injury. Work carefully and do not attempt to adjust springs or red-colored components. It is safest to work when the door is closed and the opener is unplugged.
 

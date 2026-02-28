@@ -2,28 +2,28 @@
 
 Calibration is a critical step to ensure both the car positioning system and the garage door controller function accurately.
 
-## Car Positioning System ([garage-car-sensor.yaml](../esphome/garage-car-sensor.yaml))
+## Car Positioning System ([all-in-one.yaml](../esphome/all-in-one.yaml))
 
 This calibration defines the "perfect" parking spot for the visual LED guide.
 
 * Park Your Car: Position your car in the exact ideal spot in your garage.
-* Observe Sensor Values: Go to Home Assistant and find the `sensor.car_center_x_position` and `sensor.car_center_y_position` entities. Note down their current values. Let's say your `y` value is `2050` and your `x` value is `-50`.
-* Set Target Values: Open your [garage-car-sensor.yaml](../esphome/garage-car-sensor.yaml) file and update the substitutions:
-  * `target_y_min` & `target_y_max`: Create a "safe zone" around your observed `y` value. A 200mm range is a good starting point. For an observed value of `2050`, you could set `target_y_min: "1950"` and `target_y_max: "2150"`.
-  * `target_x_tolerance`: Set this to a value that represents acceptable side-to-side deviation. The sensor reports `x` as a deviation from the center, so use the absolute value. For an observed value of `-50`, a tolerance of `300` would be very generous and likely a good starting point.
+* Observe Sensor Values: Go to Home Assistant (or the ESPHome web portal) and find the **"Car Position - Distance from Inside Wall"** and **"Car Centering"** entities. Note down their current values. All measurements are in **inches**. For example, your distance-from-wall value might be `80` and your centering value might be `-2`.
+* Set Target Values: Open your [all-in-one.yaml](../esphome/all-in-one.yaml) file and update the substitutions:
+  * `rear_target_y_min` & `rear_target_y_max`: Create a "safe zone" around your observed distance-from-wall value. An 8-inch range is a good starting point. For an observed value of `80`, you could set `rear_target_y_min: "76"` and `rear_target_y_max: "84"`.
+  * `rear_target_x_tolerance`: Set this to a value representing acceptable side-to-side deviation. For an observed centering value of `-2`, a tolerance of `12` inches is a generous and reliable starting point.
 * Save and Re-flash: Save the changes to your YAML file and flash the firmware to your ESP32-C6 again.
 
-## Garage Door Controller ([esp32-garage-door.yaml](../esphome/esp32-garage-door.yaml))
+## Garage Door Controller ([all-in-one.yaml](../esphome/all-in-one.yaml))
 
-This calibration tells the system how many rotations are required to fully open the door, which is essential for the position percentage to be accurate.
+This calibration tells the system how many encoder counts correspond to a fully open door, which is essential for the position percentage to be accurate.
 
-* Initial Flash: Flash the [esp32-garage-door.yaml](../esphome/esp32-garage-door.yaml) firmware to your ESP32-C6 for the garage door controller.
-* Close the Door: Manually run the garage door until it is fully closed. When the door presses the "closed" limit switch, the firmware will automatically reset the encoder's internal count to `0`.
-* Open the Door: Now, fully open the door until it stops.
-* Observe Encoder Value: Go to Home Assistant and find the `sensor.garage_door_position_encoder` entity. Note its current value. This is the total number of "counts" for a full open operation (e.g., `10250`).
-* Set Target Value: Open your [esp32-garage-door.yaml](../esphome/esp32-garage-door.yaml) file and update the substitution:
-  * `garage_door_full_open_counts`: Set this to the value you observed in the previous step (e.g., `"10250"`).
-* Save and Re-flash: Save the changes and flash the firmware to your ESP32-C6 one last time.
+* Initial Flash: Flash the firmware to your ESP32-C6.
+* Close the Door: Manually run the garage door until it is fully closed. When the door presses the closed limit switch, the firmware automatically resets the encoder's internal count to `0`.
+* Open the Door: Fully open the door until it stops.
+* Observe Encoder Value: Go to Home Assistant and find the **"Garage Door - Position"** entity, or check the raw encoder count in the ESPHome logs. Note the current count value (e.g., `64`).
+* Set Target Value: Open your [all-in-one.yaml](../esphome/all-in-one.yaml) file and update the substitution:
+  * `garage_door_full_open_counts`: Set this to the value you observed in the previous step (e.g., `"64"`).
+* Save and Re-flash: Save the changes and flash the firmware one last time.
 
 Your garage door controller is now calibrated.
 
@@ -67,8 +67,8 @@ Your setup uses two Hall Effect sensors (`pin_a` and `pin_b`) to create a "quadr
 
 #### Step 5 Test and Verify
 
-* Once everything is physically mounted, flash your ESP32-C6 with the `esp32-garage-door.yaml` firmware.
+* Once everything is physically mounted, flash your ESP32-C6 with the firmware.
 * Carefully open and close the garage door manually.
-* Monitor the `sensor.garage_door_position_encoder` entity in Home Assistant (or directly in ESPHome's logs).
-* The `garage_door_position_encoder` value should increase smoothly when opening and decrease smoothly when closing. If the counts are erratic, jump around, or don't register, you may need to adjust the spacing or proximity of your Hall sensors. They need to be close enough to detect the magnetic field reliably, but not so close that they are always saturated.
-* Once you have smooth, reliable counts, proceed with the software calibration steps outlined in this document (under "Garage Door Controller") to set your `garage_door_full_open_counts`.
+* Monitor the **"Garage Door - Position"** entity in Home Assistant (or directly in ESPHome's logs).
+* The value should increase smoothly when opening and decrease smoothly when closing. If the counts are erratic, jump around, or don't register, you may need to adjust the spacing or proximity of your Hall sensors. They need to be close enough to detect the magnetic field reliably, but not so close that they are always saturated.
+* Once you have smooth, reliable counts, proceed with the software calibration steps outlined above to set your `garage_door_full_open_counts`.

@@ -24,6 +24,35 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-02-28-04
+
+- Agent: Claude Sonnet 4.6
+- Subject: Doc corrections — LED behavior, calibration units, broken links
+- Key Decision: ESPHome IDs cannot start with a digit; alphabetic prefix (`a_`/`b_`) is the only valid workaround for unreliable `sorting_weight` ordering
+- Current Issue: `sorting_weight` ordering in web_server v3 is unreliable as of ESPHome 2026.2.0 — no upstream fix; `a_`/`b_`/`c_`/`d_` prefix workaround confirmed valid in `testing.yaml`
+- Testing:
+  - esphome config esphome/testing.yaml: Configuration is valid! (with a_ prefixes)
+  - esphome upload all-in-one.yaml → OTA to 192.168.68.151: successful
+  - Numeric prefix IDs (1_group_car, 1group_car) rejected: "First character in ID cannot be a digit"
+- Work Done:
+  - Tested numeric ID prefix workaround in testing.yaml — rejected by ESPHome validator
+  - Restored testing.yaml to a_/b_/c_/d_ alphabetic prefixes (valid and confirmed)
+  - Updated GitHub issue #4 with numeric prefix test findings
+  - Fixed broken links in README.md (./hardware/ → ./docs/hardware/)
+  - Fixed broken relative links in docs/Installation.md (../hardware/ → hardware/)
+  - Rewrote docs/light-strip-operation.md: effects are scanning animations not solid colors; red = person alert not distance; yellow effect unused; added summary table
+  - Updated docs/calibration.md: entity names, inch units, and file references updated for all-in-one.yaml
+- Commits: TBD
+- Files Modified:
+  - esphome/testing.yaml
+  - README.md
+  - docs/Installation.md
+  - docs/light-strip-operation.md
+  - docs/calibration.md
+  - docs/project_log.md
+
+---
+
 ## 2026-02-28-03
 
 - Agent: Claude Sonnet 4.6

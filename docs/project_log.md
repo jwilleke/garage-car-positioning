@@ -24,6 +24,30 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-02-28-05
+
+- Agent: Claude Sonnet 4.6
+- Subject: API Reboot Watchdog switch; remove device comment banner
+- Key Decision: `restore_value: true` on bool global does not fall back to `initial_value` after USB flash on ESP32-C6 (NVS erased = reads zero). Fix: `restore_value: false` + force `true` in `on_boot`, same pattern as `led_auto_mode`
+- Current Issue: See GitHub issue #6 — ESPHome global restore_value: true initializes to false after USB flash
+- Testing:
+  - esphome config esphome/all-in-one.yaml: Configuration is valid!
+  - Compiled and uploaded via USB /dev/cu.usbmodem31101
+  - API Reboot Watchdog switch confirmed ON after boot
+- Work Done:
+  - Removed `esphome.comment` field — eliminates device description banner from web portal header ("started X ago" is hardcoded in web_server v3 JS, cannot be removed)
+  - Added `System - API Reboot Watchdog` switch to Configuration group (weight 35) — disables/enables the 15-min no-client reboot watchdog at runtime
+  - Added `api.id: garage_api` + `api.reboot_timeout: 0s` — disables built-in watchdog, enables runtime control
+  - Added `interval: 60s` — custom watchdog replicating 15-min default; only reboots when switch is ON
+  - Added globals `api_reboot_allowed` and `api_no_client_secs`
+  - Fixed init bug: changed `api_reboot_allowed` to `restore_value: false`, forced `true` in `on_boot`
+  - Created GitHub issue #6 documenting the restore_value/NVS initialization bug
+- Commits: TBD
+- Files Modified:
+  - esphome/all-in-one.yaml
+
+---
+
 ## 2026-02-28-04
 
 - Agent: Claude Sonnet 4.6

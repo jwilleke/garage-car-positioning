@@ -34,7 +34,6 @@ substitutions:
 esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
-  comment: "Garage all-in-one: car positioning + door control v${firmware_version}"
   platformio_options:
     board_build.flash_mode: dio
   on_boot:
@@ -45,6 +44,7 @@ esphome:
       - lambda: |-
           id(boot_count) += 1;
           id(led_auto_mode) = true;
+          id(api_reboot_allowed) = true;
           ESP_LOGI("boot", "Boot count: %d", id(boot_count));
           if (id(garage_door_closed_switch).state) {
             id(door_counts) = 0;
@@ -68,6 +68,14 @@ globals:
   - id: door_counts
     type: int
     restore_value: true
+    initial_value: '0'
+  - id: api_reboot_allowed
+    type: bool
+    restore_value: false
+    initial_value: 'true'
+  - id: api_no_client_secs
+    type: int
+    restore_value: false
     initial_value: '0'
 
 esp32:
@@ -122,8 +130,10 @@ wifi:
     password: !secret ap_password
 
 api:
+  id: garage_api
   encryption:
     key: !secret api_encryption_key
+  reboot_timeout: 0s
 
 ota:
   - platform: esphome
@@ -621,6 +631,28 @@ switch:
       - delay: 200ms
       - switch.turn_off: garage_door_relay
 
+  - platform: template
+    name: "System - API Reboot Watchdog"
+    id: api_reboot_watchdog_switch
+    icon: "mdi:restart-alert"
+    optimistic: false
+    lambda: |-
+      return id(api_reboot_allowed);
+    turn_on_action:
+      - globals.set:
+          id: api_reboot_allowed
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: api_reboot_allowed
+          value: 'false'
+      - globals.set:
+          id: api_no_client_secs
+          value: '0'
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 35
+
 
 select:
   - platform: template
@@ -663,6 +695,19 @@ select:
     web_server:
       sorting_group_id: group_config
       sorting_weight: 34
+
+interval:
+  - interval: 60s
+    then:
+      - lambda: |-
+          if (id(garage_api).is_connected()) {
+            id(api_no_client_secs) = 0;
+          } else if (id(api_reboot_allowed)) {
+            id(api_no_client_secs) += 60;
+            if (id(api_no_client_secs) >= 900) {
+              App.reboot();
+            }
+          }
 
 # LED Strip
 light:

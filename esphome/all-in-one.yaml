@@ -166,7 +166,7 @@ sensor:
     update_interval: 60s
     web_server:
       sorting_group_id: group_diag
-      sorting_weight: 3
+      sorting_weight: 42
 
   # === CAR POSITION - GARAGE DOOR SENSORS ===
   - platform: ld2450
@@ -176,7 +176,7 @@ sensor:
       id: front_target_count
       web_server:
         sorting_group_id: group_diag
-        sorting_weight: 10
+        sorting_weight: 50
     target_1:
       x:
         name: "Car Position - Garage Door T1 X"
@@ -187,7 +187,7 @@ sensor:
           - multiply: 0.03937
         web_server:
           sorting_group_id: group_diag
-          sorting_weight: 11
+          sorting_weight: 51
       y:
         name: "Car Position - Garage Door T1 Y"
         id: front_y
@@ -197,7 +197,7 @@ sensor:
           - multiply: 0.03937
         web_server:
           sorting_group_id: group_diag
-          sorting_weight: 12
+          sorting_weight: 52
       distance:
         name: "Car Position - Garage Door T1 Distance"
         id: front_distance
@@ -207,7 +207,7 @@ sensor:
           - multiply: 0.03937
         web_server:
           sorting_group_id: group_diag
-          sorting_weight: 13
+          sorting_weight: 53
       speed:
         name: "Car Position - Garage Door T1 Speed"
         id: front_speed
@@ -217,7 +217,7 @@ sensor:
           - multiply: 0.3937
         web_server:
           sorting_group_id: group_diag
-          sorting_weight: 14
+          sorting_weight: 54
     target_2:
       x:
         name: "Car Position - Garage Door T2 X"
@@ -242,7 +242,7 @@ sensor:
           - multiply: 0.03937
         web_server:
           sorting_group_id: group_diag
-          sorting_weight: 15
+          sorting_weight: 55
 
   # === CAR POSITION - INSIDE WALL SENSORS ===
   - platform: ld2450
@@ -252,7 +252,7 @@ sensor:
       id: rear_target_count
       web_server:
         sorting_group_id: group_diag
-        sorting_weight: 20
+        sorting_weight: 60
     target_1:
       x:
         name: "Car Position - Inside Wall T1 X"
@@ -263,7 +263,7 @@ sensor:
           - multiply: 0.03937
         web_server:
           sorting_group_id: group_diag
-          sorting_weight: 21
+          sorting_weight: 61
       y:
         name: "Car Position - Inside Wall T1 Y"
         id: rear_y
@@ -273,7 +273,7 @@ sensor:
           - multiply: 0.03937
         web_server:
           sorting_group_id: group_diag
-          sorting_weight: 22
+          sorting_weight: 62
       distance:
         name: "Car Position - Inside Wall T1 Distance"
         id: rear_distance
@@ -283,7 +283,7 @@ sensor:
           - multiply: 0.03937
         web_server:
           sorting_group_id: group_diag
-          sorting_weight: 23
+          sorting_weight: 63
       speed:
         name: "Car Position - Inside Wall T1 Speed"
         id: rear_speed
@@ -293,7 +293,7 @@ sensor:
           - multiply: 0.3937
         web_server:
           sorting_group_id: group_diag
-          sorting_weight: 24
+          sorting_weight: 64
     target_2:
       x:
         name: "Car Position - Inside Wall T2 X"
@@ -318,7 +318,7 @@ sensor:
           - multiply: 0.03937
         web_server:
           sorting_group_id: group_diag
-          sorting_weight: 25
+          sorting_weight: 65
 
   # === CAR POSITION - COMPUTED ===
   # car_center_y reports the rear (wall-mounted) sensor Y: distance from back wall into garage.
@@ -339,7 +339,7 @@ sensor:
     update_interval: 500ms
     web_server:
       sorting_group_id: group_car
-      sorting_weight: 6
+      sorting_weight: 15
 
   # car_center_x reports the front (ceiling-mounted) sensor X: lateral offset of the car.
   # Positive = one side, negative = other side (confirm direction by testing on hardware).
@@ -359,7 +359,7 @@ sensor:
     update_interval: 500ms
     web_server:
       sorting_group_id: group_car
-      sorting_weight: 7
+      sorting_weight: 16
 
   # === GARAGE DOOR POSITION ===
   # Quadrature encoder: counts A-sensor edges, direction determined by B-sensor state.
@@ -376,7 +376,7 @@ sensor:
     update_interval: 500ms
     web_server:
       sorting_group_id: group_door
-      sorting_weight: 3
+      sorting_weight: 22
 
 number:
   - platform: template
@@ -395,7 +395,7 @@ number:
           args: ['x']
     web_server:
       sorting_group_id: group_config
-      sorting_weight: 2
+      sorting_weight: 31
 
 binary_sensor:
   # === CAR POSITION - DETECTION ===
@@ -415,7 +415,7 @@ binary_sensor:
       - delayed_off: 5s
     web_server:
       sorting_group_id: group_car
-      sorting_weight: 3
+      sorting_weight: 12
 
   - platform: template
     name: "Car Position - Person Detected"
@@ -438,7 +438,7 @@ binary_sensor:
       - delayed_off: 2s
     web_server:
       sorting_group_id: group_car
-      sorting_weight: 4
+      sorting_weight: 13
 
   - platform: template
     name: "Car Position - Person in Danger Zone"
@@ -462,7 +462,7 @@ binary_sensor:
       - delayed_off: 1s
     web_server:
       sorting_group_id: group_car
-      sorting_weight: 5
+      sorting_weight: 14
     on_press:
       - logger.log:
           format: "*** DANGER: Person in danger zone! ***"
@@ -497,7 +497,7 @@ binary_sensor:
       return front_ok && rear_ok;
     web_server:
       sorting_group_id: group_car
-      sorting_weight: 2
+      sorting_weight: 11
 
   # === GARAGE DOOR SENSORS ===
   - platform: gpio
@@ -522,7 +522,7 @@ binary_sensor:
       - delayed_off: 50ms
     web_server:
       sorting_group_id: group_door
-      sorting_weight: 2
+      sorting_weight: 21
 
   - platform: gpio
     name: "Garage Door - Hall Sensor A"
@@ -553,7 +553,7 @@ binary_sensor:
       - delayed_off: 50ms
     web_server:
       sorting_group_id: group_diag
-      sorting_weight: 30
+      sorting_weight: 70
 
   - platform: gpio
     name: "Garage Door - Hall Sensor B"
@@ -576,7 +576,7 @@ binary_sensor:
       - delayed_off: 50ms
     web_server:
       sorting_group_id: group_diag
-      sorting_weight: 31
+      sorting_weight: 71
 
 button:
   - platform: restart
@@ -584,7 +584,7 @@ button:
     icon: "mdi:restart"
     web_server:
       sorting_group_id: group_diag
-      sorting_weight: 2
+      sorting_weight: 41
 
 switch:
   - platform: template
@@ -605,7 +605,7 @@ switch:
       - light.turn_off: garage_parking_led
     web_server:
       sorting_group_id: group_config
-      sorting_weight: 1
+      sorting_weight: 30
 
   # Garage Door Relay — momentary pulse, auto-off after 200ms
   - platform: gpio
@@ -616,7 +616,7 @@ switch:
     restore_mode: ALWAYS_OFF
     web_server:
       sorting_group_id: group_config
-      sorting_weight: 4
+      sorting_weight: 33
     on_turn_on:
       - delay: 200ms
       - switch.turn_off: garage_door_relay
@@ -662,7 +662,7 @@ select:
                 level: WARN
     web_server:
       sorting_group_id: group_config
-      sorting_weight: 5
+      sorting_weight: 34
 
 # LED Strip
 light:
@@ -677,7 +677,7 @@ light:
     default_transition_length: 500ms
     web_server:
       sorting_group_id: group_config
-      sorting_weight: 3
+      sorting_weight: 32
     effects:
       - addressable_lambda:
           name: "Solid"
@@ -843,7 +843,7 @@ text_sensor:
       icon: "mdi:network"
       web_server:
         sorting_group_id: group_diag
-        sorting_weight: 4
+        sorting_weight: 43
 
   - platform: template
     name: "System - Reset Reason"
@@ -866,7 +866,7 @@ text_sensor:
     update_interval: never
     web_server:
       sorting_group_id: group_diag
-      sorting_weight: 5
+      sorting_weight: 44
 
   - platform: template
     name: "System - Uptime"
@@ -892,14 +892,14 @@ text_sensor:
     update_interval: 60s
     web_server:
       sorting_group_id: group_diag
-      sorting_weight: 1
+      sorting_weight: 40
 
   - platform: version
     name: "System - ESPHome Version"
     icon: "mdi:home-assistant"
     web_server:
       sorting_group_id: group_diag
-      sorting_weight: 6
+      sorting_weight: 45
 
   - platform: template
     name: "System - Firmware Version"
@@ -908,7 +908,7 @@ text_sensor:
     update_interval: never
     web_server:
       sorting_group_id: group_diag
-      sorting_weight: 7
+      sorting_weight: 46
 
   # === GARAGE DOOR STATUS ===
   - platform: template
@@ -922,7 +922,7 @@ text_sensor:
     update_interval: 500ms
     web_server:
       sorting_group_id: group_door
-      sorting_weight: 1
+      sorting_weight: 20
 
   # === CAR POSITION TEXT SENSORS ===
   - platform: template
@@ -931,7 +931,7 @@ text_sensor:
     icon: "mdi:parking"
     web_server:
       sorting_group_id: group_car
-      sorting_weight: 1
+      sorting_weight: 10
     lambda: |-
       if (id(person_in_danger_zone).state) {
         return {"!!! STOP - PERSON !!!"};

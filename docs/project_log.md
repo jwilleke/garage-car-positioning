@@ -43,7 +43,7 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
     - Updated `parking_guidance` text sensor and LED effect to use rear sensor Y for move-forward/back direction
     - Updated packages/car-sensor.yaml with identical fixes + updated header comment documenting sensor mounting and axes
     - Updated garage-car-sensor.yaml substitutions; added missing `person_max_distance`
-- Commits: TBD
+- Commits: 3dcabeb
 - Files Modified:
   - esphome/all-in-one.yaml
   - esphome/packages/car-sensor.yaml

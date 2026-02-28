@@ -58,7 +58,7 @@ globals:
     initial_value: 'true'
   - id: led_auto_mode
     type: bool
-    restore_value: true
+    restore_value: false
     initial_value: 'true'
 
 esp32:
@@ -438,12 +438,12 @@ switch:
           value: 'false'
       - light.turn_off: garage_parking_led
 
-  # Garage Door Relay
+  # Garage Door Relay — momentary pulse, auto-off after 200ms
   - platform: gpio
-    name: "Garage Door - Relay"
+    name: "Garage Door - Open / Close"
     pin: ${garage_door_relay_pin}
     id: garage_door_relay
-    icon: "mdi:garage"
+    icon: "mdi:garage-open-variant"
     restore_mode: ALWAYS_OFF
     on_turn_on:
       - delay: 200ms
@@ -452,7 +452,7 @@ switch:
 # LED Strip
 light:
   - platform: esp32_rmt_led_strip
-    name: "Car Position - LED Strip"
+    name: "Car Position - Parking LED"
     id: garage_parking_led
     pin: ${led_strip_pin}
     num_leds: ${num_leds}

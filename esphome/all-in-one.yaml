@@ -17,7 +17,7 @@ substitutions:
   danger_zone_distance: "118.1"
 
   # Garage Door Settings
-  garage_door_full_open_counts: "64"   # adjust to your measured door travel
+  garage_door_full_open_counts: "69"   # calibrated: 69 edges (A=69, B=68) measured Feb 28 2026
 
   # GPIO Assignments for ESP32-C6 DevKit (All-in-One)
   # See docs/hardware/ESP32-C6 DevKit.md for pinout details
@@ -42,7 +42,7 @@ esphome:
       - logger.set_level:
           level: WARN
       - lambda: |-
-          id(boot_count) += 1;
+          id(boot_count) = id(boot_count) + 1;
           id(led_auto_mode) = true;
           id(api_reboot_allowed) = true;
           ESP_LOGI("boot", "Boot count: %d", id(boot_count));
@@ -388,6 +388,17 @@ sensor:
       sorting_group_id: group_door
       sorting_weight: 22
 
+  - platform: template
+    name: "Garage Door - Encoder Counts"
+    id: encoder_counts_sensor
+    icon: "mdi:counter"
+    accuracy_decimals: 0
+    lambda: 'return id(door_counts);'
+    update_interval: 2s
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 72
+
 number:
   - platform: template
     name: "Car Position - LED Active Count"
@@ -547,7 +558,7 @@ binary_sensor:
           format: "*** Hall Sensor A: TRIGGERED ***"
           level: INFO
       - lambda: |-
-          int delta = id(hall_sensor_b).state ? -1 : 1;
+          int delta = id(hall_sensor_b).state ? 1 : -1;
           id(door_counts) = std::max(0, id(door_counts) + delta);
           ESP_LOGD("door", "Door counts: %d (A high, B %s)", id(door_counts), id(hall_sensor_b).state ? "high" : "low");
     on_release:
@@ -555,7 +566,7 @@ binary_sensor:
           format: "*** Hall Sensor A: CLEARED ***"
           level: INFO
       - lambda: |-
-          int delta = id(hall_sensor_b).state ? 1 : -1;
+          int delta = id(hall_sensor_b).state ? -1 : 1;
           id(door_counts) = std::max(0, id(door_counts) + delta);
           ESP_LOGD("door", "Door counts: %d (A low, B %s)", id(door_counts), id(hall_sensor_b).state ? "high" : "low");
     filters:
@@ -589,6 +600,16 @@ binary_sensor:
       sorting_weight: 71
 
 button:
+  - platform: template
+    name: "Garage Door - Reset Encoder"
+    id: reset_encoder_button
+    icon: "mdi:counter-reset"
+    on_press:
+      - lambda: 'id(door_counts) = 0;'
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 73
+
   - platform: restart
     name: "System - Restart Device"
     icon: "mdi:restart"

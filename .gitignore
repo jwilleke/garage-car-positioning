@@ -32,3 +32,4 @@ node_modules/
 *.bin
 *.elf
 private/dev-notes.md
+garage.log

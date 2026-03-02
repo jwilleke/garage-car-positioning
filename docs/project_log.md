@@ -24,6 +24,29 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-03-02-01
+
+- Agent: Claude Sonnet 4.6
+- Subject: Genie 2022 relay intermittent — configurable relay pulse duration
+- Key Decision: Relay pulse of 200ms too short for Genie 2022 PB input to register reliably; made duration configurable at runtime via `number` entity (default 500ms)
+- Current Issue: See GitHub issue #7 — Genie 2022 relay NO/COM intermittent, relay pulse duration too short
+- Testing:
+  - esphome compile esphome/all-in-one.yaml: SUCCESS
+  - OTA upload to 192.168.68.151: successful
+  - LED test across relay NO/COM confirmed contacts close on every trigger
+  - Intermittent behavior pending confirmation with 500ms pulse
+- Work Done:
+  - Diagnosed Genie 2022 not responding to relay: correct terminals (P/B), correct jumper (H), relay clicks, LED test confirms contact closure — pulse duration identified as cause
+  - Added `Garage Door - Relay Pulse (ms)` number entity (100–2000ms, step 50, default 500ms, restore_value: true)
+  - Changed relay `on_turn_on` delay from hardcoded `200ms` to `!lambda` reading `relay_pulse_ms` entity
+  - Created GitHub issue #7
+- Commits: (pending)
+- Files Modified:
+  - esphome/all-in-one.yaml
+  - docs/project_log.md
+
+---
+
 ## 2026-02-28-05
 
 - Agent: Claude Sonnet 4.6

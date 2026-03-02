@@ -401,6 +401,20 @@ sensor:
 
 number:
   - platform: template
+    name: "Garage Door - Relay Pulse (ms)"
+    id: relay_pulse_ms
+    icon: "mdi:timer"
+    min_value: 100
+    max_value: 2000
+    step: 50
+    initial_value: 500
+    restore_value: true
+    optimistic: true
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 36
+
+  - platform: template
     name: "Car Position - LED Active Count"
     id: active_led_count
     icon: "mdi:led-on"
@@ -638,7 +652,7 @@ switch:
       sorting_group_id: group_config
       sorting_weight: 30
 
-  # Garage Door Relay — momentary pulse, auto-off after 200ms
+  # Garage Door Relay — momentary pulse, auto-off after pulse duration
   - platform: gpio
     name: "Garage Door - Open / Close"
     pin: ${garage_door_relay_pin}
@@ -649,7 +663,7 @@ switch:
       sorting_group_id: group_config
       sorting_weight: 33
     on_turn_on:
-      - delay: 200ms
+      - delay: !lambda "return (uint32_t)id(relay_pulse_ms).state;"
       - switch.turn_off: garage_door_relay
 
   - platform: template

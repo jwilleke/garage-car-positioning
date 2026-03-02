@@ -34,7 +34,7 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
   - esphome compile esphome/all-in-one.yaml: SUCCESS
   - OTA upload to 192.168.68.151: successful
   - LED test across relay NO/COM confirmed contacts close on every trigger
-  - Intermittent behavior pending confirmation with 500ms pulse
+  - 500ms pulse confirmed: door triggers reliably every time — issue #7 resolved
 - Work Done:
   - Diagnosed Genie 2022 not responding to relay: correct terminals (P/B), correct jumper (H), relay clicks, LED test confirms contact closure — pulse duration identified as cause
   - Added `Garage Door - Relay Pulse (ms)` number entity (100–2000ms, step 50, default 500ms, restore_value: true)

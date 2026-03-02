@@ -10,8 +10,8 @@ DIY garage automation system using an ESP32-C6 microcontroller with ESPHome firm
 
 Three build configurations exist in `esphome/`:
 
-- `garage-car-sensor.yaml` — standalone car positioning
-- `esp32-garage-door.yaml` — standalone door controller
+- `car-positioning.yaml` — standalone car positioning
+- `garage-door.yaml` — standalone door controller
 - `all-in-one.yaml` — combined system (primary config)
 
 ## Build Commands

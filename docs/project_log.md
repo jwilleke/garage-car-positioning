@@ -162,18 +162,18 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
   - Created GitHub issue #3: Thread & Matter protocol support discussion (ESP32-C6)
   - Added Quadrature Encoder Calculations section to docs/hardware/NJK-5002C Hall Effect Sensor/NJK-5002C Hall Effect Sensor.md (6 magnets at 5" radius, two sensors, derived spacing/offset/counts/resolution, firmware lookup table, general formula)
   - Fixed dual-sensor coordinate system mismatch in all car positioning configs:
-    - Replaced single `target_y_min/max/x_tolerance` with per-sensor `front_target_*` and `rear_target_*` substitutions in all-in-one.yaml and garage-car-sensor.yaml
+    - Replaced single `target_y_min/max/x_tolerance` with per-sensor `front_target_*` and `rear_target_*` substitutions in all-in-one.yaml and car-positioning.yaml
     - Updated `car_center_y` to return rear sensor Y (wall = depth into garage) instead of averaged Y
     - Added `car_center_x` sensor (was missing from all-in-one.yaml) returning front sensor X (ceiling = lateral offset)
     - Updated `car_correctly_parked` to check each sensor against its own coordinate zone independently
     - Updated `parking_guidance` text sensor and LED effect to use rear sensor Y for move-forward/back direction
     - Updated packages/car-sensor.yaml with identical fixes + updated header comment documenting sensor mounting and axes
-    - Updated garage-car-sensor.yaml substitutions; added missing `person_max_distance`
+    - Updated car-positioning.yaml substitutions; added missing `person_max_distance`
 - Commits: 3dcabeb
 - Files Modified:
   - esphome/all-in-one.yaml
   - esphome/packages/car-sensor.yaml
-  - esphome/garage-car-sensor.yaml
+  - esphome/car-positioning.yaml
   - docs/hardware/NJK-5002C Hall Effect Sensor/NJK-5002C Hall Effect Sensor.md
 
 ---
@@ -282,8 +282,8 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
   - esphome/simple-wifi.yaml (major update)
   - esphome/packages/base.yaml
   - esphome/all-in-one.yaml
-  - esphome/garage-car-sensor.yaml
-  - esphome/esp32-garage-door.yaml
+  - esphome/car-positioning.yaml
+  - esphome/garage-door.yaml
 
 ---
 
@@ -298,7 +298,7 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 - Work Done:
   - Diagnosed rear LD2450 issue (wiring fault on extended cable)
   - Created ESPHome package structure (base.yaml, car-sensor.yaml, garage-door.yaml)
-  - Fixed broken esp32_rmt platform in garage-car-sensor.yaml
+  - Fixed broken esp32_rmt platform in car-positioning.yaml
   - Fixed Color() wrapper in LED lambdas
   - Fixed X=0 validity check (now uses distance > 0)
   - Added NaN guards in parking logic
@@ -314,8 +314,8 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
   - esphome/packages/garage-door.yaml (new)
   - esphome/secrets.yaml.example (new)
   - esphome/all-in-one.yaml
-  - esphome/garage-car-sensor.yaml
-  - esphome/esp32-garage-door.yaml
+  - esphome/car-positioning.yaml
+  - esphome/garage-door.yaml
   - esphome/simple-wifi.yaml
   - BUILD_STATUS.md
 

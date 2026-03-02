@@ -41,12 +41,12 @@ See [hardware/LD2450/LD2450-Mounting.md](hardware/LD2450/LD2450-Mounting.md) for
 
 ## Step 4: Firmware
 
-Configuration file: `esphome/garage-car-sensor.yaml`
+Configuration file: `esphome/car-positioning.yaml`
 
 ```bash
-esphome config esphome/garage-car-sensor.yaml   # validate
-esphome compile esphome/garage-car-sensor.yaml  # compile
-esphome upload esphome/garage-car-sensor.yaml   # flash
+esphome config esphome/car-positioning.yaml   # validate
+esphome compile esphome/car-positioning.yaml  # compile
+esphome upload esphome/car-positioning.yaml   # flash
 ```
 
 A `secrets.yaml` is required in `esphome/` — see `esphome/secrets-example.yaml`.
@@ -69,7 +69,7 @@ Typical placement:
 
 ## Step 6: Calibration
 
-Park your car in the ideal position, observe the sensor values, then update the substitutions in `garage-car-sensor.yaml`.
+Park your car in the ideal position, observe the sensor values, then update the substitutions in `car-positioning.yaml`.
 
 ➡️ See [calibration.md — Car Positioning System](calibration.md#car-positioning-system)
 

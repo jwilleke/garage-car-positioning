@@ -15,7 +15,7 @@ This project is based on ESPHome, so there is no traditional "build" process. In
 1. **Set up ESPHome:** If you haven't already, you will need to set up ESPHome. This is typically done as a Home Assistant add-on.
 2. **Configure ESPHome:**
     * Create a new ESPHome device.
-    * Copy the contents of `esphome/garage-car-sensor.yaml` or `esphome/esp32-garage-door.yaml` (or a combination of both for the all-in-one system) into the ESPHome editor for your device.
+    * Copy the contents of `esphome/car-positioning.yaml` or `esphome/garage-door.yaml` (or a combination of both for the all-in-one system) into the ESPHome editor for your device.
     * Create a `secrets.yaml` file in your ESPHome configuration directory (if you don't already have one) and add the following secrets, replacing the placeholder values with your own:
 
         ```yaml

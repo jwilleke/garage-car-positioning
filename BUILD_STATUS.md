@@ -23,7 +23,7 @@ esphome/packages/
 
 **Bugs fixed:**
 
-- `garage-car-sensor.yaml`: Fixed broken `esp32_rmt` platform → `esp32_rmt_led_strip`
+- `car-positioning.yaml`: Fixed broken `esp32_rmt` platform → `esp32_rmt_led_strip`
 - Fixed `Color()` wrapper in LED lambdas
 - Fixed X=0 validity check (now uses distance > 0)
 - Added NaN guards in parking logic
@@ -56,9 +56,9 @@ Sensors for the web portal:
 
 ### ✅ Configuration Files Validated
 
-1. esp32-garage-door.yaml - ✅ Validates successfully
+1. garage-door.yaml - ✅ Validates successfully
 2. all-in-one.yaml - ✅ Validates successfully (LD2450 native component working)
-3. garage-car-sensor.yaml - ✅ Ready (LD2450 native component working)
+3. car-positioning.yaml - ✅ Ready (LD2450 native component working)
 
 ### ✅ Build & Deployment Status
 
@@ -90,9 +90,9 @@ Note: If you encounter the architecture mismatch issue again, use the `fix_ninja
 
 1. Added `throttle: 500ms` to LD2450 sensors in all-in-one.yaml
 2. Fixed lambda string conversion (removed `std::stof()`)
-3. Fixed typo in esp32-garage-door.yaml ("resistere" → "resistor")
-4. Added missing WiFi/API/OTA configuration to esp32-garage-door.yaml
-5. Fixed cover template syntax in esp32-garage-door.yaml
+3. Fixed typo in garage-door.yaml ("resistere" → "resistor")
+4. Added missing WiFi/API/OTA configuration to garage-door.yaml
+5. Fixed cover template syntax in garage-door.yaml
 6. Added external_components section for LD2450
 
 ## LD2450 Component Setup
@@ -146,13 +146,13 @@ cd esphome
 
 # Validate configuration
 esphome config all-in-one.yaml
-esphome config esp32-garage-door.yaml
-esphome config garage-car-sensor.yaml
+esphome config garage-door.yaml
+esphome config car-positioning.yaml
 
 # Compile firmware
 esphome compile all-in-one.yaml
-esphome compile esp32-garage-door.yaml
-esphome compile garage-car-sensor.yaml
+esphome compile garage-door.yaml
+esphome compile car-positioning.yaml
 
 # Flash to device (when connected)
 esphome upload all-in-one.yaml

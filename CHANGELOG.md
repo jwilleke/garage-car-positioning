@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Broken `esp32_rmt` platform in garage-car-sensor.yaml (now `esp32_rmt_led_strip`)
+- Broken `esp32_rmt` platform in car-positioning.yaml (now `esp32_rmt_led_strip`)
 - `Color()` wrapper in LED lambdas
 - X=0 validity check (now uses distance > 0)
 - NaN guards in parking logic

@@ -61,12 +61,12 @@ Physical magnet and sensor placement determines encoder accuracy.
 
 ## Step 4: Firmware
 
-Configuration file: `esphome/esp32-garage-door.yaml`
+Configuration file: `esphome/garage-door.yaml`
 
 ```bash
-esphome config esphome/esp32-garage-door.yaml   # validate
-esphome compile esphome/esp32-garage-door.yaml  # compile
-esphome upload esphome/esp32-garage-door.yaml   # flash
+esphome config esphome/garage-door.yaml   # validate
+esphome compile esphome/garage-door.yaml  # compile
+esphome upload esphome/garage-door.yaml   # flash
 ```
 
 A `secrets.yaml` is required in `esphome/` — see `esphome/secrets-example.yaml`.
@@ -85,7 +85,7 @@ Summary:
 1. Flash firmware
 2. Fully close the door — encoder resets to 0
 3. Fully open the door — note the encoder count
-4. Set `garage_door_full_open_counts` in `esp32-garage-door.yaml` to that value
+4. Set `garage_door_full_open_counts` in `garage-door.yaml` to that value
 5. Reflash
 
 ---

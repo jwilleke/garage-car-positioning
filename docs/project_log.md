@@ -40,7 +40,7 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
   - Added `Garage Door - Relay Pulse (ms)` number entity (100–2000ms, step 50, default 500ms, restore_value: true)
   - Changed relay `on_turn_on` delay from hardcoded `200ms` to `!lambda` reading `relay_pulse_ms` entity
   - Created GitHub issue #7
-- Commits: (pending)
+- Commits: 951886b
 - Files Modified:
   - esphome/all-in-one.yaml
   - docs/project_log.md

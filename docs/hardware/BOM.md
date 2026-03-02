@@ -2,6 +2,8 @@
 
 This document provides a comprehensive list of components for three different implementation options, all using the ESP32-C6 as the core microcontroller.
 
+> **Note:** This BOM reflects components sourced from the builder's existing inventory. Items marked "Already Had" were on hand and not purchased for this project. Substitutions are generally viable — verify pinouts and voltage compatibility before wiring. This list is a reference, not a prescriptive shopping list.
+
 ## Option 1: Standalone Car Positioning System
 
 Standalone Car Positioning System focused only on detecting a car's position and providing visual LED feedback.

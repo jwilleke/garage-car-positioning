@@ -24,6 +24,41 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-03-02-02
+
+- Agent: Claude Sonnet 4.6
+- Subject: Standalone implementation guides, config renames, Thread/Matter decision doc
+- Key Decision: ESPHome config filenames simplified — `garage-car-sensor.yaml` → `car-positioning.yaml`, `esp32-garage-door.yaml` → `garage-door.yaml`; Thread/Matter deferred until ESPHome Matter support is stable
+- Current Issue: Issue #4 open — web portal layout tracking (updated with new Configuration entities)
+- Testing:
+  - No firmware changes this session
+- Work Done:
+  - Created `docs/car-positioning-guide.md` — standalone implementation path for car positioning only
+  - Created `docs/garage-door-guide.md` — standalone implementation path for garage door only (includes Genie 2022 relay pulse note)
+  - Added builder inventory note to `docs/hardware/BOM.md`
+  - Renamed `esphome/garage-car-sensor.yaml` → `esphome/car-positioning.yaml`
+  - Renamed `esphome/esp32-garage-door.yaml` → `esphome/garage-door.yaml`
+  - Updated all references across CLAUDE.md, GEMINI.md, CHANGELOG.md, BUILD_STATUS.md, project_log.md, docs
+  - Created `docs/planning/thread-matter.md` — Thread & Matter trade-off analysis and decision
+  - Closed issue #3 (Thread/Matter) with link to new doc
+  - Updated issue #4 (web portal layout) with new Configuration group entities
+- Commits: ec308db, 7bb98bd, dc051ed
+- Files Modified:
+  - docs/car-positioning-guide.md (new)
+  - docs/garage-door-guide.md (new)
+  - docs/planning/thread-matter.md (new)
+  - docs/hardware/BOM.md
+  - esphome/car-positioning.yaml (renamed)
+  - esphome/garage-door.yaml (renamed)
+  - CLAUDE.md
+  - GEMINI.md
+  - CHANGELOG.md
+  - BUILD_STATUS.md
+  - docs/Installation.md
+  - docs/project_log.md
+
+---
+
 ## 2026-03-02-01
 
 - Agent: Claude Sonnet 4.6

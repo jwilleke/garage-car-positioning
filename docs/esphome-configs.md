@@ -4,6 +4,50 @@ Overview of all firmware configs in `esphome/` and the shared package architectu
 
 ---
 
+## Flashing
+
+### Standard workflow (OTA — device on WiFi)
+
+No USB required. Device must be reachable on the network.
+
+```bash
+cd esphome
+esphome run all-in-one.yaml
+```
+
+`run` compiles, flashes via OTA, then streams logs. This is the normal update path.
+
+### Validate or compile only
+
+```bash
+esphome config all-in-one.yaml    # YAML validation only — fast, no compile
+esphome compile all-in-one.yaml   # Compile only, no flash
+esphome logs all-in-one.yaml      # Stream logs from running device
+```
+
+### USB flash (first flash or WiFi unavailable)
+
+Put the board in bootloader mode first:
+
+1. Hold `BOOT`
+2. Press + release `RESET` (while holding BOOT)
+3. Release `BOOT`
+
+Then run the utility script:
+
+```bash
+utility/UPLOAD_NOW.sh
+```
+
+Or manually:
+
+```bash
+cd esphome
+esphome run all-in-one.yaml --device /dev/cu.usbmodem31201
+```
+
+---
+
 ## Build Configs
 
 Three production configs exist, each targeting a different hardware build path. All use the shared `packages/` directory — see [Package Architecture](#package-architecture) below.

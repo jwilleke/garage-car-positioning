@@ -17,13 +17,15 @@ Four configs exist in `esphome/` — three production builds and one test config
 This is an ESPHome project, not a traditional software project. Use ESPHome CLI:
 
 ```bash
-esphome config esphome/all-in-one.yaml     # Validate YAML configuration
-esphome compile esphome/all-in-one.yaml     # Compile firmware
-esphome upload esphome/all-in-one.yaml      # Flash to ESP32-C6
-esphome logs esphome/all-in-one.yaml        # Monitor serial/network logs
+esphome config esphome/all-in-one.yaml     # Validate YAML only (fast)
+esphome compile esphome/all-in-one.yaml    # Compile only, no flash
+esphome run esphome/all-in-one.yaml        # Compile + flash + stream logs (standard workflow)
+esphome logs esphome/all-in-one.yaml       # Stream logs only (device already running)
 ```
 
 Replace `all-in-one.yaml` with the appropriate config for other build options.
+
+➡️ See [docs/esphome-configs.md — Flashing](docs/esphome-configs.md#flashing) for OTA vs USB workflows.
 
 A `secrets.yaml` file is required in `esphome/` with: `wifi_ssid`, `wifi_password`, `ap_password`, `ota_password`, `api_encryption_key`.
 

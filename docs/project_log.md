@@ -34,7 +34,7 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
   - No firmware changes
 - Work Done:
   - Updated docs/esphome-configs.md: clarified all-in-one vs ha-builder roles, identical firmware note, push-before-compile warning, secrets shared-vs-unique guidance, updated package architecture diagram
-- Commits: TBD
+- Commits: fe40514
 - Files Modified:
   - docs/esphome-configs.md
 

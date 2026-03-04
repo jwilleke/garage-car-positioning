@@ -33,3 +33,4 @@ node_modules/
 *.elf
 private/dev-notes.md
 garage.log
+.claude/settings.local.json

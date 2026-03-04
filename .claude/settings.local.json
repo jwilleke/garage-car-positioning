@@ -7,7 +7,8 @@
       "Bash(gh issue:*)",
       "Bash(git:*)",
       "Bash(esphome config:*)",
-      "Bash(esphome:*)"
+      "Bash(esphome:*)",
+      "mcp__ide__getDiagnostics"
     ]
   }
 }

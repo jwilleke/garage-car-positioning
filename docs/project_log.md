@@ -45,7 +45,7 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
   - Deleted scratch/test configs: connect.yaml, all-connect.yaml, simple-wifi.yaml, testing.yaml
   - Created docs/esphome-configs.md — documents all configs, package architecture, substitution tables
   - Updated CLAUDE.md to link to docs/esphome-configs.md (DRY in docs)
-- Commits: TBD
+- Commits: 7ac3f0f
 - Files Modified:
   - esphome/all-in-one.yaml (refactored to thin config)
   - esphome/car-positioning.yaml

@@ -6,35 +6,73 @@
 #   garage_door_closed_switch_pin: GPIO for reed switch (e.g., GPIO1)
 #   garage_door_encoder_a_pin: GPIO for encoder A (e.g., GPIO2)
 #   garage_door_encoder_b_pin: GPIO for encoder B (e.g., GPIO3)
-#   garage_door_full_open_counts: Encoder counts when fully open (e.g., "10000")
+#   garage_door_full_open_counts: Encoder counts at full open — calibrate after flash
+
+number:
+  - platform: template
+    name: "Garage Door - Relay Pulse (ms)"
+    id: relay_pulse_ms
+    icon: "mdi:timer"
+    min_value: 100
+    max_value: 2000
+    step: 50
+    initial_value: 500
+    restore_value: true
+    optimistic: true
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 36
+
+button:
+  - platform: template
+    name: "Garage Door - Reset Encoder"
+    id: reset_encoder_button
+    icon: "mdi:counter-reset"
+    on_press:
+      - sensor.rotary_encoder.set_value:
+          id: garage_door_encoder
+          value: 0
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 73
 
 switch:
   - platform: gpio
-    name: "Garage Door Relay"
+    name: "Garage Door - Open / Close"
     pin: ${garage_door_relay_pin}
     id: garage_door_relay
+    icon: "mdi:garage-open-variant"
     restore_mode: ALWAYS_OFF
     on_turn_on:
-      - delay: 200ms
+      - delay: !lambda "return (uint32_t)id(relay_pulse_ms).state;"
       - switch.turn_off: garage_door_relay
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 33
 
 binary_sensor:
   - platform: gpio
-    name: "Garage Door Closed Switch"
+    name: "Garage Door - Closed Switch"
     id: garage_door_closed_switch
     pin:
       number: ${garage_door_closed_switch_pin}
       mode: INPUT_PULLUP
       inverted: true
     device_class: door
+    filters:
+      - delayed_on: 50ms
+      - delayed_off: 50ms
     on_press:
       - sensor.rotary_encoder.set_value:
           id: garage_door_encoder
           value: 0
+    web_server:
+      sorting_group_id: group_door
+      sorting_weight: 21
 
 sensor:
   - platform: rotary_encoder
-    name: "Garage Door Position Encoder"
+    name: "Garage Door - Position Encoder"
     id: garage_door_encoder
     pin_a: ${garage_door_encoder_a_pin}
     pin_b: ${garage_door_encoder_b_pin}
@@ -42,6 +80,46 @@ sensor:
     publish_initial_value: false
     filters:
       - debounce: 10ms
+
+  - platform: template
+    name: "Garage Door - Position"
+    id: door_position_pct
+    unit_of_measurement: "%"
+    icon: "mdi:garage"
+    accuracy_decimals: 0
+    lambda: |-
+      float val = clamp((float)id(garage_door_encoder).state, 0.0f, (float)${garage_door_full_open_counts});
+      float pct = val / (float)${garage_door_full_open_counts} * 100.0f;
+      return std::min(100.0f, std::max(0.0f, pct));
+    update_interval: 500ms
+    web_server:
+      sorting_group_id: group_door
+      sorting_weight: 22
+
+  - platform: template
+    name: "Garage Door - Encoder Counts"
+    id: encoder_counts_sensor
+    icon: "mdi:counter"
+    accuracy_decimals: 0
+    lambda: 'return id(garage_door_encoder).state;'
+    update_interval: 2s
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 72
+
+text_sensor:
+  - platform: template
+    name: "Garage Door - Status"
+    id: door_status
+    icon: "mdi:garage"
+    lambda: |-
+      if (id(garage_door_closed_switch).state) return {"Closed"};
+      int pct = (int)id(door_position_pct).state;
+      return str_sprintf("Open %d%%", pct);
+    update_interval: 500ms
+    web_server:
+      sorting_group_id: group_door
+      sorting_weight: 20
 
 cover:
   - platform: template
@@ -58,7 +136,9 @@ cover:
       if (id(garage_door_closed_switch).state) {
         return 0.0;
       }
-      float val = clamp((float)id(garage_door_encoder).state, 0.0f, (float)${garage_door_full_open_counts});
-      return val / (float)${garage_door_full_open_counts};
+      return id(door_position_pct).state / 100.0f;
     optimistic: false
     assumed_state: false
+    web_server:
+      sorting_group_id: group_door
+      sorting_weight: 23

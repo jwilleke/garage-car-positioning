@@ -24,6 +24,43 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-03-04-01
+
+- Agent: Claude Sonnet 4.6
+- Subject: DRY refactor — package-based architecture, cover entity, consistency sync
+- Key Decision: `all-in-one.yaml` refactored from monolithic (~1000 lines) to thin package-based config (55 lines); rotary_encoder platform adopted for garage door (replaces manual GPIO counting); `garage_door_full_open_counts` set to 138 (estimated) — must recalibrate on hardware
+- Current Issue: `garage_door_full_open_counts` needs hardware recalibration after flash (open door fully, read `Garage Door - Encoder Counts` from HA diagnostics)
+- Testing:
+  - `esphome config all-in-one.yaml` — valid
+  - `esphome config garage-door.yaml` — valid
+  - `esphome config car-positioning.yaml` — valid
+- Work Done:
+  - Added `cover:` entity (Garage Door) to all-in-one.yaml and packages/garage-door.yaml — HA now sees a proper garage cover
+  - Synced packages/garage-door.yaml with all-in-one: configurable relay_pulse_ms, dash-convention entity names, door_position_pct sensor, door_status text sensor, reset encoder button, encoder counts sensor, web_server sorting
+  - Synced packages/car-sensor.yaml with all-in-one: scan_position + led_auto_mode globals, T2 sensors, person_in_danger_zone binary sensor, danger zone parking guidance check, on_value LED automation, led_auto_mode_switch, web_server sorting
+  - Synced packages/base.yaml: api_reboot_allowed + api_no_client_secs globals, on_boot handler, API watchdog interval, web_server sorting groups, log level select, api_reboot_watchdog_switch
+  - Refactored all-in-one.yaml to use packages (DRY) — all logic now lives in packages only
+  - Fixed pre-existing bug: boot_count global added to base.yaml (standalone configs were broken)
+  - Updated car-positioning.yaml: added danger_zone_distance substitution, corrected person_max_distance from mm to inches
+  - Deleted scratch/test configs: connect.yaml, all-connect.yaml, simple-wifi.yaml, testing.yaml
+  - Created docs/esphome-configs.md — documents all configs, package architecture, substitution tables
+  - Updated CLAUDE.md to link to docs/esphome-configs.md (DRY in docs)
+- Commits: TBD
+- Files Modified:
+  - esphome/all-in-one.yaml (refactored to thin config)
+  - esphome/car-positioning.yaml
+  - esphome/packages/base.yaml
+  - esphome/packages/car-sensor.yaml
+  - esphome/packages/garage-door.yaml
+  - esphome/connect.yaml (deleted)
+  - esphome/all-connect.yaml (deleted)
+  - esphome/simple-wifi.yaml (deleted)
+  - esphome/testing.yaml (deleted)
+  - docs/esphome-configs.md (new)
+  - CLAUDE.md
+
+---
+
 ## 2026-03-02-02
 
 - Agent: Claude Sonnet 4.6

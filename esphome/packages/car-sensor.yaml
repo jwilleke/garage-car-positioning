@@ -8,17 +8,27 @@
 #   ld2450_rear_tx_pin: GPIO for rear sensor TX (e.g., GPIO19)
 #   led_strip_pin: GPIO for WS2812B data (e.g., GPIO0)
 #   num_leds: Number of LEDs in strip (e.g., "30")
-#   person_max_distance: Targets closer than this are likely people (mm)
+#   person_max_distance: Targets closer than this are likely people (in, e.g., "59.1")
+#   danger_zone_distance: Max distance for person-in-danger-zone detection (in, e.g., "118.1")
 #
 # Sensor mounting and coordinate axes:
 #   Front sensor (ceiling-mounted): Y = distance from ceiling to car top; X = lateral offset
 #   Rear sensor (wall-mounted):     Y = distance from back wall into garage; X = height
 #
 # Per-sensor parking zone substitutions:
-#   front_target_y_min / front_target_y_max: ceiling-to-car Y range (mm) — calibrate to ceiling_height - car_height ± tolerance
-#   front_target_x_tolerance: max lateral offset (mm) from ceiling sensor X axis
-#   rear_target_y_min / rear_target_y_max: parking depth from back wall (mm)
+#   front_target_y_min / front_target_y_max: ceiling-to-car Y range (in) — calibrate to ceiling_height - car_height ± tolerance
+#   front_target_x_tolerance: max lateral offset (in) from ceiling sensor X axis
+#   rear_target_y_min / rear_target_y_max: parking depth from back wall (in)
 #   rear_target_x_tolerance: max X deviation for rear sensor (height axis — usually not critical)
+
+globals:
+  - id: scan_position
+    type: int
+    initial_value: '0'
+  - id: led_auto_mode
+    type: bool
+    restore_value: false
+    initial_value: 'true'
 
 uart:
   - id: uart_ld2450_front
@@ -48,13 +58,37 @@ number:
     min_value: 1
     max_value: 60
     step: 1
-    initial_value: 30
+    initial_value: ${num_leds}
     restore_value: true
     optimistic: true
     set_action:
       - logger.log:
           format: "LED count set to %.0f"
           args: ['x']
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 31
+
+switch:
+  - platform: template
+    name: "Car Position - LED Auto Mode"
+    id: led_auto_mode_switch
+    icon: "mdi:led-on"
+    optimistic: false
+    lambda: |-
+      return id(led_auto_mode);
+    turn_on_action:
+      - globals.set:
+          id: led_auto_mode
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: led_auto_mode
+          value: 'false'
+      - light.turn_off: garage_parking_led
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 30
 
 sensor:
   # === FRONT SENSOR ===
@@ -63,35 +97,75 @@ sensor:
     target_count:
       name: "Car Position - Garage Door Target Count"
       id: front_target_count
+      web_server:
+        sorting_group_id: group_diag
+        sorting_weight: 50
     target_1:
       x:
-        name: "Car Position - Garage Door X"
+        name: "Car Position - Garage Door T1 X"
         id: front_x
         unit_of_measurement: "in"
         accuracy_decimals: 1
         filters:
           - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 51
       y:
-        name: "Car Position - Garage Door Y"
+        name: "Car Position - Garage Door T1 Y"
         id: front_y
         unit_of_measurement: "in"
         accuracy_decimals: 1
         filters:
           - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 52
       distance:
-        name: "Car Position - Garage Door Distance"
+        name: "Car Position - Garage Door T1 Distance"
         id: front_distance
         unit_of_measurement: "in"
         accuracy_decimals: 1
         filters:
           - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 53
       speed:
-        name: "Car Position - Garage Door Speed"
+        name: "Car Position - Garage Door T1 Speed"
         id: front_speed
         unit_of_measurement: "in/s"
         accuracy_decimals: 1
         filters:
           - multiply: 0.3937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 54
+    target_2:
+      x:
+        name: "Car Position - Garage Door T2 X"
+        id: front_t2_x
+        unit_of_measurement: "in"
+        filters:
+          - multiply: 0.03937
+        internal: true
+      y:
+        name: "Car Position - Garage Door T2 Y"
+        id: front_t2_y
+        unit_of_measurement: "in"
+        filters:
+          - multiply: 0.03937
+        internal: true
+      distance:
+        name: "Car Position - Garage Door T2 Distance"
+        id: front_t2_distance
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 55
 
   # === REAR SENSOR ===
   - platform: ld2450
@@ -99,35 +173,75 @@ sensor:
     target_count:
       name: "Car Position - Inside Wall Target Count"
       id: rear_target_count
+      web_server:
+        sorting_group_id: group_diag
+        sorting_weight: 60
     target_1:
       x:
-        name: "Car Position - Inside Wall X"
+        name: "Car Position - Inside Wall T1 X"
         id: rear_x
         unit_of_measurement: "in"
         accuracy_decimals: 1
         filters:
           - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 61
       y:
-        name: "Car Position - Inside Wall Y"
+        name: "Car Position - Inside Wall T1 Y"
         id: rear_y
         unit_of_measurement: "in"
         accuracy_decimals: 1
         filters:
           - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 62
       distance:
-        name: "Car Position - Inside Wall Distance"
+        name: "Car Position - Inside Wall T1 Distance"
         id: rear_distance
         unit_of_measurement: "in"
         accuracy_decimals: 1
         filters:
           - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 63
       speed:
-        name: "Car Position - Inside Wall Speed"
+        name: "Car Position - Inside Wall T1 Speed"
         id: rear_speed
         unit_of_measurement: "in/s"
         accuracy_decimals: 1
         filters:
           - multiply: 0.3937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 64
+    target_2:
+      x:
+        name: "Car Position - Inside Wall T2 X"
+        id: rear_t2_x
+        unit_of_measurement: "in"
+        filters:
+          - multiply: 0.03937
+        internal: true
+      y:
+        name: "Car Position - Inside Wall T2 Y"
+        id: rear_t2_y
+        unit_of_measurement: "in"
+        filters:
+          - multiply: 0.03937
+        internal: true
+      distance:
+        name: "Car Position - Inside Wall T2 Distance"
+        id: rear_t2_distance
+        unit_of_measurement: "in"
+        accuracy_decimals: 1
+        filters:
+          - multiply: 0.03937
+        web_server:
+          sorting_group_id: group_diag
+          sorting_weight: 65
 
   # === COMPUTED POSITION ===
   # car_center_x: front (ceiling) sensor X — lateral offset of the car in inches.
@@ -146,6 +260,9 @@ sensor:
       if (rear_valid) return id(rear_x).state;
       return NAN;
     update_interval: 500ms
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 16
 
   # car_center_y: rear (wall-mounted) sensor Y — distance from back wall into garage.
   # This is the physically meaningful depth axis for parking guidance.
@@ -163,6 +280,9 @@ sensor:
       if (front_valid) return id(front_y).state;
       return NAN;
     update_interval: 500ms
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 15
 
 binary_sensor:
   - platform: template
@@ -179,6 +299,9 @@ binary_sensor:
     filters:
       - delayed_on: 1s
       - delayed_off: 5s
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 12
 
   - platform: template
     name: "Car Position - Person Detected"
@@ -197,6 +320,41 @@ binary_sensor:
     filters:
       - delayed_on: 500ms
       - delayed_off: 2s
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 13
+
+  - platform: template
+    name: "Car Position - Person in Danger Zone"
+    id: person_in_danger_zone
+    device_class: safety
+    icon: "mdi:alert"
+    lambda: |-
+      if (!id(car_detected).state) return false;
+      float danger_dist = ${danger_zone_distance};
+      float front_t2_dist = id(front_t2_distance).state;
+      bool front_danger = !isnan(front_t2_dist) && front_t2_dist > 4 && front_t2_dist < danger_dist;
+      float rear_t2_dist = id(rear_t2_distance).state;
+      bool rear_danger = !isnan(rear_t2_dist) && rear_t2_dist > 4 && rear_t2_dist < danger_dist;
+      return front_danger || rear_danger;
+    filters:
+      - delayed_on: 300ms
+      - delayed_off: 1s
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 14
+    on_press:
+      - logger.log:
+          format: "*** DANGER: Person in danger zone! ***"
+          level: WARN
+      - light.turn_on:
+          id: garage_parking_led
+          effect: "Person Alert (Red Flash)"
+    on_release:
+      - logger.log:
+          format: "*** Danger zone clear ***"
+          level: INFO
+      - light.turn_off: garage_parking_led
 
   - platform: template
     name: "Car Position - Correctly Parked"
@@ -217,13 +375,22 @@ binary_sensor:
         && (id(rear_y).state >= ${rear_target_y_min})
         && (id(rear_y).state <= ${rear_target_y_max});
       return front_ok && rear_ok;
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 11
 
 text_sensor:
   - platform: template
     name: "Car Position - Parking Guidance"
     id: parking_guidance
     icon: "mdi:parking"
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 10
     lambda: |-
+      if (id(person_in_danger_zone).state) {
+        return {"!!! STOP - PERSON !!!"};
+      }
       if (id(person_detected).state) {
         return {"PERSON DETECTED"};
       }
@@ -244,6 +411,44 @@ text_sensor:
       if (y > target + zone) return {"< Move back"};
       return {"Almost there..."};
     update_interval: 500ms
+    on_value:
+      - if:
+          condition:
+            lambda: 'return id(led_auto_mode);'
+          then:
+            - if:
+                condition:
+                  lambda: 'return x == "PARKED";'
+                then:
+                  - light.turn_on:
+                      id: garage_parking_led
+                      effect: "Parked (Green)"
+            - if:
+                condition:
+                  lambda: 'return x == "MOVE FORWARD >>>" || x == "Move forward >";'
+                then:
+                  - light.turn_on:
+                      id: garage_parking_led
+                      effect: "Move Forward (Blue Scan)"
+            - if:
+                condition:
+                  lambda: 'return x == "<<< MOVE BACK" || x == "< Move back";'
+                then:
+                  - light.turn_on:
+                      id: garage_parking_led
+                      effect: "Move Back (Orange Scan)"
+            - if:
+                condition:
+                  lambda: 'return x == "Almost there...";'
+                then:
+                  - light.turn_on:
+                      id: garage_parking_led
+                      effect: "Move Forward Minor (Cyan Scan)"
+            - if:
+                condition:
+                  lambda: 'return x == "No vehicle" || x == "Acquiring...";'
+                then:
+                  - light.turn_off: garage_parking_led
 
 light:
   - platform: esp32_rmt_led_strip
@@ -252,40 +457,13 @@ light:
     pin: ${led_strip_pin}
     num_leds: ${num_leds}
     chipset: WS2812
-    restore_mode: ALWAYS_OFF
+    restore_mode: RESTORE_DEFAULT_ON
     rgb_order: GRB
     default_transition_length: 500ms
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 32
     effects:
-      - addressable_lambda:
-          name: "Parking Guidance"
-          update_interval: 200ms
-          lambda: |-
-            int count = id(active_led_count).state;
-            if (!id(car_detected).state) {
-              for (int i = 0; i < it.size(); i++) it[i] = Color::BLACK;
-            } else if (id(car_correctly_parked).state) {
-              for (int i = 0; i < it.size(); i++)
-                it[i] = (i < count) ? Color(0, 255, 0) : Color::BLACK;
-            } else {
-              // Use rear sensor Y (wall-mounted) for depth guidance
-              float y = id(rear_y).state;
-              if (isnan(y)) {
-                for (int i = 0; i < it.size(); i++)
-                  it[i] = (i < count) ? Color(128, 128, 128) : Color::BLACK;
-                return;
-              }
-              float target = (${rear_target_y_min} + ${rear_target_y_max}) / 2.0;
-              float zone = (${rear_target_y_max} - ${rear_target_y_min}) / 2.0;
-              Color c;
-              if (y < target - zone - 12) c = Color(0, 0, 255);
-              else if (y > target + zone + 12) c = Color(255, 69, 0);
-              else if (y < target - zone) c = Color(0, 255, 255);
-              else if (y > target + zone) c = Color(255, 255, 0);
-              else c = Color(255, 255, 255);
-              for (int i = 0; i < it.size(); i++)
-                it[i] = (i < count) ? c : Color::BLACK;
-            }
-
       - addressable_lambda:
           name: "Solid"
           update_interval: 100ms

@@ -13,7 +13,8 @@ substitutions:
   rear_target_y_max: "2200"
   rear_target_x_tolerance: "300"
   num_leds: "30"
-  person_max_distance: "1500"
+  person_max_distance: "59.1"
+  danger_zone_distance: "118.1"
 
   # GPIO Assignments for ESP32-C6 DevKit
   led_strip_pin: GPIO0

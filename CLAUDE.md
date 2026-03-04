@@ -8,11 +8,9 @@ Read: AGENTS.md and related files.
 
 DIY garage automation system using an ESP32-C6 microcontroller with ESPHome firmware, integrated with Home Assistant. Provides car positioning via dual LD2450 mmWave radar sensors with a WS2812B LED parking aid, and smart garage door control via rotary encoder position tracking.
 
-Three build configurations exist in `esphome/`:
+Four configs exist in `esphome/` — three production builds and one test config. All production builds use shared `packages/` for DRY architecture.
 
-- `car-positioning.yaml` — standalone car positioning
-- `garage-door.yaml` — standalone door controller
-- `all-in-one.yaml` — combined system (primary config)
+➡️ See [docs/esphome-configs.md](docs/esphome-configs.md) for the full config and package reference.
 
 ## Build Commands
 

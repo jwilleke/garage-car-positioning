@@ -6,6 +6,20 @@
 #   friendly_name: Human-readable name
 #   firmware_version: Semantic version (e.g., "0.1.1")
 
+globals:
+  - id: boot_count
+    type: int
+    restore_value: true
+    initial_value: '0'
+  - id: api_reboot_allowed
+    type: bool
+    restore_value: false
+    initial_value: 'true'
+  - id: api_no_client_secs
+    type: int
+    restore_value: false
+    initial_value: '0'
+
 esp32:
   board: esp32-c6-devkitc-1
   variant: esp32c6
@@ -18,13 +32,26 @@ esp32:
       CONFIG_ESP_WIFI_SOFTAP_SAE_SUPPORT: "n"
       CONFIG_ESP_WIFI_ENABLE_WPA3_OWE_STA: "n"
 
+esphome:
+  on_boot:
+    priority: -100
+    then:
+      - logger.set_level:
+          level: WARN
+      - lambda: |-
+          id(boot_count) = id(boot_count) + 1;
+          id(api_reboot_allowed) = true;
+          ESP_LOGI("boot", "Boot count: %d", id(boot_count));
+
 logger:
-  level: DEBUG
+  level: DEBUG  # compile-time max; runtime level set to WARN on boot
   hardware_uart: USB_SERIAL_JTAG
 
 api:
+  id: garage_api
   encryption:
     key: !secret api_encryption_key
+  reboot_timeout: 0s
 
 ota:
   - platform: esphome
@@ -36,11 +63,105 @@ web_server:
   port: 80
   version: 3
   include_internal: false
+  sorting_groups:
+    - id: group_car
+      name: "Car Positioning"
+      sorting_weight: 10
+    - id: group_door
+      name: "Garage Door"
+      sorting_weight: 20
+    - id: group_config
+      name: "Configuration"
+      sorting_weight: 30
+    - id: group_diag
+      name: "Diagnostic"
+      sorting_weight: 40
+
+interval:
+  - interval: 60s
+    then:
+      - lambda: |-
+          if (id(garage_api).is_connected()) {
+            id(api_no_client_secs) = 0;
+          } else if (id(api_reboot_allowed)) {
+            id(api_no_client_secs) += 60;
+            if (id(api_no_client_secs) >= 900) {
+              App.reboot();
+            }
+          }
 
 button:
   - platform: restart
     name: "System - Restart Device"
     icon: "mdi:restart"
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 41
+
+switch:
+  - platform: template
+    name: "System - API Reboot Watchdog"
+    id: api_reboot_watchdog_switch
+    icon: "mdi:restart-alert"
+    optimistic: false
+    lambda: |-
+      return id(api_reboot_allowed);
+    turn_on_action:
+      - globals.set:
+          id: api_reboot_allowed
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: api_reboot_allowed
+          value: 'false'
+      - globals.set:
+          id: api_no_client_secs
+          value: '0'
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 35
+
+select:
+  - platform: template
+    name: "System - Log Level"
+    id: log_level_select
+    icon: "mdi:bug"
+    options:
+      - "Off"
+      - "WARN"
+      - "INFO"
+      - "DEBUG"
+    initial_option: "Off"
+    restore_value: false
+    optimistic: true
+    set_action:
+      - if:
+          condition:
+            lambda: 'return x == "WARN";'
+          then:
+            - logger.set_level:
+                level: WARN
+      - if:
+          condition:
+            lambda: 'return x == "INFO";'
+          then:
+            - logger.set_level:
+                level: INFO
+      - if:
+          condition:
+            lambda: 'return x == "DEBUG";'
+          then:
+            - logger.set_level:
+                level: DEBUG
+      - if:
+          condition:
+            lambda: 'return x == "Off";'
+          then:
+            - logger.set_level:
+                level: WARN
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 34
 
 sensor:
   - platform: uptime
@@ -56,12 +177,18 @@ sensor:
     lambda: |-
       return id(boot_count);
     update_interval: 60s
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 42
 
 text_sensor:
   - platform: wifi_info
     mac_address:
       name: "System - MAC Address"
       icon: "mdi:network"
+      web_server:
+        sorting_group_id: group_diag
+        sorting_weight: 43
 
   - platform: template
     name: "System - Reset Reason"
@@ -82,6 +209,9 @@ text_sensor:
         default: return std::string("Unknown");
       }
     update_interval: never
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 44
 
   - platform: template
     name: "System - Uptime"
@@ -105,13 +235,22 @@ text_sensor:
         return str_sprintf("%dm", minutes);
       }
     update_interval: 60s
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 40
 
   - platform: template
     name: "System - Firmware Version"
     icon: "mdi:tag"
     lambda: 'return {"${firmware_version}"};'
     update_interval: never
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 46
 
   - platform: version
     name: "System - ESPHome Version"
     icon: "mdi:home-assistant"
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 45

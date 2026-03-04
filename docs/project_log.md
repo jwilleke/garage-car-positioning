@@ -24,6 +24,22 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-03-04-03
+
+- Agent: Claude Sonnet 4.6
+- Subject: Document all-in-one vs ha-builder relationship and HA secrets guidance
+- Key Decision: `all-in-one.yaml` (local `!include`) and `ha-builder.yaml` (`github://`) produce identical firmware — difference is only package resolution path; local packages must be pushed before HA Builder compiles to stay in sync
+- Current Issue: None
+- Testing:
+  - No firmware changes
+- Work Done:
+  - Updated docs/esphome-configs.md: clarified all-in-one vs ha-builder roles, identical firmware note, push-before-compile warning, secrets shared-vs-unique guidance, updated package architecture diagram
+- Commits: TBD
+- Files Modified:
+  - docs/esphome-configs.md
+
+---
+
 ## 2026-03-04-02
 
 - Agent: Claude Sonnet 4.6

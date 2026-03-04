@@ -50,15 +50,37 @@ esphome run all-in-one.yaml --device /dev/cu.usbmodem31201
 
 ## Build Configs
 
-Three production configs exist, each targeting a different hardware build path. All use the shared `packages/` directory — see [Package Architecture](#package-architecture) below.
+Four configs exist for the all-in-one build, plus two standalone configs. All use the shared `packages/` directory — see [Package Architecture](#package-architecture) below.
 
-### `all-in-one.yaml` — Primary Config
+### `all-in-one.yaml` — Local Dev / CLI Flashing
 
-Combines car positioning and garage door control on a single ESP32-C6. This is the primary maintained config and the source of truth for all shared logic.
+Combines car positioning and garage door control. Uses `!include` to reference packages from the **local disk**. Use this when developing or flashing from the Mac CLI.
 
-- Includes all three packages: `base`, `car_sensor`, `garage_door`
 - Contains only substitutions and WiFi config — all logic lives in packages
+- Packages resolved from local `esphome/packages/` — changes take effect immediately without pushing to GitHub
 - See [Installation.md](Installation.md) for full setup
+
+### `ha-builder.yaml` — Home Assistant ESPHome Builder
+
+Produces **identical firmware** to `all-in-one.yaml`. Uses `github://` package references instead of local `!include` — packages are pulled directly from the public GitHub repo each time HA Builder compiles.
+
+Paste into the ESPHome Builder add-on in Home Assistant. No file copying required.
+
+➡️ [github.com/jwilleke/garage-car-positioning](https://github.com/jwilleke/garage-car-positioning)
+
+> Local packages and GitHub packages must be in sync to produce identical firmware. Always push before compiling from HA Builder.
+
+Required entries in HA's `secrets.yaml`:
+
+```yaml
+wifi_ssid: "your-ssid"
+wifi_password: "your-wifi-password"
+ap_password: "your-ap-password"
+ota_password: "your-ota-password"
+api_encryption_key: "your-32-byte-base64-key"
+```
+
+These secrets can be shared across ESPHome devices (simpler) or made unique per device (more secure) by using device-specific names such as `garage_api_encryption_key`.
 
 ### `car-positioning.yaml` — Standalone Car Sensor
 
@@ -73,22 +95,6 @@ Garage door control only — no radar sensors or LED strip.
 
 - Includes `base` and `garage_door` packages
 - See [garage-door-guide.md](garage-door-guide.md)
-
-### `ha-builder.yaml` — Home Assistant ESPHome Builder
-
-Identical to `all-in-one.yaml` but uses `github://` package references instead of local `!include`. Paste this file into the ESPHome Builder add-on in Home Assistant — packages are pulled directly from the public GitHub repo, no file copying required.
-
-➡️ [github.com/jwilleke/garage-car-positioning](https://github.com/jwilleke/garage-car-positioning)
-
-Required entries in HA's `secrets.yaml`:
-
-```yaml
-wifi_ssid: "your-ssid"
-wifi_password: "your-wifi-password"
-ap_password: "your-ap-password"
-ota_password: "your-ota-password"
-api_encryption_key: "your-32-byte-base64-key"
-```
 
 ---
 
@@ -108,9 +114,10 @@ All shared firmware logic lives in `esphome/packages/`. Configs compose behavior
 
 ```
 esphome/
-  all-in-one.yaml          ← substitutions + wifi only
-  car-positioning.yaml     ← substitutions + wifi only
-  garage-door.yaml         ← substitutions + wifi only
+  all-in-one.yaml          ← CLI flashing — !include (local packages)
+  ha-builder.yaml          ← HA Builder — github:// (same firmware, GitHub packages)
+  car-positioning.yaml     ← standalone car sensor — !include (local packages)
+  garage-door.yaml         ← standalone door controller — !include (local packages)
   test-minimal.yaml        ← hardware bring-up only
   packages/
     base.yaml              ← ESP32 board, logger, API, OTA, web server, system sensors

@@ -74,6 +74,22 @@ Garage door control only — no radar sensors or LED strip.
 - Includes `base` and `garage_door` packages
 - See [garage-door-guide.md](garage-door-guide.md)
 
+### `ha-builder.yaml` — Home Assistant ESPHome Builder
+
+Identical to `all-in-one.yaml` but uses `github://` package references instead of local `!include`. Paste this file into the ESPHome Builder add-on in Home Assistant — packages are pulled directly from the public GitHub repo, no file copying required.
+
+➡️ [github.com/jwilleke/garage-car-positioning](https://github.com/jwilleke/garage-car-positioning)
+
+Required entries in HA's `secrets.yaml`:
+
+```yaml
+wifi_ssid: "your-ssid"
+wifi_password: "your-wifi-password"
+ap_password: "your-ap-password"
+ota_password: "your-ota-password"
+api_encryption_key: "your-32-byte-base64-key"
+```
+
 ---
 
 ## Test Config

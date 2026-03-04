@@ -24,6 +24,25 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-03-04-02
+
+- Agent: Claude Sonnet 4.6
+- Subject: Flash/OTA workflow documentation, fix esphome run vs upload
+- Key Decision: `esphome run` is the correct command (compile + flash + logs); `esphome upload` is USB-only recovery
+- Current Issue: None
+- Testing:
+  - No firmware changes
+- Work Done:
+  - Corrected `esphome upload` → `esphome run` in CLAUDE.md Build Commands
+  - Added Flashing section to docs/esphome-configs.md: OTA workflow, validate/compile/logs commands, USB bootloader steps
+  - Linked CLAUDE.md Build Commands to docs/esphome-configs.md#flashing
+- Commits: f913eed
+- Files Modified:
+  - CLAUDE.md
+  - docs/esphome-configs.md
+
+---
+
 ## 2026-03-04-01
 
 - Agent: Claude Sonnet 4.6

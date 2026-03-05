@@ -24,6 +24,26 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-03-05-02
+
+- Agent: Claude Sonnet 4.6
+- Subject: Diagnose and fix encoder sensor logic, inverted closed switch, pulse counter calibration
+- Key Decision: `closed_switch` binary sensor state is TRUE when door is OPEN (NPN NC sensor behavior) — all lambdas and callbacks had inverted logic; rotary encoder replaced with independent pulse counters for diagnosis; calibrated full_open_counts = 37
+- Current Issue: Rotary encoder not yet restored (next step)
+- Testing:
+  - Door close → Position 0%, Status Closed, Cover shows open arrow ✓
+  - Door open → Position 100%, Status Open 100%, Cover shows close arrow ✓
+  - Sensor A: 37 pulses / full travel; Sensor B: 37 pulses / full travel ✓
+- Work Done:
+  - Replaced rotary encoder with two independent GPIO pulse counters (Sensor A/B) to diagnose why quadrature gave net ~1 count; confirmed both sensors working (37 pulses each)
+  - Fixed inverted closed switch logic throughout: `on_boot` is_off→is_on, `on_press`→`on_release` for count reset, status/cover/position lambdas all negated
+  - Added `if (!closed_switch.state) return 0` guard to position sensor
+  - Calculated rotary encoder equivalents: resolution:4 → full_open_counts=36, resolution:1 → full_open_counts=144
+- Files Modified:
+  - esphome/packages/garage-door.yaml
+
+---
+
 ## 2026-03-05-01
 
 - Agent: Claude Sonnet 4.6

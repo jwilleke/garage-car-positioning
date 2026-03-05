@@ -1,5 +1,6 @@
 # Garage door controller package
-# Rotary encoder position tracking with relay control
+# Pulse counting via two independent Hall effect sensors (diagnostic mode)
+# Rotary encoder (quadrature) temporarily removed for sensor diagnosis
 #
 # Required substitutions (define in main config):
 #   garage_door_relay_pin: GPIO for relay (e.g., GPIO10)
@@ -7,7 +8,17 @@
 #   garage_door_encoder_a_pin: GPIO for encoder A (e.g., GPIO2)
 #   garage_door_encoder_b_pin: GPIO for encoder B (e.g., GPIO3)
 #
-# full_open_counts is now a runtime number entity — calibrate from HA without reflashing
+# full_open_counts is a runtime number entity — calibrate from HA without reflashing
+
+globals:
+  - id: encoder_a_count
+    type: int
+    restore_value: false
+    initial_value: '0'
+  - id: encoder_b_count
+    type: int
+    restore_value: false
+    initial_value: '0'
 
 esphome:
   on_boot:
@@ -15,18 +26,18 @@ esphome:
     then:
       - if:
           condition:
-            binary_sensor.is_off: garage_door_closed_switch
+            binary_sensor.is_on: garage_door_closed_switch
           then:
-            - sensor.rotary_encoder.set_value:
-                id: garage_door_encoder
-                value: !lambda "return id(full_open_counts).state;"
+            - lambda: |-
+                id(encoder_a_count) = (int)id(full_open_counts).state;
+                id(encoder_b_count) = (int)id(full_open_counts).state;
 
 number:
   - platform: template
     name: "Garage Door - Full Open Counts"
     id: full_open_counts
     icon: "mdi:counter"
-    min_value: 10
+    min_value: 1
     max_value: 500
     step: 1
     initial_value: 50
@@ -56,9 +67,9 @@ button:
     id: reset_encoder_button
     icon: "mdi:counter-reset"
     on_press:
-      - sensor.rotary_encoder.set_value:
-          id: garage_door_encoder
-          value: 0
+      - lambda: |-
+          id(encoder_a_count) = 0;
+          id(encoder_b_count) = 0;
     web_server:
       sorting_group_id: group_diag
       sorting_weight: 73
@@ -79,6 +90,38 @@ switch:
 
 binary_sensor:
   - platform: gpio
+    name: "Garage Door - Sensor A"
+    id: encoder_sensor_a
+    pin:
+      number: ${garage_door_encoder_a_pin}
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on: 5ms
+      - delayed_off: 5ms
+    on_press:
+      - lambda: 'id(encoder_a_count) += 1;'
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 74
+
+  - platform: gpio
+    name: "Garage Door - Sensor B"
+    id: encoder_sensor_b
+    pin:
+      number: ${garage_door_encoder_b_pin}
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on: 5ms
+      - delayed_off: 5ms
+    on_press:
+      - lambda: 'id(encoder_b_count) += 1;'
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 75
+
+  - platform: gpio
     name: "Garage Door - Closed Switch"
     id: garage_door_closed_switch
     pin:
@@ -89,25 +132,15 @@ binary_sensor:
     filters:
       - delayed_on: 50ms
       - delayed_off: 50ms
-    on_press:
-      - sensor.rotary_encoder.set_value:
-          id: garage_door_encoder
-          value: 0
+    on_release:
+      - lambda: |-
+          id(encoder_a_count) = 0;
+          id(encoder_b_count) = 0;
     web_server:
       sorting_group_id: group_door
       sorting_weight: 21
 
 sensor:
-  - platform: rotary_encoder
-    name: "Garage Door - Position Encoder"
-    id: garage_door_encoder
-    pin_a: ${garage_door_encoder_a_pin}
-    pin_b: ${garage_door_encoder_b_pin}
-    resolution: 4
-    publish_initial_value: false
-    filters:
-      - debounce: 10ms
-
   - platform: template
     name: "Garage Door - Position"
     id: door_position_pct
@@ -115,7 +148,8 @@ sensor:
     icon: "mdi:garage"
     accuracy_decimals: 0
     lambda: |-
-      float val = clamp((float)id(garage_door_encoder).state, 0.0f, id(full_open_counts).state);
+      if (!id(garage_door_closed_switch).state) return 0.0f;
+      float val = clamp((float)id(encoder_a_count), 0.0f, id(full_open_counts).state);
       float pct = val / id(full_open_counts).state * 100.0f;
       return std::min(100.0f, std::max(0.0f, pct));
     update_interval: 500ms
@@ -124,15 +158,26 @@ sensor:
       sorting_weight: 22
 
   - platform: template
-    name: "Garage Door - Encoder Counts"
-    id: encoder_counts_sensor
+    name: "Garage Door - Sensor A Count"
+    id: encoder_a_sensor
     icon: "mdi:counter"
     accuracy_decimals: 0
-    lambda: 'return id(garage_door_encoder).state;'
-    update_interval: 2s
+    lambda: 'return id(encoder_a_count);'
+    update_interval: 1s
     web_server:
       sorting_group_id: group_diag
-      sorting_weight: 72
+      sorting_weight: 76
+
+  - platform: template
+    name: "Garage Door - Sensor B Count"
+    id: encoder_b_sensor
+    icon: "mdi:counter"
+    accuracy_decimals: 0
+    lambda: 'return id(encoder_b_count);'
+    update_interval: 1s
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 77
 
 text_sensor:
   - platform: template
@@ -140,7 +185,7 @@ text_sensor:
     id: door_status
     icon: "mdi:garage"
     lambda: |-
-      if (id(garage_door_closed_switch).state) return {"Closed"};
+      if (!id(garage_door_closed_switch).state) return {"Closed"};
       int pct = (int)id(door_position_pct).state;
       return str_sprintf("Open %d%%", pct);
     update_interval: 500ms
@@ -160,7 +205,7 @@ cover:
     stop_action:
       - switch.turn_on: garage_door_relay
     lambda: |-
-      if (id(garage_door_closed_switch).state) {
+      if (!id(garage_door_closed_switch).state) {
         return 0.0;
       }
       return id(door_position_pct).state / 100.0f;

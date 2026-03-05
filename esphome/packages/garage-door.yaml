@@ -1,6 +1,5 @@
 # Garage door controller package
-# Pulse counting via two independent Hall effect sensors (diagnostic mode)
-# Rotary encoder (quadrature) temporarily removed for sensor diagnosis
+# Rotary encoder position tracking with relay control
 #
 # Required substitutions (define in main config):
 #   garage_door_relay_pin: GPIO for relay (e.g., GPIO10)
@@ -9,13 +8,14 @@
 #   garage_door_encoder_b_pin: GPIO for encoder B (e.g., GPIO3)
 #
 # full_open_counts is a runtime number entity — calibrate from HA without reflashing
+# closed_switch state: TRUE = door OPEN, FALSE = door CLOSED (NPN NC sensor)
 
 globals:
-  - id: encoder_a_count
+  - id: encoder_cw_count
     type: int
     restore_value: false
     initial_value: '0'
-  - id: encoder_b_count
+  - id: encoder_ccw_count
     type: int
     restore_value: false
     initial_value: '0'
@@ -28,9 +28,9 @@ esphome:
           condition:
             binary_sensor.is_on: garage_door_closed_switch
           then:
-            - lambda: |-
-                id(encoder_a_count) = (int)id(full_open_counts).state;
-                id(encoder_b_count) = (int)id(full_open_counts).state;
+            - sensor.rotary_encoder.set_value:
+                id: garage_door_encoder
+                value: !lambda "return id(full_open_counts).state;"
 
 number:
   - platform: template
@@ -40,7 +40,7 @@ number:
     min_value: 1
     max_value: 500
     step: 1
-    initial_value: 50
+    initial_value: 36
     restore_value: true
     optimistic: true
     web_server:
@@ -67,9 +67,9 @@ button:
     id: reset_encoder_button
     icon: "mdi:counter-reset"
     on_press:
-      - lambda: |-
-          id(encoder_a_count) = 0;
-          id(encoder_b_count) = 0;
+      - sensor.rotary_encoder.set_value:
+          id: garage_door_encoder
+          value: 0
     web_server:
       sorting_group_id: group_diag
       sorting_weight: 73
@@ -90,38 +90,6 @@ switch:
 
 binary_sensor:
   - platform: gpio
-    name: "Garage Door - Sensor A"
-    id: encoder_sensor_a
-    pin:
-      number: ${garage_door_encoder_a_pin}
-      mode: INPUT_PULLUP
-      inverted: true
-    filters:
-      - delayed_on: 5ms
-      - delayed_off: 5ms
-    on_press:
-      - lambda: 'id(encoder_a_count) += 1;'
-    web_server:
-      sorting_group_id: group_diag
-      sorting_weight: 74
-
-  - platform: gpio
-    name: "Garage Door - Sensor B"
-    id: encoder_sensor_b
-    pin:
-      number: ${garage_door_encoder_b_pin}
-      mode: INPUT_PULLUP
-      inverted: true
-    filters:
-      - delayed_on: 5ms
-      - delayed_off: 5ms
-    on_press:
-      - lambda: 'id(encoder_b_count) += 1;'
-    web_server:
-      sorting_group_id: group_diag
-      sorting_weight: 75
-
-  - platform: gpio
     name: "Garage Door - Closed Switch"
     id: garage_door_closed_switch
     pin:
@@ -133,14 +101,28 @@ binary_sensor:
       - delayed_on: 50ms
       - delayed_off: 50ms
     on_release:
-      - lambda: |-
-          id(encoder_a_count) = 0;
-          id(encoder_b_count) = 0;
+      - sensor.rotary_encoder.set_value:
+          id: garage_door_encoder
+          value: 0
     web_server:
       sorting_group_id: group_door
       sorting_weight: 21
 
 sensor:
+  - platform: rotary_encoder
+    name: "Garage Door - Position Encoder"
+    id: garage_door_encoder
+    pin_a: ${garage_door_encoder_a_pin}
+    pin_b: ${garage_door_encoder_b_pin}
+    resolution: 4
+    publish_initial_value: false
+    filters:
+      - debounce: 10ms
+    on_clockwise:
+      - lambda: 'id(encoder_cw_count) += 1;'
+    on_anticlockwise:
+      - lambda: 'id(encoder_ccw_count) += 1;'
+
   - platform: template
     name: "Garage Door - Position"
     id: door_position_pct
@@ -149,7 +131,7 @@ sensor:
     accuracy_decimals: 0
     lambda: |-
       if (!id(garage_door_closed_switch).state) return 0.0f;
-      float val = clamp((float)id(encoder_a_count), 0.0f, id(full_open_counts).state);
+      float val = clamp((float)id(garage_door_encoder).state, 0.0f, id(full_open_counts).state);
       float pct = val / id(full_open_counts).state * 100.0f;
       return std::min(100.0f, std::max(0.0f, pct));
     update_interval: 500ms
@@ -158,22 +140,33 @@ sensor:
       sorting_weight: 22
 
   - platform: template
-    name: "Garage Door - Sensor A Count"
-    id: encoder_a_sensor
+    name: "Garage Door - Encoder Counts"
+    id: encoder_counts_sensor
     icon: "mdi:counter"
     accuracy_decimals: 0
-    lambda: 'return id(encoder_a_count);'
+    lambda: 'return id(garage_door_encoder).state;'
+    update_interval: 2s
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 72
+
+  - platform: template
+    name: "Garage Door - Encoder CW Steps"
+    id: encoder_cw_sensor
+    icon: "mdi:rotate-right"
+    accuracy_decimals: 0
+    lambda: 'return id(encoder_cw_count);'
     update_interval: 1s
     web_server:
       sorting_group_id: group_diag
       sorting_weight: 76
 
   - platform: template
-    name: "Garage Door - Sensor B Count"
-    id: encoder_b_sensor
-    icon: "mdi:counter"
+    name: "Garage Door - Encoder CCW Steps"
+    id: encoder_ccw_sensor
+    icon: "mdi:rotate-left"
     accuracy_decimals: 0
-    lambda: 'return id(encoder_b_count);'
+    lambda: 'return id(encoder_ccw_count);'
     update_interval: 1s
     web_server:
       sorting_group_id: group_diag

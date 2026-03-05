@@ -24,6 +24,24 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-03-05-03
+
+- Agent: Claude Sonnet 4.6
+- Subject: Restore rotary encoder with corrected logic
+- Key Decision: Rotary encoder restored with `resolution: 4` and `full_open_counts` default 36; CW/CCW diagnostic counters retained; all inverted closed-switch logic carried forward from previous fix
+- Current Issue: Pending hardware test — if quadrature still cancels, will try resolution:1
+- Testing:
+  - Config validates; not yet flashed
+- Work Done:
+  - Restored `platform: rotary_encoder` (resolution:4, pin_a=GPIO2, pin_b=GPIO3)
+  - Carried forward all inverted logic fixes from 2026-03-05-02
+  - Kept CW/CCW step counters for ongoing diagnostics
+  - Set full_open_counts initial_value to 36 (calibrated)
+- Files Modified:
+  - esphome/packages/garage-door.yaml
+
+---
+
 ## 2026-03-05-02
 
 - Agent: Claude Sonnet 4.6

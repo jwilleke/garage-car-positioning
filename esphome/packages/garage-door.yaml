@@ -6,9 +6,36 @@
 #   garage_door_closed_switch_pin: GPIO for reed switch (e.g., GPIO1)
 #   garage_door_encoder_a_pin: GPIO for encoder A (e.g., GPIO2)
 #   garage_door_encoder_b_pin: GPIO for encoder B (e.g., GPIO3)
-#   garage_door_full_open_counts: Encoder counts at full open — calibrate after flash
+#
+# full_open_counts is now a runtime number entity — calibrate from HA without reflashing
+
+esphome:
+  on_boot:
+    priority: -200  # after sensors initialized; handles open-on-boot
+    then:
+      - if:
+          condition:
+            binary_sensor.is_off: garage_door_closed_switch
+          then:
+            - sensor.rotary_encoder.set_value:
+                id: garage_door_encoder
+                value: !lambda "return id(full_open_counts).state;"
 
 number:
+  - platform: template
+    name: "Garage Door - Full Open Counts"
+    id: full_open_counts
+    icon: "mdi:counter"
+    min_value: 10
+    max_value: 500
+    step: 1
+    initial_value: 50
+    restore_value: true
+    optimistic: true
+    web_server:
+      sorting_group_id: group_config
+      sorting_weight: 37
+
   - platform: template
     name: "Garage Door - Relay Pulse (ms)"
     id: relay_pulse_ms
@@ -88,8 +115,8 @@ sensor:
     icon: "mdi:garage"
     accuracy_decimals: 0
     lambda: |-
-      float val = clamp((float)id(garage_door_encoder).state, 0.0f, (float)${garage_door_full_open_counts});
-      float pct = val / (float)${garage_door_full_open_counts} * 100.0f;
+      float val = clamp((float)id(garage_door_encoder).state, 0.0f, id(full_open_counts).state);
+      float pct = val / id(full_open_counts).state * 100.0f;
       return std::min(100.0f, std::max(0.0f, pct));
     update_interval: 500ms
     web_server:

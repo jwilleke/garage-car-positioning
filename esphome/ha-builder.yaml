@@ -28,10 +28,6 @@ substitutions:
   person_max_distance: "59.1"
   danger_zone_distance: "118.1"
 
-  # Garage Door Settings
-  # Recalibrate after first flash: open door fully, read Garage Door - Encoder Counts from HA diagnostics
-  garage_door_full_open_counts: "138"   # estimated; recalibrate on hardware
-
   # GPIO Assignments for ESP32-C6 DevKit (All-in-One)
   led_strip_pin: GPIO0
   garage_door_closed_switch_pin: GPIO1

@@ -24,6 +24,30 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-03-05-01
+
+- Agent: Claude Sonnet 4.6
+- Subject: OTA reliability fixes, firmware version sensor fix, full_open_counts runtime calibration
+- Key Decision: `garage_door_full_open_counts` converted from YAML substitution to persistent `number` entity (`full_open_counts`, default 50) — calibrate from HA without reflashing; WiFi TX power raised 8.5→17dBm for reliable OTA transfers
+- Current Issue: None
+- Testing:
+  - Pending flash and OTA verification
+- Work Done:
+  - `packages/base.yaml`: fixed firmware version sensor lambda (`return std::string(...)`) and changed `update_interval` from `never` to `120s` so it publishes reliably after boot
+  - `packages/base.yaml`: added `safe_mode` (3 attempts, 3min timeout) — ensures remote OTA recovery if bad firmware is flashed
+  - `all-in-one.yaml`: raised `output_power` from `8.5dBm` to `17dBm` for stable OTA transfers
+  - `packages/garage-door.yaml`: added `number.full_open_counts` (persistent, shown in HA Configuration group) replacing hardcoded substitution
+  - `packages/garage-door.yaml`: added `on_boot` (priority -200) to initialize encoder to `full_open_counts` when door is open at startup — fixes cover reporting "closed" after reboot with door open
+  - Removed `garage_door_full_open_counts` substitution from `all-in-one.yaml`, `garage-door.yaml`, `ha-builder.yaml`
+- Files Modified:
+  - esphome/packages/base.yaml
+  - esphome/packages/garage-door.yaml
+  - esphome/all-in-one.yaml
+  - esphome/garage-door.yaml
+  - esphome/ha-builder.yaml
+
+---
+
 ## 2026-03-04-03
 
 - Agent: Claude Sonnet 4.6

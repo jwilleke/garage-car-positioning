@@ -57,6 +57,10 @@ ota:
   - platform: esphome
     password: !secret ota_password
 
+safe_mode:
+  num_attempts: 3
+  reboot_timeout: 3min
+
 captive_portal:
 
 web_server:
@@ -242,8 +246,8 @@ text_sensor:
   - platform: template
     name: "System - Firmware Version"
     icon: "mdi:tag"
-    lambda: 'return {"${firmware_version}"};'
-    update_interval: never
+    lambda: 'return std::string("${firmware_version}");'
+    update_interval: 120s
     web_server:
       sorting_group_id: group_diag
       sorting_weight: 46

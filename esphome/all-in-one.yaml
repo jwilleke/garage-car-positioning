@@ -19,7 +19,6 @@ substitutions:
   # Garage Door Settings
   # IMPORTANT: Recalibrate after flash — open door fully, read encoder count from HA diagnostics.
   # Prior manual-counting value was 69; rotary_encoder at resolution:4 may differ.
-  garage_door_full_open_counts: "138"   # estimated; recalibrate on hardware
 
   # GPIO Assignments for ESP32-C6 DevKit (All-in-One)
   # See docs/hardware/ESP32-C6 DevKit.md for pinout details
@@ -51,7 +50,7 @@ wifi:
   power_save_mode: none
   enable_on_boot: true
   fast_connect: on
-  output_power: 8.5dBm
+  output_power: 17dBm
   ap:
     ssid: "garage-all-in-one"
     password: !secret ap_password

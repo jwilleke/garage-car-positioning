@@ -10,9 +10,6 @@ substitutions:
   garage_door_encoder_a_pin: GPIO2
   garage_door_encoder_b_pin: GPIO3
 
-  # Calibrate this value by opening the door fully and noting the encoder count
-  garage_door_full_open_counts: "10000"
-
 packages:
   base: !include packages/base.yaml
   garage_door: !include packages/garage-door.yaml

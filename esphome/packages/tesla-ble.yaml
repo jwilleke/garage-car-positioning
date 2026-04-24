@@ -26,15 +26,15 @@ esp32_ble_tracker:
 bluetooth_proxy:
   active: false     # passive proxy — forwards advertisements to HA only
 
-# ── Phase 2: uncomment after MAC discovery ─────────────────────────────────
-# binary_sensor:
-#   - platform: ble_presence
-#     mac_address: !secret blue_moon_ble_mac
-#     name: "Tesla Blue Moon Approaching"
-#     id: tesla_blue_moon_approaching
-#     icon: "mdi:car-electric"
-#     delayed_on: 10s    # must be seen continuously for 10s before "on"
-#     delayed_off: 30s   # must be absent for 30s before "off"
-#     web_server:
-#       sorting_group_id: group_car
-#       sorting_weight: 15
+binary_sensor:
+  - platform: ble_presence
+    mac_address: !secret blue_moon_ble_mac
+    name: "Tesla Blue Moon Approaching"
+    id: tesla_blue_moon_approaching
+    icon: "mdi:car-electric"
+    filters:
+      - delayed_on: 10s    # must be seen continuously for 10s before "on"
+      - delayed_off: 30s   # must be absent for 30s before "off"
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 15

@@ -26,9 +26,9 @@ ESPHOME_DIR="$PROJECT_ROOT/esphome"
 # ESPHome config files to update
 ESPHOME_CONFIGS=(
     "$ESPHOME_DIR/all-in-one.yaml"
-    "$ESPHOME_DIR/garage-car-sensor.yaml"
-    "$ESPHOME_DIR/esp32-garage-door.yaml"
-    "$ESPHOME_DIR/simple-wifi.yaml"
+    "$ESPHOME_DIR/car-positioning.yaml"
+    "$ESPHOME_DIR/garage-door.yaml"
+    "$ESPHOME_DIR/ha-builder.yaml"
 )
 
 # Colors for output

@@ -24,6 +24,34 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-04-25-02
+
+- Agent: Claude Sonnet 4.6
+- Subject: Resolve VERSION/CHANGELOG drift; release v0.2.2
+- Key Decision: Bump all four production configs to a single project version (`0.2.2`); backfill CHANGELOG with `[0.2.0]` (BLE Phase 1) and `[0.2.1]` (BLE Phase 2) to explain the firmware jump that was already on the device; ship the relay rename as `[0.2.2]`; fix stale `scripts/version.sh` ESPHOME_CONFIGS array (referenced three deleted/renamed files, missing three current ones)
+- Current Issue: None — coherent release state restored
+- Testing:
+  - `esphome config all-in-one.yaml` — valid
+  - `esphome config car-positioning.yaml` — valid
+  - `esphome config garage-door.yaml` — valid
+  - `esphome config ha-builder.yaml` — valid
+- Work Done:
+  - Fixed `scripts/version.sh` ESPHOME_CONFIGS: removed `garage-car-sensor.yaml`, `esp32-garage-door.yaml`, `simple-wifi.yaml` (no longer exist); added `car-positioning.yaml`, `garage-door.yaml`, `ha-builder.yaml`
+  - Ran `./scripts/version.sh set 0.2.2`: bumped VERSION 0.1.1 → 0.2.2; bumped firmware_version in all 4 configs (all-in-one and ha-builder were 0.2.1; car-positioning and garage-door were stuck at 0.1.1)
+  - Backfilled CHANGELOG.md with `[0.2.0]`, `[0.2.1]`, `[0.2.2]` sections plus updated reference links
+  - Tag `v0.2.2` recreated against the version-bump commit (script tagged HEAD before commit existed)
+- Files Modified:
+  - VERSION
+  - CHANGELOG.md
+  - scripts/version.sh
+  - esphome/all-in-one.yaml
+  - esphome/car-positioning.yaml
+  - esphome/garage-door.yaml
+  - esphome/ha-builder.yaml
+  - docs/project_log.md
+
+---
+
 ## 2026-04-25-01
 
 - Agent: Claude Sonnet 4.6

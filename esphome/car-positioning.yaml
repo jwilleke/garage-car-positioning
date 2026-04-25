@@ -1,7 +1,7 @@
 substitutions:
   device_name: garage-car-sensor
   friendly_name: "Garage Car Sensor"
-  firmware_version: "0.1.1"
+  firmware_version: "0.2.2"
 
   # Car Positioning Settings
   # Front sensor (ceiling-mounted): Y = distance from ceiling to car top; X = lateral offset

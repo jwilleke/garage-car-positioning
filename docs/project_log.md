@@ -42,6 +42,58 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-04-24-02
+
+- Agent: Claude Sonnet 4.6
+- Subject: BLE presence sensor for Tesla Blue Moon (Phase 2)
+- Key Decision: Uncommented `ble_presence` binary sensor in `tesla-ble.yaml` now that Blue Moon's MAC (`0c:0a:df:b3:ae:13`) is known; `delayed_on`/`delayed_off` filters added to debounce intermittent BLE advertising; firmware bumped 0.2.0 → 0.2.1
+- Current Issue: Part of jwilleke/mjs-ha#1 — Tesla approach detection, Layer 1
+- Work Done:
+  - Enabled `ble_presence` binary sensor for Blue Moon MAC in `packages/tesla-ble.yaml` with delayed_on/delayed_off debounce filters
+  - Bumped firmware version 0.2.0 → 0.2.1 in `all-in-one.yaml` and `ha-builder.yaml`
+  - Added `blue_moon_ble_mac` to required secrets comment in `ha-builder.yaml`
+- Commits: 96119e7
+- Files Modified:
+  - esphome/packages/tesla-ble.yaml
+  - esphome/all-in-one.yaml
+  - esphome/ha-builder.yaml
+
+---
+
+## 2026-04-24-01
+
+- Agent: Claude Sonnet 4.6
+- Subject: BLE proximity detection package for Tesla Blue Moon (Phase 1 discovery)
+- Key Decision: New `tesla-ble.yaml` package introduces passive `esp32_ble_tracker` (100% duty cycle) plus passive `bluetooth_proxy`; `ble_presence` binary sensor left commented out pending discovery of Blue Moon's BLE MAC address; firmware bumped 0.1.1 → 0.2.0
+- Current Issue: Phase 1 — needs Blue Moon MAC capture before Phase 2 enables the presence sensor
+- Work Done:
+  - Created `esphome/packages/tesla-ble.yaml` (passive BLE tracker + bluetooth_proxy, ble_presence stub commented out)
+  - Included new tesla_ble package in `all-in-one.yaml`; bumped firmware 0.1.1 → 0.2.0
+  - Added `blue_moon_ble_mac` placeholder to `secrets.yaml.example`
+- Commits: 387e9b6
+- Files Modified:
+  - esphome/packages/tesla-ble.yaml (new)
+  - esphome/all-in-one.yaml
+  - esphome/secrets.yaml.example
+
+---
+
+## 2026-03-22-01
+
+- Agent: Jim
+- Subject: Add GitHub issue templates (bug report, epic, feature request)
+- Work Done:
+  - Added `.github/ISSUE_TEMPLATE/bug_report.md` (50 lines)
+  - Added `.github/ISSUE_TEMPLATE/epic.md` (29 lines)
+  - Added `.github/ISSUE_TEMPLATE/feature_request.md` (54 lines)
+- Commits: 9815fec, d322296, 7befec2
+- Files Modified:
+  - .github/ISSUE_TEMPLATE/bug_report.md (new)
+  - .github/ISSUE_TEMPLATE/epic.md (new)
+  - .github/ISSUE_TEMPLATE/feature_request.md (new)
+
+---
+
 ## 2026-03-05-03
 
 - Agent: Claude Sonnet 4.6

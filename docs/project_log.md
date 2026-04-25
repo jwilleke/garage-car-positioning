@@ -24,6 +24,24 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-04-25-01
+
+- Agent: Claude Sonnet 4.6
+- Subject: Rename relay switch entity from "Open / Close" to "Toggle"
+- Key Decision: Friendly name shortened to "Garage Door - Toggle" to better reflect momentary-relay behavior (single pulse toggles door state); HA `cover.garage_door` remains the recommended control surface for open/close intent
+- Current Issue: Entity rename will cause HA to register a new `switch.garage_door_toggle`; old `switch.garage_door_open_close` will go orphaned and needs manual cleanup in HA UI
+- Testing:
+  - `esphome config esphome/all-in-one.yaml` — valid
+  - `esphome config esphome/garage-door.yaml` — valid
+  - Not yet flashed
+- Work Done:
+  - Renamed `switch.garage_door_relay` friendly name in `packages/garage-door.yaml`
+- Files Modified:
+  - esphome/packages/garage-door.yaml
+  - docs/project_log.md
+
+---
+
 ## 2026-03-05-03
 
 - Agent: Claude Sonnet 4.6

@@ -76,7 +76,7 @@ button:
 
 switch:
   - platform: gpio
-    name: "Garage Door - Open / Close"
+    name: "Garage Door - Toggle"
     pin: ${garage_door_relay_pin}
     id: garage_door_relay
     icon: "mdi:garage-open-variant"

@@ -11,7 +11,10 @@
       "mcp__ide__getDiagnostics",
       "Read(//Users/jim/.local/bin/**)",
       "Read(//opt/homebrew/bin/**)",
-      "Bash(pip show *)"
+      "Bash(pip show *)",
+      "Bash(gh label *)",
+      "Bash([ -f \"/Volumes/jobd/code/GitHub/garage-car-positioning/esphome/$f\" ])",
+      "Bash(./scripts/version.sh set *)"
     ]
   }
 }

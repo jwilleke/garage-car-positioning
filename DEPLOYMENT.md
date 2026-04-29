@@ -35,9 +35,15 @@ esphome/.esphome/build/esp32-garage-all-in-one/.pioenvs/esp32-garage-all-in-one/
 
 Once the device is on your network, you can update wirelessly:
 
-```bash
-cd esphome
-esphome upload all-in-one.yaml
+``` bash
+ # Option 1: Activate the venv first            
+cd /Volumes/jobd/code/GitHub/garage-car-positioning/esphome
+source .venv/bin/activate                                                                                                                                                                         
+esphome run all-in-one.yaml
+
+# Option 2: Call it directly (no activation needed) quicker for a one-off flash
+cd /Volumes/jobd/code/GitHub/garage-car-positioning/esphome
+.venv/bin/esphome run all-in-one.yaml
 ```
 
 - Select option `[2]` for OTA upload when prompted

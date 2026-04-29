@@ -24,6 +24,30 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-04-29-01
+
+- Agent: Claude Sonnet 4.6
+- Subject: Fix encoder position tracking (issue #13) — replace rotary_encoder with single-channel pulse counter
+- Key Decision: Abandoned quadrature (`rotary_encoder`, resolution:4) — Hall sensors not precisely 90° out of phase causes CW/CCW cancellation at fast motor speed (evidence: lifetime cw=147, ccw=146 across many cycles). Replaced with single `binary_sensor` on GPIO2 + `door_is_opening` bool global; direction set by open/close scripts. GPIO3 physically wired but unused.
+- Current Issue: Pending hardware test — flash and observe `encoder_counts_sensor` climbing 0→37 during full open travel
+- Testing:
+  - `esphome config esphome/all-in-one.yaml` — pending (esphome not in CI shell PATH)
+- Work Done:
+  - Removed `sensor.rotary_encoder` (resolution:4, debounce:10ms, on_clockwise/on_anticlockwise)
+  - Added `door_counts` (int global) and `door_is_opening` (bool global)
+  - Added internal `binary_sensor` on `${garage_door_encoder_a_pin}` (1ms debounce, on_press increments/decrements `door_counts` and CW/CCW diagnostic counters)
+  - Set `door_is_opening = true` in `garage_door_open_pulse` script; `false` in `garage_door_close_pulse`
+  - `closed_switch.on_release`: resets `door_counts = 0`, `door_is_opening = true` (alongside existing current_operation reset)
+  - `on_boot`: sets `door_counts = full_open_counts` when door is open at startup
+  - Reset button: sets `door_counts = 0`, `door_is_opening = false`
+  - Template lambdas updated: `door_position_pct` and `encoder_counts_sensor` read `door_counts` instead of `garage_door_encoder.state`
+  - `full_open_counts.initial_value` updated 36 → 37 (calibrated)
+  - Updated file header comment
+- Files Modified:
+  - esphome/packages/garage-door.yaml
+
+---
+
 ## 2026-04-25-02
 
 - Agent: Claude Sonnet 4.6

@@ -1,11 +1,14 @@
 # Garage door controller package
-# Rotary encoder position tracking with relay control
+# Single-channel pulse counting with direction tracking (issue #13)
+# GPIO2 (encoder A) counts pulses; direction set by open/close scripts.
+# GPIO3 (encoder B) physically wired but unused — quadrature abandoned due to
+# phase-cancellation at fast motor speed (CW ≈ CCW → net zero).
 #
 # Required substitutions (define in main config):
 #   garage_door_relay_pin: GPIO for relay (e.g., GPIO10)
 #   garage_door_closed_switch_pin: GPIO for reed switch (e.g., GPIO1)
 #   garage_door_encoder_a_pin: GPIO for encoder A (e.g., GPIO2)
-#   garage_door_encoder_b_pin: GPIO for encoder B (e.g., GPIO3)
+#   garage_door_encoder_b_pin: GPIO for encoder B (e.g., GPIO3) — wired, unused
 #
 # full_open_counts is a runtime number entity — calibrate from HA without reflashing
 # closed_switch state: TRUE = door OPEN, FALSE = door CLOSED (NPN NC sensor)
@@ -19,6 +22,14 @@ globals:
     type: int
     restore_value: false
     initial_value: '0'
+  - id: door_counts
+    type: int
+    restore_value: false
+    initial_value: '0'
+  - id: door_is_opening
+    type: bool
+    restore_value: false
+    initial_value: 'false'
 
 esphome:
   on_boot:
@@ -28,9 +39,9 @@ esphome:
           condition:
             binary_sensor.is_on: garage_door_closed_switch
           then:
-            - sensor.rotary_encoder.set_value:
-                id: garage_door_encoder
-                value: !lambda "return id(full_open_counts).state;"
+            - lambda: |-
+                id(door_counts) = (int)id(full_open_counts).state;
+                id(door_is_opening) = false;
 
 number:
   - platform: template
@@ -40,7 +51,7 @@ number:
     min_value: 1
     max_value: 500
     step: 1
-    initial_value: 36
+    initial_value: 37
     restore_value: true
     optimistic: true
     web_server:
@@ -67,9 +78,9 @@ button:
     id: reset_encoder_button
     icon: "mdi:counter-reset"
     on_press:
-      - sensor.rotary_encoder.set_value:
-          id: garage_door_encoder
-          value: 0
+      - lambda: |-
+          id(door_counts) = 0;
+          id(door_is_opening) = false;
     web_server:
       sorting_group_id: group_diag
       sorting_weight: 73
@@ -87,6 +98,7 @@ script:
             - lambda: |-
                 id(garage_door).current_operation = cover::COVER_OPERATION_OPENING;
                 id(garage_door).publish_state();
+                id(door_is_opening) = true;
             - switch.turn_on: garage_door_relay
             - delay: !lambda "return (uint32_t)id(relay_pulse_ms).state + 500;"
 
@@ -102,6 +114,7 @@ script:
             - lambda: |-
                 id(garage_door).current_operation = cover::COVER_OPERATION_CLOSING;
                 id(garage_door).publish_state();
+                id(door_is_opening) = false;
             - switch.turn_on: garage_door_relay
             - delay: !lambda "return (uint32_t)id(relay_pulse_ms).state + 500;"
 
@@ -121,6 +134,25 @@ switch:
 
 binary_sensor:
   - platform: gpio
+    id: encoder_a_pin
+    internal: true
+    pin:
+      number: ${garage_door_encoder_a_pin}
+      mode: INPUT_PULLUP
+    filters:
+      - delayed_on: 1ms
+      - delayed_off: 1ms
+    on_press:
+      - lambda: |-
+          if (id(door_is_opening)) {
+            id(door_counts) += 1;
+            id(encoder_cw_count) += 1;
+          } else {
+            id(door_counts) = std::max(0, id(door_counts) - 1);
+            id(encoder_ccw_count) += 1;
+          }
+
+  - platform: gpio
     name: "Garage Door - Closed Switch"
     id: garage_door_closed_switch
     pin:
@@ -135,28 +167,13 @@ binary_sensor:
       - lambda: |-
           id(garage_door).current_operation = cover::COVER_OPERATION_IDLE;
           id(garage_door).publish_state();
-      - sensor.rotary_encoder.set_value:
-          id: garage_door_encoder
-          value: 0
+          id(door_counts) = 0;
+          id(door_is_opening) = true;
     web_server:
       sorting_group_id: group_door
       sorting_weight: 21
 
 sensor:
-  - platform: rotary_encoder
-    name: "Garage Door - Position Encoder"
-    id: garage_door_encoder
-    pin_a: ${garage_door_encoder_a_pin}
-    pin_b: ${garage_door_encoder_b_pin}
-    resolution: 4
-    publish_initial_value: false
-    filters:
-      - debounce: 10ms
-    on_clockwise:
-      - lambda: 'id(encoder_cw_count) += 1;'
-    on_anticlockwise:
-      - lambda: 'id(encoder_ccw_count) += 1;'
-
   - platform: template
     name: "Garage Door - Position"
     id: door_position_pct
@@ -165,7 +182,7 @@ sensor:
     accuracy_decimals: 0
     lambda: |-
       if (!id(garage_door_closed_switch).state) return 0.0f;
-      float val = clamp((float)id(garage_door_encoder).state, 0.0f, id(full_open_counts).state);
+      float val = clamp((float)id(door_counts), 0.0f, id(full_open_counts).state);
       float pct = val / id(full_open_counts).state * 100.0f;
       return std::min(100.0f, std::max(0.0f, pct));
     update_interval: 500ms
@@ -178,7 +195,7 @@ sensor:
     id: encoder_counts_sensor
     icon: "mdi:counter"
     accuracy_decimals: 0
-    lambda: 'return id(garage_door_encoder).state;'
+    lambda: 'return (float)id(door_counts);'
     update_interval: 2s
     web_server:
       sorting_group_id: group_diag

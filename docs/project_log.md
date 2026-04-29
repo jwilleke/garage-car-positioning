@@ -24,6 +24,21 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-04-29-04
+
+- Agent: Claude Sonnet 4.6
+- Subject: Fix HA Builder error — push corrected ha-builder.yaml to HA host; OTA flash v0.2.5
+- Key Decision: Used `scp` to push `ha-builder.yaml` directly to `root@192.168.68.20:/config/esphome/garage-all-in-one.yaml`, bypassing the ESPHome add-on UI
+- Work Done:
+  - Pushed corrected `ha-builder.yaml` (no `tesla_ble` package) to HA ESPHome config path
+  - User triggered OTA flash from HA ESPHome add-on — v0.2.5 now live
+  - Updated cross-project sync state: HA Builder error resolved, encoder verification still pending
+- Files Modified:
+  - docs/cross-project.md
+  - docs/project_log.md
+
+---
+
 ## 2026-04-29-02
 
 - Agent: Claude Sonnet 4.6

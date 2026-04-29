@@ -5,7 +5,16 @@
 **Home Assistant config:** `/Volumes/jobd/code/GitHub/mjs-ha`
 GitHub: <https://github.com/jwilleke/mjs-ha>
 
-The HA project contains Node-RED flows and HA config that consume entities published by this firmware.
+## Responsibility Split
+
+| Concern | Firmware (this repo) | HA / mjs-ha |
+|---|---|---|
+| Garage door control | Relay, encoder position, cover entity | Node-RED flows consume cover entity |
+| Car positioning | LD2450 radar sensors, LED strip | Consume parking sensors for notifications |
+| BLE scanning | Passive scan, forward ALL advertisements + RSSI to HA | Identify devices by MAC, detect approach/departure via RSSI trends |
+| Notifications | — | Node-RED "Garage" flow triggers on entity state changes |
+
+**BLE design principle:** Firmware is fully MAC-agnostic. `esp32_ble_tracker` + `bluetooth_proxy` forward every BLE advertisement (RSSI included) to HA. HA configures which MACs to track and determines approach/departure. No BLE device knowledge lives in firmware.
 
 ## Entity IDs Exposed by This Firmware
 
@@ -15,52 +24,50 @@ Device name: `esp32-garage-all-in-one` → HA entity prefix: `garage_all_in_one_
 
 | Entity | Type | Description |
 |---|---|---|
-| `cover.garage_all_in_one_garage_door` | cover | Main garage door control (open/close/stop) |
+| `cover.garage_all_in_one_garage_door` | cover | Primary control — open/close/stop |
 | `sensor.garage_all_in_one_garage_door_position` | sensor | Door position 0–100% |
 | `sensor.garage_all_in_one_garage_door_status` | text_sensor | "Closed" or "Open X%" |
 | `binary_sensor.garage_all_in_one_garage_door_closed_switch` | binary_sensor | Reed switch — TRUE = door open |
-| `switch.garage_all_in_one_garage_door_open_close` | switch | Relay trigger (momentary) |
-| `number.garage_all_in_one_garage_door_full_open_counts` | number | Encoder calibration (runtime) |
-| `number.garage_all_in_one_garage_door_relay_pulse_ms` | number | Relay pulse duration (runtime) |
+| `switch.garage_all_in_one_garage_door_toggle` | switch | Raw relay trigger (prefer cover entity) |
+| `number.garage_all_in_one_garage_door_full_open_counts` | number | Encoder calibration (adjustable from HA) |
+| `number.garage_all_in_one_garage_door_relay_pulse_ms` | number | Relay pulse duration (adjustable from HA) |
 
 ### Car Positioning
 
 | Entity | Type | Description |
 |---|---|---|
-| `binary_sensor.garage_all_in_one_car_detected` | binary_sensor | Car present in garage |
-| `binary_sensor.garage_all_in_one_car_correctly_parked` | binary_sensor | Car in target zone |
+| `binary_sensor.garage_all_in_one_car_position_vehicle_detected` | binary_sensor | Car present in garage |
+| `binary_sensor.garage_all_in_one_car_position_correctly_parked` | binary_sensor | Car in target zone |
+| `binary_sensor.garage_all_in_one_car_position_person_in_danger_zone` | binary_sensor | Person near car |
 | `sensor.garage_all_in_one_car_position_parking_guidance` | text_sensor | Parking direction text |
-| `light.garage_all_in_one_car_position_led_strip` | light | WS2812B LED strip |
+| `light.garage_all_in_one_car_position_led_strip` | light | WS2812B LED strip (auto-managed by firmware) |
 
-### BLE Proximity
+### BLE
 
-Firmware knows nothing about specific devices — HA identifies them.
-
-| Entity | Type | Description |
-|---|---|---|
-| `binary_sensor.garage_all_in_one_target_approaching` | binary_sensor | BLE target in range (10s on, 30s off delay) |
-
-All nearby BLE devices (RSSI, iBeacon UUIDs, etc.) are also forwarded to HA via `bluetooth_proxy` and appear in Settings → Bluetooth.
+No firmware-level BLE entity. The `bluetooth_proxy` forwards all raw BLE advertisements to HA.
+HA surfaces nearby BLE devices (with RSSI) in Settings → Devices & Services → Bluetooth.
+mjs-ha handles device identification and approach/departure logic.
 
 ### System
 
 | Entity | Type | Description |
 |---|---|---|
 | `sensor.garage_all_in_one_system_uptime` | sensor | Device uptime |
-| `binary_sensor.garage_all_in_one_person_in_danger_zone` | binary_sensor | Person near car |
+| `sensor.garage_all_in_one_system_firmware_version` | text_sensor | Firmware version string |
 
 ## Coordination Rules
 
-- Any rename of an entity `name:` field in this firmware changes the HA entity ID — update Node-RED flows and HA automations in `mjs-ha` before or immediately after flashing
-- The `cover.garage_all_in_one_garage_door` entity is the primary control surface — prefer it over the raw relay switch
-- After flashing new firmware, run `sync-from-homeassistant.sh` in `mjs-ha` and check `overview.md` for unavailable entities
+- Entity `name:` renames in firmware change HA entity IDs — update Node-RED flows in mjs-ha before or immediately after flashing
+- `cover.garage_all_in_one_garage_door` is the primary control surface — prefer it over the raw relay switch
+- After flashing, run `sync-from-homeassistant.sh` in mjs-ha and check `overview.md` for unavailable entities
+- BLE device MACs are configured in mjs-ha only — never in firmware
 
 ## Current Sync State
 
 Last updated: 2026-04-29
 
-- Firmware version: v0.2.4 (pending version bump + OTA flash)
-- Issue #13 (encoder): fixed in `6ecc425` — pending hardware verification (OTA flash + observe counts climbing 0→37)
-- Issue #11 (BLE): implemented in `99f169d` — `tesla-ble.yaml` deleted, BLE merged into `garage-door.yaml`; `secrets.yaml` `ble_target_mac` must be set to real MAC before flash
-- Entity rename: `binary_sensor.garage_all_in_one_tesla_blue_moon_approaching` → `binary_sensor.garage_all_in_one_target_approaching` — update any mjs-ha flows referencing old entity
-- Node-RED flows in `mjs-ha` that use garage entities: search `flows.pretty.json` for `garage_all_in_one`
+- Firmware: v0.2.4 — pending OTA flash (commits `6ecc425` encoder fix, `99f169d`+`b97ff00` BLE refactor)
+- Issue #13 (encoder): fixed — verify by watching `Garage Door - Encoder Counts` climb 0→37 during full open
+- Issue #11 (BLE): `tesla-ble.yaml` deleted; firmware now MAC-agnostic (`bluetooth_proxy` only)
+- Entity removed: `binary_sensor.garage_all_in_one_tesla_blue_moon_approaching` / `target_approaching` — no longer exists; HA handles BLE presence directly
+- mjs-ha action needed: configure target BLE MAC(s) in HA Bluetooth integration or Node-RED for approach/departure detection

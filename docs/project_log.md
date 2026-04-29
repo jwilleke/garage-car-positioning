@@ -24,6 +24,31 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-04-29-02
+
+- Agent: Claude Sonnet 4.6
+- Subject: Make BLE proximity detection device-agnostic; merge into garage-door.yaml (issue #11)
+- Key Decision: Firmware has no knowledge of specific BLE devices. `tesla-ble.yaml` deleted; `esp32_ble_tracker`, `bluetooth_proxy`, and a generic `binary_sensor.ble_presence` merged into `garage-door.yaml`. Secret renamed `blue_moon_ble_mac` → `ble_target_mac`. Entity renamed to `binary_sensor.garage_all_in_one_target_approaching`.
+- Current Issue: `secrets.yaml` placeholder `ble_target_mac: "AA:BB:CC:DD:EE:FF"` must be updated to actual MAC before flash
+- Testing:
+  - `esphome config esphome/garage-door.yaml` — Configuration is valid!
+- Work Done:
+  - Merged `esp32_ble_tracker` + `bluetooth_proxy` + `binary_sensor.ble_presence` into `packages/garage-door.yaml`
+  - Renamed binary sensor: "Tesla Blue Moon Approaching" → "Target Approaching"; id `target_approaching`
+  - Renamed secret: `blue_moon_ble_mac` → `ble_target_mac` in `secrets.yaml.example` and `ha-builder.yaml`
+  - Removed `tesla_ble` package include from `all-in-one.yaml` and `ha-builder.yaml`
+  - Deleted `esphome/packages/tesla-ble.yaml`
+  - Updated `docs/cross-project.md` with new entity name and BLE proxy note
+- Files Modified:
+  - esphome/packages/garage-door.yaml
+  - esphome/packages/tesla-ble.yaml (deleted)
+  - esphome/all-in-one.yaml
+  - esphome/ha-builder.yaml
+  - esphome/secrets.yaml.example
+  - docs/cross-project.md
+
+---
+
 ## 2026-04-29-01
 
 - Agent: Claude Sonnet 4.6

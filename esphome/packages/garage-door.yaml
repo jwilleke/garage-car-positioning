@@ -4,14 +4,31 @@
 # GPIO3 (encoder B) physically wired but unused — quadrature abandoned due to
 # phase-cancellation at fast motor speed (CW ≈ CCW → net zero).
 #
+# Also includes generic BLE proximity detection (issue #11):
+#   bluetooth_proxy forwards all BLE advertisements + RSSI to HA.
+#   binary_sensor.ble_presence reports when ble_target_mac is nearby.
+#   Firmware has no knowledge of what device ble_target_mac belongs to.
+#
 # Required substitutions (define in main config):
 #   garage_door_relay_pin: GPIO for relay (e.g., GPIO10)
 #   garage_door_closed_switch_pin: GPIO for reed switch (e.g., GPIO1)
 #   garage_door_encoder_a_pin: GPIO for encoder A (e.g., GPIO2)
 #   garage_door_encoder_b_pin: GPIO for encoder B (e.g., GPIO3) — wired, unused
 #
+# Required secrets:
+#   ble_target_mac: BLE MAC of target device to detect approaching
+#
 # full_open_counts is a runtime number entity — calibrate from HA without reflashing
 # closed_switch state: TRUE = door OPEN, FALSE = door CLOSED (NPN NC sensor)
+
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 1100ms
+    window: 1100ms
+    active: false
+
+bluetooth_proxy:
+  active: false
 
 globals:
   - id: encoder_cw_count
@@ -151,6 +168,18 @@ binary_sensor:
             id(door_counts) = std::max(0, id(door_counts) - 1);
             id(encoder_ccw_count) += 1;
           }
+
+  - platform: ble_presence
+    mac_address: !secret ble_target_mac
+    name: "Target Approaching"
+    id: target_approaching
+    icon: "mdi:radar"
+    filters:
+      - delayed_on: 10s
+      - delayed_off: 30s
+    web_server:
+      sorting_group_id: group_door
+      sorting_weight: 24
 
   - platform: gpio
     name: "Garage Door - Closed Switch"

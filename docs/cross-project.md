@@ -32,6 +32,16 @@ Device name: `esp32-garage-all-in-one` → HA entity prefix: `garage_all_in_one_
 | `sensor.garage_all_in_one_car_position_parking_guidance` | text_sensor | Parking direction text |
 | `light.garage_all_in_one_car_position_led_strip` | light | WS2812B LED strip |
 
+### BLE Proximity
+
+Firmware knows nothing about specific devices — HA identifies them.
+
+| Entity | Type | Description |
+|---|---|---|
+| `binary_sensor.garage_all_in_one_target_approaching` | binary_sensor | BLE target in range (10s on, 30s off delay) |
+
+All nearby BLE devices (RSSI, iBeacon UUIDs, etc.) are also forwarded to HA via `bluetooth_proxy` and appear in Settings → Bluetooth.
+
 ### System
 
 | Entity | Type | Description |

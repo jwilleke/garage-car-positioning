@@ -9,7 +9,7 @@
 #   ap_password: "your-ap-password"
 #   ota_password: "your-ota-password"
 #   api_encryption_key: "your-32-byte-base64-key"
-#   blue_moon_ble_mac: "0c:0a:df:b3:ae:13"   # Tesla Blue Moon BLE MAC
+#   ble_target_mac: "AA:BB:CC:DD:EE:FF"   # BLE MAC of target device to detect approaching
 
 substitutions:
   device_name: esp32-garage-all-in-one
@@ -44,7 +44,6 @@ packages:
   base: github://jwilleke/garage-car-positioning/esphome/packages/base.yaml@master
   car_sensor: github://jwilleke/garage-car-positioning/esphome/packages/car-sensor.yaml@master
   garage_door: github://jwilleke/garage-car-positioning/esphome/packages/garage-door.yaml@master
-  tesla_ble: github://jwilleke/garage-car-positioning/esphome/packages/tesla-ble.yaml@master
 
 esphome:
   name: ${device_name}

@@ -36,7 +36,6 @@ packages:
   base: !include packages/base.yaml
   car_sensor: !include packages/car-sensor.yaml
   garage_door: !include packages/garage-door.yaml
-  tesla_ble: !include packages/tesla-ble.yaml
 
 esphome:
   name: ${device_name}

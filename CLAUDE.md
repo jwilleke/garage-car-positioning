@@ -48,6 +48,14 @@ A `secrets.yaml` file is required in `esphome/` with: `wifi_ssid`, `wifi_passwor
 
 **GPIO assignments** (ESP32-C6): GPIO0 (LEDs), GPIO1 (door switch), GPIO2-3 (encoder), GPIO10 (relay), GPIO16-17 (front radar UART), GPIO18-19 (rear radar UART).
 
+## Related Projects
+
+**Home Assistant config:** `/Volumes/jobd/code/GitHub/mjs-ha`
+
+This firmware publishes entities that HA automations and Node-RED flows consume. Entity renames in this repo change HA entity IDs — coordinate with the HA project before flashing.
+
+➡️ See [docs/cross-project.md](docs/cross-project.md) for the full entity inventory and current sync state.
+
 ## Conventions
 
 - Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for commit messages.

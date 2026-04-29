@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(esphome config:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}

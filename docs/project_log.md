@@ -49,6 +49,26 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-04-29-03
+
+- Agent: Claude Sonnet 4.6
+- Subject: BLE firmware made fully MAC-agnostic; cross-project responsibility split documented
+- Current Issue: #11 (resolved approach), #13 (pending hardware verification)
+- Work Done:
+  - Removed `binary_sensor.ble_presence` ("Target Approaching") and `ble_target_mac` secret — firmware has zero MAC knowledge
+  - `bluetooth_proxy` forwards all BLE advertisements + RSSI to HA; HA handles device identification and approach/departure logic
+  - Rewrote `docs/cross-project.md` with clear responsibility split table (firmware vs. mjs-ha)
+  - Rewrote `mjs-ha/docs/cross-project-garage.md` with HA-side action items for BLE approach/departure
+- Commits: b97ff00, 9ae7671
+- Files Modified:
+  - esphome/packages/garage-door.yaml
+  - esphome/secrets.yaml.example
+  - esphome/ha-builder.yaml
+  - docs/cross-project.md
+  - mjs-ha/docs/cross-project-garage.md
+
+---
+
 ## 2026-04-29-01
 
 - Agent: Claude Sonnet 4.6

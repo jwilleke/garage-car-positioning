@@ -74,6 +74,37 @@ button:
       sorting_group_id: group_diag
       sorting_weight: 73
 
+script:
+  - id: garage_door_open_pulse
+    mode: single  # drops concurrent calls during the 50ms closed_switch debounce window
+    then:
+      - if:
+          condition:
+            lambda: |-
+              return !id(garage_door_closed_switch).state &&
+                     id(garage_door).current_operation != cover::COVER_OPERATION_OPENING;
+          then:
+            - lambda: |-
+                id(garage_door).current_operation = cover::COVER_OPERATION_OPENING;
+                id(garage_door).publish_state();
+            - switch.turn_on: garage_door_relay
+            - delay: !lambda "return (uint32_t)id(relay_pulse_ms).state + 500;"
+
+  - id: garage_door_close_pulse
+    mode: single
+    then:
+      - if:
+          condition:
+            lambda: |-
+              return id(garage_door_closed_switch).state &&
+                     id(garage_door).current_operation != cover::COVER_OPERATION_CLOSING;
+          then:
+            - lambda: |-
+                id(garage_door).current_operation = cover::COVER_OPERATION_CLOSING;
+                id(garage_door).publish_state();
+            - switch.turn_on: garage_door_relay
+            - delay: !lambda "return (uint32_t)id(relay_pulse_ms).state + 500;"
+
 switch:
   - platform: gpio
     name: "Garage Door - Toggle"
@@ -100,6 +131,10 @@ binary_sensor:
     filters:
       - delayed_on: 50ms
       - delayed_off: 50ms
+    on_press:
+      - lambda: |-
+          id(garage_door).current_operation = cover::COVER_OPERATION_IDLE;
+          id(garage_door).publish_state();
     on_release:
       - sensor.rotary_encoder.set_value:
           id: garage_door_encoder
@@ -192,10 +227,13 @@ cover:
     id: garage_door
     device_class: garage
     open_action:
-      - switch.turn_on: garage_door_relay
+      - script.execute: garage_door_open_pulse
     close_action:
-      - switch.turn_on: garage_door_relay
+      - script.execute: garage_door_close_pulse
     stop_action:
+      - lambda: |-
+          id(garage_door).current_operation = cover::COVER_OPERATION_IDLE;
+          id(garage_door).publish_state();
       - switch.turn_on: garage_door_relay
     lambda: |-
       if (!id(garage_door_closed_switch).state) {

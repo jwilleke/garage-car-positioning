@@ -15,7 +15,8 @@
       "Bash(gh label *)",
       "Bash([ -f \"/Volumes/jobd/code/GitHub/garage-car-positioning/esphome/$f\" ])",
       "Bash(./scripts/version.sh set *)",
-      "Bash(gh api *)"
+      "Bash(gh api *)",
+      "Bash(/Volumes/hd2A/workspaces/github/garage-car-positioning/esphome/.venv/bin/esphome config *)"
     ]
   }
 }

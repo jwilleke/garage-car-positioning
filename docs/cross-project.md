@@ -59,7 +59,8 @@ All nearby BLE devices (RSSI, iBeacon UUIDs, etc.) are also forwarded to HA via 
 
 Last updated: 2026-04-29
 
-- Firmware version: v0.2.4
-- Active issue: [#13](https://github.com/jwilleke/garage-car-positioning/issues/13) — encoder position tracking broken, fix planned (single-channel pulse counter replacing rotary_encoder)
-- No HA entity renames pending
-- Node-RED flows in `mjs-ha` that use garage entities: unknown — search `flows.pretty.json` for `garage_all_in_one`
+- Firmware version: v0.2.4 (pending version bump + OTA flash)
+- Issue #13 (encoder): fixed in `6ecc425` — pending hardware verification (OTA flash + observe counts climbing 0→37)
+- Issue #11 (BLE): implemented in `99f169d` — `tesla-ble.yaml` deleted, BLE merged into `garage-door.yaml`; `secrets.yaml` `ble_target_mac` must be set to real MAC before flash
+- Entity rename: `binary_sensor.garage_all_in_one_tesla_blue_moon_approaching` → `binary_sensor.garage_all_in_one_target_approaching` — update any mjs-ha flows referencing old entity
+- Node-RED flows in `mjs-ha` that use garage entities: search `flows.pretty.json` for `garage_all_in_one`

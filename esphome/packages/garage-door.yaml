@@ -131,11 +131,10 @@ binary_sensor:
     filters:
       - delayed_on: 50ms
       - delayed_off: 50ms
-    on_press:
+    on_release:
       - lambda: |-
           id(garage_door).current_operation = cover::COVER_OPERATION_IDLE;
           id(garage_door).publish_state();
-    on_release:
       - sensor.rotary_encoder.set_value:
           id: garage_door_encoder
           value: 0

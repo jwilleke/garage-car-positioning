@@ -1,7 +1,7 @@
 substitutions:
   device_name: esp32-garage-all-in-one
   friendly_name: "Garage All-in-One"
-  firmware_version: "0.2.3"
+  firmware_version: "0.2.4"
 
   # Car Positioning Settings (inches)
   # Garage Door sensor is ceiling-mounted: Y = distance from ceiling to car top; X = lateral offset

@@ -66,8 +66,8 @@ mjs-ha handles device identification and approach/departure logic.
 
 Last updated: 2026-04-29
 
-- Firmware: v0.2.4 — pending OTA flash (commits `6ecc425` encoder fix, `99f169d`+`b97ff00` BLE refactor)
-- Issue #13 (encoder): fixed — verify by watching `Garage Door - Encoder Counts` climb 0→37 during full open
-- Issue #11 (BLE): `tesla-ble.yaml` deleted; firmware now MAC-agnostic (`bluetooth_proxy` only)
-- Entity removed: `binary_sensor.garage_all_in_one_tesla_blue_moon_approaching` / `target_approaching` — no longer exists; HA handles BLE presence directly
+- Firmware: v0.2.4 — OTA flashed 2026-04-29
+- Issue #13 (encoder): flashed — **hardware verification pending**: open door fully and confirm `Garage Door - Encoder Counts` climbs 0→37; adjust `full_open_counts` from HA if needed
+- Issue #11 (BLE): complete — firmware MAC-agnostic; `bluetooth_proxy` forwarding all BLE to HA
+- Entity removed: `binary_sensor.garage_all_in_one_tesla_blue_moon_approaching` / `target_approaching` gone
 - mjs-ha action needed: configure target BLE MAC(s) in HA Bluetooth integration or Node-RED for approach/departure detection

@@ -4,11 +4,11 @@ substitutions:
   firmware_version: "0.2.5"
 
   # Car Positioning Settings (inches)
-  # Garage Door sensor is ceiling-mounted: Y = distance from ceiling to car top; X = lateral offset
-  front_target_y_min: "19.7"   # calibrate: (ceiling_height_in - car_height_in) - tolerance
+  # Garage Door sensor is wall-mounted (garage-door wall): Y = distance from front wall into garage; X = lateral offset
+  front_target_y_min: "19.7"   # calibrate: distance from front wall to car bumper ± tolerance
   front_target_y_max: "31.5"
   front_target_x_tolerance: "7.9"
-  # Inside Wall sensor is wall-mounted: Y = distance from inside wall into garage; X = height
+  # Inside Wall sensor is ceiling-mounted: Y = distance from ceiling to car top; X = lateral offset
   rear_target_y_min: "70.9"    # desired parking depth from back wall (inches)
   rear_target_y_max: "86.6"
   rear_target_x_tolerance: "11.8"

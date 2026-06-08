@@ -95,14 +95,14 @@ sensor:
   - platform: ld2450
     ld2450_id: ld2450_front
     target_count:
-      name: "Car Position - Garage Door Target Count"
+      name: "Car Position - Front Target Count"
       id: front_target_count
       web_server:
         sorting_group_id: group_diag
         sorting_weight: 50
     target_1:
       x:
-        name: "Car Position - Garage Door T1 X"
+        name: "Car Position - Front T1 X"
         id: front_x
         unit_of_measurement: "in"
         accuracy_decimals: 1
@@ -112,7 +112,7 @@ sensor:
           sorting_group_id: group_diag
           sorting_weight: 51
       y:
-        name: "Car Position - Garage Door T1 Y"
+        name: "Car Position - Front T1 Y"
         id: front_y
         unit_of_measurement: "in"
         accuracy_decimals: 1
@@ -122,7 +122,7 @@ sensor:
           sorting_group_id: group_diag
           sorting_weight: 52
       distance:
-        name: "Car Position - Garage Door T1 Distance"
+        name: "Car Position - Front T1 Distance"
         id: front_distance
         unit_of_measurement: "in"
         accuracy_decimals: 1
@@ -132,7 +132,7 @@ sensor:
           sorting_group_id: group_diag
           sorting_weight: 53
       speed:
-        name: "Car Position - Garage Door T1 Speed"
+        name: "Car Position - Front T1 Speed"
         id: front_speed
         unit_of_measurement: "in/s"
         accuracy_decimals: 1
@@ -143,21 +143,21 @@ sensor:
           sorting_weight: 54
     target_2:
       x:
-        name: "Car Position - Garage Door T2 X"
+        name: "Car Position - Front T2 X"
         id: front_t2_x
         unit_of_measurement: "in"
         filters:
           - multiply: 0.03937
         internal: true
       y:
-        name: "Car Position - Garage Door T2 Y"
+        name: "Car Position - Front T2 Y"
         id: front_t2_y
         unit_of_measurement: "in"
         filters:
           - multiply: 0.03937
         internal: true
       distance:
-        name: "Car Position - Garage Door T2 Distance"
+        name: "Car Position - Front T2 Distance"
         id: front_t2_distance
         unit_of_measurement: "in"
         accuracy_decimals: 1
@@ -171,14 +171,14 @@ sensor:
   - platform: ld2450
     ld2450_id: ld2450_rear
     target_count:
-      name: "Car Position - Inside Wall Target Count"
+      name: "Car Position - Rear Target Count"
       id: rear_target_count
       web_server:
         sorting_group_id: group_diag
         sorting_weight: 60
     target_1:
       x:
-        name: "Car Position - Inside Wall T1 X"
+        name: "Car Position - Rear T1 X"
         id: rear_x
         unit_of_measurement: "in"
         accuracy_decimals: 1
@@ -188,7 +188,7 @@ sensor:
           sorting_group_id: group_diag
           sorting_weight: 61
       y:
-        name: "Car Position - Inside Wall T1 Y"
+        name: "Car Position - Rear T1 Y"
         id: rear_y
         unit_of_measurement: "in"
         accuracy_decimals: 1
@@ -198,7 +198,7 @@ sensor:
           sorting_group_id: group_diag
           sorting_weight: 62
       distance:
-        name: "Car Position - Inside Wall T1 Distance"
+        name: "Car Position - Rear T1 Distance"
         id: rear_distance
         unit_of_measurement: "in"
         accuracy_decimals: 1
@@ -208,7 +208,7 @@ sensor:
           sorting_group_id: group_diag
           sorting_weight: 63
       speed:
-        name: "Car Position - Inside Wall T1 Speed"
+        name: "Car Position - Rear T1 Speed"
         id: rear_speed
         unit_of_measurement: "in/s"
         accuracy_decimals: 1
@@ -219,21 +219,21 @@ sensor:
           sorting_weight: 64
     target_2:
       x:
-        name: "Car Position - Inside Wall T2 X"
+        name: "Car Position - Rear T2 X"
         id: rear_t2_x
         unit_of_measurement: "in"
         filters:
           - multiply: 0.03937
         internal: true
       y:
-        name: "Car Position - Inside Wall T2 Y"
+        name: "Car Position - Rear T2 Y"
         id: rear_t2_y
         unit_of_measurement: "in"
         filters:
           - multiply: 0.03937
         internal: true
       distance:
-        name: "Car Position - Inside Wall T2 Distance"
+        name: "Car Position - Rear T2 Distance"
         id: rear_t2_distance
         unit_of_measurement: "in"
         accuracy_decimals: 1
@@ -267,7 +267,7 @@ sensor:
   # car_center_y: rear (ceiling-mounted) sensor Y — distance from ceiling to car top.
   # Falls back to front Y only when rear is unavailable.
   - platform: template
-    name: "Car Position - Distance from Inside Wall"
+    name: "Car Position - Rear Sensor Distance"
     id: car_center_y
     unit_of_measurement: "in"
     accuracy_decimals: 1

@@ -7,9 +7,9 @@ Calibration is a critical step to ensure both the car positioning system and the
 This calibration defines the "perfect" parking spot for the visual LED guide.
 
 * Park Your Car: Position your car in the exact ideal spot in your garage.
-* Observe Sensor Values: Go to Home Assistant (or the ESPHome web portal) and find the **"Car Position - Distance from Inside Wall"** and **"Car Centering"** entities. Note down their current values. All measurements are in **inches**. For example, your distance-from-wall value might be `80` and your centering value might be `-2`.
+* Observe Sensor Values: Go to Home Assistant (or the ESPHome web portal) and find the **"Car Position - Rear Sensor Distance"** and **"Car Centering"** entities. Note down their current values. All measurements are in **inches**. For example, your rear sensor distance might be `42` and your centering value might be `-2`.
 * Set Target Values: Open your [all-in-one.yaml](../esphome/all-in-one.yaml) file and update the substitutions:
-  * `rear_target_y_min` & `rear_target_y_max`: Create a "safe zone" around your observed distance-from-wall value. An 8-inch range is a good starting point. For an observed value of `80`, you could set `rear_target_y_min: "76"` and `rear_target_y_max: "84"`.
+  * `rear_target_y_min` & `rear_target_y_max`: Create a "safe zone" around your observed rear sensor distance value. An 8-inch range is a good starting point. For an observed value of `42`, you could set `rear_target_y_min: "38"` and `rear_target_y_max: "46"`.
   * `rear_target_x_tolerance`: Set this to a value representing acceptable side-to-side deviation. For an observed centering value of `-2`, a tolerance of `12` inches is a generous and reliable starting point.
 * Save and Re-flash: Save the changes to your YAML file and flash the firmware to your ESP32-C6 again.
 

@@ -9,7 +9,7 @@ substitutions:
   front_target_y_max: "31.5"
   front_target_x_tolerance: "7.9"
   # Inside Wall sensor is ceiling-mounted: Y = distance from ceiling to car top; X = lateral offset
-  rear_target_y_min: "70.9"    # desired parking depth from back wall (inches)
+  rear_target_y_min: "70.9"    # calibrate: ceiling_height_in - car_height_in - tolerance
   rear_target_y_max: "86.6"
   rear_target_x_tolerance: "11.8"
   num_leds: "60"

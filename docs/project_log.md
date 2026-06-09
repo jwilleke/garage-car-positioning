@@ -24,6 +24,30 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-06-09-02
+
+- Agent: Claude Sonnet 4.6
+- Subject: Debug both LD2450 sensors offline; create issues #15 and #16; document sensor IDs and wire colors
+- Current Issue: #15 (sensors offline), #16 (zone configuration feature)
+- Work Done:
+  - Diagnosed both LD2450 sensors offline — confirmed via HA log (no raw sensor keys), ESPHome log (no target count lines), HLKRadarTool (both sensors visible via BLE, power OK, baud rate 256000 confirmed)
+  - Identified fault is UART wiring at ESP GPIO16-19 side (both sensors simultaneously dead with correct power/baud points to shared connector or ESP pin issue)
+  - Recorded HLKRadarTool BLE device name: HLK-LD2450_1A63 = Rear Sensor
+  - Added wire color table for front LD2450 connector (RED=TX, WHT=RX, YEL=GND)
+  - Created GH issue #15: Front sensor offline with full debug guide
+  - Created GH issue #16: LD2450 zone configuration feature (Options A/B/C with effort estimates)
+  - Added `logs/` to .gitignore
+- Commits: 3e4ac64
+- Files Modified:
+  - docs/hardware/LD2450/LD2450.md
+  - docs/hardware/wiring-diagram.md
+  - .gitignore
+  - .claude/commands/session-commit.md
+  - .claude/commands/check-todos.md (new)
+  - .claude/commands/update-docs.md (new)
+
+---
+
 ## 2026-06-09-01
 
 - Agent: Claude Sonnet 4.6

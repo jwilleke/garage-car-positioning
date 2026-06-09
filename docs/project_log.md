@@ -24,6 +24,27 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-06-09-03
+
+- Agent: Claude Sonnet 4.6
+- Subject: LD2450 wiring root cause identified — TX/RX swap during connection block rewire (#15)
+- Current Issue: #15
+- Work Done:
+  - User confirmed sensors were working before rewiring JST modular connector to bare connection block
+  - Root cause: TX/RX swap is likely fault — connection block has no keying, JST connector did
+  - Confirmed LD2450 detects stationary targets (micro-Doppler, not motion-only); check HLKRadarTool for "all targets" mode
+  - Clarified GPIO16 board label "TX" vs ESPHome `rx_pin` role — board label refers to UART0, not LD2450 UART
+  - Added complete end-to-end wire color table to LD2450.md (front and rear sensors)
+  - Flagged TX wire color inconsistency between DevKit.md and wiring-diagram.md — needs physical verification
+  - Added rear sensor cable path documentation (ESP → 7-wire cable → connector board → brown 5-wire → sensor)
+- Commits: 61415d4
+- Files Modified:
+  - docs/hardware/LD2450/LD2450.md
+  - docs/hardware/ESP32-C6 DevKit.md
+  - docs/hardware/wiring-diagram.md
+
+---
+
 ## 2026-06-09-02
 
 - Agent: Claude Sonnet 4.6

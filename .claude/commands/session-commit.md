@@ -52,6 +52,7 @@ Rules for the log entry:
 
 For each related open GitHub issue:
 
+- Put at above last dated entry
 - Add a comment summarizing what was done and referencing the commit hash(es)
 - If the work fully resolves the issue, note that in the comment but do NOT close the issue (let the user decide)
 - Use `gh issue comment <number> --body "<comment>"` to post
@@ -60,6 +61,7 @@ For each related open GitHub issue:
 
 - Stage the updated `docs/project_log.md`
 - Commit with message: `docs: update project log for session yyyy-MM-dd-##`
+- Cloae any known finished Issues. Add GH "In Review" lable if ready to close waiting for Review.
 - Ask the user if they want to push to remote
 
 If no GitHub issues are related to the current work, skip Step 4 and note "none" for Current Issue in the log.

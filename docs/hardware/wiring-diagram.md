@@ -86,7 +86,7 @@ Located near Garage Door opener. Wired to terminals on Garage door opener for NO
 
 #### Rear LD2450 Sensor - Ceiling Mounted
 
-A seperate "brown" wire from a wire Connector to the LD2450 Sensor is used. 
+A seperate "brown" wire from a wire Connector to the LD2450 Sensor is used.
 
 - 5V Power supply input 5V
 - GND Power Ground
@@ -95,11 +95,11 @@ A seperate "brown" wire from a wire Connector to the LD2450 Sensor is used.
 
 ### Components Located Near Garage Door Opening
 
-Seven (seven conductors)
+Seven (seven conductors) to Front Component Board
 
 - 5V (brown wire)
 - GRN (blue wire)
-- Reed switch contaact
+- Reed switch contaact (Closed Door Switch)
 - Rotary Encoder Channel A
 - Rotary Encoder Channel B
 - Tx Serial port Tx pins
@@ -114,7 +114,7 @@ Seven (seven conductors)
 
 We need 4 wires to the Rotary Encoder(s)
 
-- 5V (brown wire)│
+- 5V (brown wire)
 - GRN (blue wire)
 - Rotary Encoder Channel A (black wire)
 - Rotary Encoder Channel B (black wire)
@@ -133,26 +133,24 @@ We need 4 wires to the Rotary Encoder(s)
 | PA9  | DM |
 | GND  | OK |
 
-
-
 | LEFT | RIGHT | Sensor | Brown Wire |
 | 5V | RX | Blue | Red |
-| 3.3V | RX | 
-| PA9  | DM | 
+| 3.3V | RX |
+| PA9  | DM |
 | GND  | OK | Yellow | Yellow |
 
-
-- 5V Power supply input 5V 
+- 5V Power supply input 5V
 - GND Power Ground
-- Tx Serial port Tx pins 
+- Tx Serial port Tx pins
 - Rx Serial port Rx pins
+
+Modular Connector on LD2450 Board
 
 | ESP32-C6 Pin | Component | Component Pin | Sensor Wire | Brown Wire |
 | 5v | Front LD2450 | TX | PWR Supply |  BLK | BLU |
 | GPIO16 | Front LD2450 | TX | ESP32 RX <- Sensor TX | RED | RED |  
 | GPIO17 | Front LD2450 | RX | ESP32 TX -> Sensor RX | WHT | WHT
 | GND | Front LD2450 | GND | ESP32 TX -> Sensor | YEL | YEL |
-
 
 | 5v | Front LD2450 | TX | PWR Supply |  BLK | BLU |
 | GPIO18 | Rear LD2450 | TX | ESP32 RX <- Sensor TX |

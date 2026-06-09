@@ -65,6 +65,9 @@ Using JST ZH 1.5mm 4Pin connector (see [LD2450 documentation](LD2450/LD2450.md))
 
 ### Rear LD2450
 
+Runs from ESP32 through 7 wire cable to "Rear" Connector Board.
+Brown (5) wire cable from from "Rear" Connector Board to REAR LD2459 Mount.
+
 | Wire Color | LD2450 Pin | Connect To |
 | ---- | ---- | ---- |
 | BLK-BLU-RED | 5V | ESP32-C6 5V |

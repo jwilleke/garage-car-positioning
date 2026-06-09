@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.6] - 2026-06-09
+
+### Changed
+
+- Rebuilt firmware with ESPHome 2026.5.1, gaining ultra-low latency BLE event processing (~12 µs vs 0–16 ms previously). Bluetooth proxy operations now rival dedicated local adapters.
+
+### Notes
+
+- No YAML configuration changes. Rebuild and reflash to activate the updated ESP-IDF BLE stack.
+- Closes [#14](https://github.com/jwilleke/garage-car-positioning/issues/14).
+
 ## [0.2.2] - 2026-04-25
 
 ### Changed

@@ -24,6 +24,26 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-06-09-01
+
+- Agent: Claude Sonnet 4.6
+- Subject: Rebuild firmware with ESPHome 2026.5.1 for BLE ultra-low latency (issue #14)
+- Key Decision: No YAML changes needed — ESPHome 2026.5.1 BLE improvements are in the ESP-IDF stack, applied automatically on rebuild. Firmware version bumped to trigger OTA update.
+- Work Done:
+  - Bumped firmware_version 0.2.5 → 0.2.6 across all four production configs via `scripts/version.sh`
+  - Added `[0.2.6]` entry to CHANGELOG.md
+  - Created GitHub issue #14
+- Files Modified:
+  - VERSION
+  - CHANGELOG.md
+  - esphome/all-in-one.yaml
+  - esphome/car-positioning.yaml
+  - esphome/garage-door.yaml
+  - esphome/ha-builder.yaml
+  - docs/project_log.md
+
+---
+
 ## 2026-04-29-04
 
 - Agent: Claude Sonnet 4.6

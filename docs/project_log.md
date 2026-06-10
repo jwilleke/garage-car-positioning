@@ -24,6 +24,28 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-06-10-01
+
+- Agent: Claude Sonnet 4.6
+- Subject: Resolve Dependabot PR #9 — remove accidental package.json from repo; add TODO.md
+- Current Issue: none (PR #9 closed)
+- Work Done:
+  - Ran `/check-todos` — surveyed GitHub issues, PRs, Dependabot alerts, and Actions runs
+  - Created `TODO.md` with live-surveyed state and recommended next moves
+  - Identified `package.json` / `package-lock.json` as accidental Claude Code CLI artifacts committed in "Claude setup"
+  - Removed both files via `git rm` and pushed to master; 3 Dependabot alerts will auto-dismiss
+  - Closed PR #9 (Dependabot bump for `@anthropic-ai/claude-code`) with explanation comment
+  - Expanded `.claude/commands/check-todos.md` with full section definitions and easy-win filter
+  - Saved memory: always run `/session-commit` after any repository contribution
+- Commits: ac18826, 1cd1659
+- Files Modified:
+  - package.json (deleted)
+  - package-lock.json (deleted)
+  - TODO.md (new)
+  - .claude/commands/check-todos.md
+
+---
+
 ## 2026-06-09-03
 
 - Agent: Claude Sonnet 4.6

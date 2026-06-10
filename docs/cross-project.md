@@ -64,9 +64,10 @@ mjs-ha handles device identification and approach/departure logic.
 
 ## Current Sync State
 
-Last updated: 2026-04-29
+Last updated: 2026-06-10
 
-- Firmware: v0.2.5 — OTA flashed 2026-04-29 (HA Builder, corrected config pushed via scp)
+- Firmware: v0.2.6 — rebuilt for ESPHome 2026.5.1 (OTA flashed 2026-06-09)
+- Issue #15 (front sensor offline): active — both LD2450 sensors offline; suspected TX/RX swap at connection block; car positioning entities degraded (`car_correctly_parked` always false)
 - Issue #13 (encoder): live — hardware verification pending: open door fully, confirm `Garage Door - Encoder Counts` climbs 0→37; adjust `full_open_counts` from HA if needed
 - Issue #11 (BLE): complete — firmware MAC-agnostic; `bluetooth_proxy` forwarding all BLE + RSSI to HA; mjs-ha handles device identification
 - Entity removed: `binary_sensor.garage_all_in_one_tesla_blue_moon_approaching` / `target_approaching` — gone since v0.2.4

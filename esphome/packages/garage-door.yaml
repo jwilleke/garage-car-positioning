@@ -43,6 +43,10 @@ globals:
     type: bool
     restore_value: false
     initial_value: 'false'
+  - id: peak_open_counts
+    type: int
+    restore_value: false
+    initial_value: '0'
 
 esphome:
   on_boot:
@@ -160,6 +164,9 @@ binary_sensor:
           if (id(door_is_opening)) {
             id(door_counts) += 1;
             id(encoder_cw_count) += 1;
+            if (id(door_counts) > id(peak_open_counts)) {
+              id(peak_open_counts) = id(door_counts);
+            }
           } else {
             id(door_counts) = std::max(0, id(door_counts) - 1);
             id(encoder_ccw_count) += 1;
@@ -181,6 +188,7 @@ binary_sensor:
           id(garage_door).current_operation = cover::COVER_OPERATION_IDLE;
           id(garage_door).publish_state();
           id(door_counts) = 0;
+          id(peak_open_counts) = 0;
           id(door_is_opening) = true;
     web_server:
       sorting_group_id: group_door
@@ -235,6 +243,17 @@ sensor:
     web_server:
       sorting_group_id: group_diag
       sorting_weight: 77
+
+  - platform: template
+    name: "Garage Door - Last Open Peak Counts"
+    id: last_open_peak_sensor
+    icon: "mdi:counter"
+    accuracy_decimals: 0
+    lambda: 'return (float)id(peak_open_counts);'
+    update_interval: 1s
+    web_server:
+      sorting_group_id: group_diag
+      sorting_weight: 78
 
 text_sensor:
   - platform: template

@@ -24,6 +24,23 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-06-10-02
+
+- Agent: Claude Sonnet 4.6
+- Subject: Add peak_open_counts diagnostic sensor for encoder pulse-drop diagnosis (#13)
+- Current Issue: #13
+- Work Done:
+  - Added `peak_open_counts` global to garage-door.yaml — tracks max door_counts seen during each open cycle
+  - Updated encoder ISR (encoder_a_pin.on_press) to update peak while door_is_opening
+  - Reset peak to 0 in closed_switch.on_release so each open cycle starts fresh
+  - Added "Garage Door - Last Open Peak Counts" template sensor (diag group, sorting_weight 78)
+  - Validated config with `esphome config all-in-one.yaml` — no errors
+- Commits: afd4dc5
+- Files Modified:
+  - esphome/packages/garage-door.yaml
+
+---
+
 ## 2026-06-10-01
 
 - Agent: Claude Sonnet 4.6

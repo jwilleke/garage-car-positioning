@@ -24,6 +24,25 @@ AI agent session tracking. See [CHANGELOG.md](../CHANGELOG.md) for version histo
 
 ---
 
+## 2026-06-10-03
+
+- Agent: Claude Sonnet 4.6
+- Subject: Encoder CW/CCW renamed to Open/Close; reset per cycle; full_open_counts calibrated to 36 (#13)
+- Current Issue: #13
+- Work Done:
+  - Renamed `encoder_cw_count` → `encoder_open_count`, `encoder_ccw_count` → `encoder_close_count`
+  - Renamed HA sensors "Encoder CW Steps" → "Encoder Open Steps", "CCW Steps" → "Encoder Close Steps"
+  - Reset both step counters in `closed_switch.on_release` — each reading now reflects the most recent cycle only
+  - Changed `full_open_counts` `initial_value` from 37 → 36 (verified via Last Open Peak Counts: encoder consistently reaches 36)
+  - Updated `docs/garage-door-guide.md` calibration section: runtime calibration via HA number entity, records verified value of 36
+  - Commented on issue #13 with diagnostic findings; issue resolved
+- Commits: dbbf53c
+- Files Modified:
+  - esphome/packages/garage-door.yaml
+  - docs/garage-door-guide.md
+
+---
+
 ## 2026-06-10-02
 
 - Agent: Claude Sonnet 4.6

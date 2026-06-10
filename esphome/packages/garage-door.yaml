@@ -27,11 +27,11 @@ bluetooth_proxy:
   active: false
 
 globals:
-  - id: encoder_cw_count
+  - id: encoder_open_count
     type: int
     restore_value: false
     initial_value: '0'
-  - id: encoder_ccw_count
+  - id: encoder_close_count
     type: int
     restore_value: false
     initial_value: '0'
@@ -68,7 +68,7 @@ number:
     min_value: 1
     max_value: 500
     step: 1
-    initial_value: 37
+    initial_value: 36
     restore_value: true
     optimistic: true
     web_server:
@@ -163,13 +163,13 @@ binary_sensor:
       - lambda: |-
           if (id(door_is_opening)) {
             id(door_counts) += 1;
-            id(encoder_cw_count) += 1;
+            id(encoder_open_count) += 1;
             if (id(door_counts) > id(peak_open_counts)) {
               id(peak_open_counts) = id(door_counts);
             }
           } else {
             id(door_counts) = std::max(0, id(door_counts) - 1);
-            id(encoder_ccw_count) += 1;
+            id(encoder_close_count) += 1;
           }
 
   - platform: gpio
@@ -189,6 +189,8 @@ binary_sensor:
           id(garage_door).publish_state();
           id(door_counts) = 0;
           id(peak_open_counts) = 0;
+          id(encoder_open_count) = 0;
+          id(encoder_close_count) = 0;
           id(door_is_opening) = true;
     web_server:
       sorting_group_id: group_door
@@ -223,22 +225,22 @@ sensor:
       sorting_weight: 72
 
   - platform: template
-    name: "Garage Door - Encoder CW Steps"
-    id: encoder_cw_sensor
-    icon: "mdi:rotate-right"
+    name: "Garage Door - Encoder Open Steps"
+    id: encoder_open_sensor
+    icon: "mdi:arrow-up-circle"
     accuracy_decimals: 0
-    lambda: 'return id(encoder_cw_count);'
+    lambda: 'return id(encoder_open_count);'
     update_interval: 1s
     web_server:
       sorting_group_id: group_diag
       sorting_weight: 76
 
   - platform: template
-    name: "Garage Door - Encoder CCW Steps"
-    id: encoder_ccw_sensor
-    icon: "mdi:rotate-left"
+    name: "Garage Door - Encoder Close Steps"
+    id: encoder_close_sensor
+    icon: "mdi:arrow-down-circle"
     accuracy_decimals: 0
-    lambda: 'return id(encoder_ccw_count);'
+    lambda: 'return id(encoder_close_count);'
     update_interval: 1s
     web_server:
       sorting_group_id: group_diag

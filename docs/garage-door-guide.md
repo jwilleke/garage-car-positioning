@@ -82,11 +82,15 @@ Calibration sets the encoder count for a fully open door, which is required for 
 ➡️ See [calibration.md — Garage Door Controller](calibration.md#garage-door-controller)
 
 Summary:
+
 1. Flash firmware
 2. Fully close the door — encoder resets to 0
-3. Fully open the door — note the encoder count
-4. Set `garage_door_full_open_counts` in `garage-door.yaml` to that value
-5. Reflash
+3. Fully open the door — watch `Garage Door - Last Open Peak Counts` in HA
+4. Set **Garage Door - Full Open Counts** in HA to the peak value observed (no reflash needed — it is a runtime `number` entity with `restore_value: true`)
+
+**Calibrated value for this installation: 36** (verified 2026-06-10 via `Last Open Peak Counts` diagnostic)
+
+> **Note:** The firmware default (`initial_value`) is also set to 36. If you erase NVS or flash a clean device, the default will be correct without manual calibration.
 
 ---
 

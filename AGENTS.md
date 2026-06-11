@@ -6,13 +6,15 @@ repos. Put repo-specific context **below the `KIT:END` marker**; do not edit her
 
 ## Session continuity
 
-- Before starting, read `private/project_log.md` (local, gitignored) and recent `git log`.
-  That is where the last session left off — repeating finished work is the most common
-  avoidable mistake.
-- Close a session with `/session-commit`: commits code + `TODO.md`, appends to
-  `private/project_log.md` (the log is never committed).
+- Before starting, read the `▶ Resume here` block at the top of `private/project_log.md`
+  (local, gitignored) and recent `git log`. That is where the last session left off —
+  repeating finished work is the most common avoidable mistake.
+- Commit a chunk of work with `/session-commit`: commits code + `TODO.md`, appends a journal
+  entry to `private/project_log.md` (the log is never committed).
 - Run `/status` often (after every `/session-commit`): it ranks open work and recommends
   the next step.
+- End a session with `/wrap`: commits anything outstanding, refreshes the `▶ Resume here`
+  pointer, and reports whether it is safe to shut down the editor.
 
 ## Priorities — GitHub labels are the source of truth
 

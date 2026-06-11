@@ -35,3 +35,4 @@ node_modules/
 private/dev-notes.md
 garage.log
 .claude/settings.local.json
+.claude/worktrees/

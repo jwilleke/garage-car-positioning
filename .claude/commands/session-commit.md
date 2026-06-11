@@ -1,71 +1,64 @@
 # Session Commit
 
-Commit current work, update the project log, and update any related GitHub issues.
+Commit the session's work, refresh the priority mirror, journal the session, and update
+related GitHub issues. The personal log is **never committed**.
 
 ## Steps
 
-Do all of the following:
+### Step 1: Gather context (run in parallel)
 
-### Step 1: Gather context
+- `git status` — all changed files
+- `git diff --stat` — scope of changes
+- `git log --oneline -5` — match commit-message style
+- `gh issue list --state open --limit 20` — related open issues
 
-Run these in parallel:
+### Step 2: Commit the code
 
-- `git status` to see all changed files
-- `git diff --stat` to see the scope of changes
-- `git log --oneline -5` to match commit message style
-- Check if there are any open GitHub issues related to this work: `gh issue list --state open --limit 20`
+- Stage the relevant changed files (never `.claude/settings.local.json`, never anything under `private/`).
+- Write a Conventional Commit message: `type(scope): description`.
+- Commit.
 
-### Step 2: Create the commit
+### Step 3: Refresh `TODO.md` and commit it
 
-- Stage all relevant changed files (not `.claude/settings.local.json` or other local-only files)
-- Write a conventional commit message: `type(scope): description`
-- Commit the changes
+- Regenerate `TODO.md` from the current GitHub issue labels (same banding as `/status`:
+  P0 / P1 / P2 / Deferred / Needs triage). If `/status` was just run, it is already current.
+- Stage and commit `TODO.md` if it changed: `docs: refresh TODO from issue labels`.
 
-### Step 3: Update project log
+### Step 4: Journal the session (local only — NOT committed)
 
-Append a new session log entry to `docs/project_log.md` using this exact format:
+Append an entry to `private/project_log.md` (gitignored), newest on top:
 
+```text
+## yyyy-MM-dd-NN
+
+- Agent: Claude
+- Subject: <brief description of the session>
+- Current issue: <#123 or none>
+- Work done:
+  - <task>
+- Commits: <short hash(es)>
+- Files modified:
+  - <file>
 ```
-### yyyy-MM-dd-##
 
-- Agent: [Claude/Gemini/Other]
-- Subject: [Brief description of the session's work]
-- Current Issue: [GitHub issue number if applicable, or "none"]
-- Work Done:
-  - [task 1]
-  - [task 2]
-- Commits: [commit hash(es) from this session]
-- Files Modified:
-  - [list each modified file]
-```
+Use today's date; `NN` increments per same-day entry starting at `01`.
 
-Rules for the log entry:
+### Step 5: Update related GitHub issues
 
-- Use today's date for `yyyy-MM-dd`
-- Use `##` as an incrementing number if there are multiple entries for the same date (start at `01`)
-- For Agent, use the name of the AI agent (e.g., "Claude")
-- For Current Issue, reference any GitHub issue numbers as `#123` format
-- For Commits, use the short hash(es) from git log
-- For Files Modified, list every file that was changed in this session
+For each related open issue:
 
-### Step 4: Update GitHub issues
+- Comment summarizing what was done, referencing the commit hash(es).
+- If the work fully resolves it, say so but do **not** close it — let the operator decide
+  (consider adding `in-review`).
+- Use `gh issue comment <number> --body "<comment>"`.
 
-For each related open GitHub issue:
+### Step 6: Push
 
-- Put at above last dated entry
-- Add a comment summarizing what was done and referencing the commit hash(es)
-- If the work fully resolves the issue, note that in the comment but do NOT close the issue (let the user decide)
-- Use `gh issue comment <number> --body "<comment>"` to post
+- Ask the operator whether to push to remote.
 
-### Step 5: Final commit and push
+## Notes
 
-- Stage the updated `docs/project_log.md`
-- Commit with message: `docs: update project log for session yyyy-MM-dd-##`
-- Cloae any known finished Issues. Add GH "In Review" lable if ready to close waiting for Review.
-- Ask the user if they want to push to remote
-
-If no GitHub issues are related to the current work, skip Step 4 and note "none" for Current Issue in the log.
-
-### Step 6 cross-project
-
-Update any docs/cross-project*.md files as appopriate.
+- `private/project_log.md` is gitignored and personal — it is appended locally only.
+- If `docs/project_log.md` still exists (pre-kit), it should have been migrated to
+  `private/project_log.md` by `install-kit.sh`.
+- After committing, the natural next step is `/status`.

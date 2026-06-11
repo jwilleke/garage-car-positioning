@@ -6,8 +6,8 @@ repos. Put repo-specific context **below the `KIT:END` marker**; do not edit her
 
 ## Session continuity
 
-- Before starting, read the `▶ Resume here` block at the top of `private/project_log.md`
-  (local, gitignored) and recent `git log`. That is where the last session left off —
+- Before starting, read the `▶ Resume here` block at the top of `TODO.md` (committed, so it
+  syncs across machines) and recent `git log`. That is where the last session left off —
   repeating finished work is the most common avoidable mistake.
 - Commit a chunk of work with `/session-commit`: commits code + `TODO.md`, appends a journal
   entry to `private/project_log.md` (the log is never committed).
@@ -21,7 +21,8 @@ repos. Put repo-specific context **below the `KIT:END` marker**; do not edit her
 - `P0` critical/security · `P1` high · `P2` normal · `deferred` postponed · `needs-triage` unassigned.
 - Security comes first. Scanner alerts (Dependabot / code-scanning / GitGuardian) become
   issues labeled `security` + a graded priority: critical/high → `P0`, medium → `P1`, low → `P2`.
-- `TODO.md` is a generated mirror of these labels — do not hand-edit it; `/status` regenerates it.
+- `TODO.md` = a `▶ Resume here` block (maintained by `/wrap`) on top, then priority bands that
+  `/status` regenerates from the labels. Do not hand-edit the bands.
 
 ## Working agreement
 

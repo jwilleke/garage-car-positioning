@@ -40,7 +40,9 @@ For each open Dependabot / code-scanning / GitGuardian alert:
 
 ### Step 4: Rank and regenerate `TODO.md`
 
-Overwrite `TODO.md` (it is a generated mirror) with the open issues grouped into bands:
+Overwrite `TODO.md` with the open issues grouped into bands. The `▶ Resume here` pointer is owned by
+`/wrap` (written at session end) — `/status` does not write or preserve it; once you've resumed it
+has served its purpose, so regenerating a bands-only `TODO.md` here is expected:
 
 - `🔴 P0 — Security & Critical` (list `security` / vulnerability issues first)
 - `🟠 P1`

@@ -30,8 +30,9 @@ In-flight work that a shutdown would orphan (note status of each, anything of si
 
 ### Step 3: Refresh the "Resume here" pointer
 
-Overwrite the marker-delimited block at the **top** of `private/project_log.md` (above the dated
-entries) so the next session knows exactly where to pick up:
+Overwrite the marker-delimited block at the **top** of `TODO.md` (above the generated priority
+bands) so the next session — on any machine, since `TODO.md` is committed — knows exactly where to
+pick up:
 
 ```text
 <!-- RESUME:START -->
@@ -47,11 +48,14 @@ entries) so the next session knows exactly where to pick up:
 <!-- RESUME:END -->
 ```
 
-If the markers are present, replace the content between them; if absent, insert the block right
-after the log's title. This block is always overwritten — it reflects only the latest handoff.
+Insert the block right after the `# TODO` title (the markers will usually be absent, since `/status`
+regenerated a bands-only `TODO.md` during the session; replace the block if it is present). This
+reflects only the latest handoff — `/context` reads it next session, then the first `/status` clears
+it again.
 
-### Step 4: Push (ask)
+### Step 4: Commit the refreshed pointer & push (ask)
 
+- Stage and commit `TODO.md` if the Resume block changed (`docs: refresh resume pointer`).
 - If there are unpushed commits, ask the operator whether to push before shutdown.
 
 ### Step 5: Shutdown-readiness verdict
@@ -67,4 +71,5 @@ Report one clear verdict:
 ## Notes
 
 - `/wrap` is the close bookend to `/context` (open) and complements `/session-commit` (per-chunk).
-- `/context` and `/status` read the "Resume here" block first to restore continuity.
+- `/context` and `/status` read the `▶ Resume here` block at the top of `TODO.md` first to restore
+  continuity. The dated session history stays in `private/project_log.md`.

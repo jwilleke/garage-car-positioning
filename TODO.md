@@ -1,6 +1,6 @@
 # TODO
 
-Last updated: 2026-06-10
+Last updated: 2026-06-16
 
 ---
 
@@ -29,12 +29,23 @@ None.
 
 ---
 
+## Needs Triage
+
+All open issues are currently unranked (`needs-triage`):
+
+| # | Type | Title |
+| --- | --- | --- |
+| #15 | bug | [BUG] Front sensor (ld2450_front) offline — Car Centering and Vehicle Detected degraded |
+| #16 | feature | [FEATURE] LD2450 zone configuration — hardware and ESPHome software zones |
+| #10 | feature | [FEATURE] Bootloader too old for OTA rollback — flash via USB once to update bootloader |
+
+---
+
 ## Open Bugs
 
 | # | Title | Notes |
 | --- | --- | --- |
 | #15 | [BUG] Front sensor (ld2450_front) offline | **Active — physical wiring fix pending (TX/RX swap)** |
-| #13 | [BUG] Encoder does not track door position accurately during fast motor travel | Suspected interrupt-rate issue at full motor speed |
 
 ---
 
@@ -50,7 +61,7 @@ None.
 ## Easy Wins
 
 None qualify. All open issues require physical hardware access (#15 wiring swap, #10 USB flash) or
-further diagnosis before code changes are possible (#13 encoder). #16 is explicitly blocked by #15.
+#16 is explicitly blocked by #15.
 
 ---
 
@@ -74,5 +85,3 @@ None with `deferred` label.
   Verify via HLKRadarTool and `Car Position - Front Target Count` in HA. This unblocks #16.
 - **After #15 resolved, start #16 Option A:** Configure hardware zones on both sensors via HLKRadarTool
   (≈30 min/sensor, no firmware changes, low risk) for immediate false-positive reduction.
-- **Triage #13 (encoder):** Connect debug logging and capture a full open/close cycle to measure
-  actual pulse counts vs. expected; determine if the issue is interrupt rate, calibration, or both.

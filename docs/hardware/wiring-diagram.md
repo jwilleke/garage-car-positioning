@@ -156,3 +156,6 @@ Modular Connector on LD2450 Board
 | GPIO18 | Rear LD2450 | TX | ESP32 RX <- Sensor TX |
 | GPIO19 | Rear LD2450 | RX | ESP32 TX -> Sensor RX |
 | GND | Front LD2450 | GND | ESP32 TX -> Sensor | YEL | YEL |
+
+RED on sensor goes to RED on brown goes to YEL on 7 Wire to
+WHT on sensor goes to WHT on brown goes to BLU/PUR on 7 Wire to

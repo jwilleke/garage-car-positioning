@@ -61,7 +61,7 @@ All open issues are currently unranked (`needs-triage`):
 ## Easy Wins
 
 None qualify. All open issues require physical hardware access (#15 wiring swap, #10 USB flash) or
-#16 is explicitly blocked by #15.
+are explicitly blocked (#16 is blocked by #15).
 
 ---
 

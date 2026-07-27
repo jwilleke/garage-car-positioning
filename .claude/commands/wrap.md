@@ -48,9 +48,9 @@ pick up:
 <!-- RESUME:END -->
 ```
 
-Insert the block right after the `# TODO` title (the markers will usually be absent, since `/status`
+Insert the block right after the `# TODO` title (the markers will usually be absent, since `/pstatus`
 regenerated a bands-only `TODO.md` during the session; replace the block if it is present). This
-reflects only the latest handoff — `/context` reads it next session, then the first `/status` clears
+reflects only the latest handoff — `/context` reads it next session, then the first `/pstatus` clears
 it again.
 
 ### Step 4: Commit the refreshed pointer & push (ask)
@@ -71,5 +71,8 @@ Report one clear verdict:
 ## Notes
 
 - `/wrap` is the close bookend to `/context` (open) and complements `/session-commit` (per-chunk).
-- `/context` and `/status` read the `▶ Resume here` block at the top of `TODO.md` first to restore
-  continuity. The dated session history stays in `private/project_log.md`.
+- `/context` reads the `▶ Resume here` block at the top of `TODO.md` first to restore continuity.
+  `/pstatus` does **not** read it — it removes the block when it regenerates the bands. So the
+  block survives exactly one hop: `/wrap` writes it, the next session's `/context` reads it, the
+  first `/pstatus` of that session clears it. Open a session with `/context`, not `/pstatus`, or
+  the pointer is discarded unread. The dated session history stays in `private/project_log.md`.

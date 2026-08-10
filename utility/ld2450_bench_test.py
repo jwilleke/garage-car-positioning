@@ -97,8 +97,7 @@ def show_ports():
 
 
 def run(port, baud, seconds, raw):
-    print(f"Opening {port} at {baud} baud for {seconds}s ...")
-    print("Wave a hand in front of the sensor to see targets appear.\n")
+    print(f"Opening {port} at {baud} baud ...")
 
     try:
         ser = serial.Serial(port, baud, timeout=0.5)
@@ -110,6 +109,9 @@ def run(port, baud, seconds, raw):
         print(f"ERROR: this adapter/driver rejected {baud} baud.")
         print("256000 is non-standard — try a CP2102, CH340 or FTDI adapter.")
         return 2
+
+    print(f"Listening for {seconds}s.")
+    print("Wave a hand in front of the sensor to see targets appear.\n")
 
     buf = bytearray()
     total_bytes = 0

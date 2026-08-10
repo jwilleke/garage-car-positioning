@@ -23,6 +23,7 @@ Wire all components according to the **Option 2** wiring diagram.
 ➡️ See [hardware/wiring-diagram.md — Option 2](hardware/wiring-diagram.md#option-2-standalone-garage-door-controller)
 
 Key connections:
+
 - GPIO10 — Relay module signal (jumper set to **H**)
 - GPIO1 — Reed switch (door closed sensor)
 - GPIO2 — Hall effect sensor A (encoder)

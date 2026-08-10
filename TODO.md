@@ -1,19 +1,6 @@
 # TODO
 
-<!-- RESUME:START -->
-## ▶ Resume here — 2026-06-16
-
-- Last worked on: #15 front sensor offline — TX/RX swap attempted, no change, needs more troubleshooting
-- Branch / state: master, clean, pushed
-- Running / in-flight: none
-- Parked / half-done: none
-- Next steps:
-  - Dig deeper on #15 — TX/RX swap ruled out. Check power (3.3 V vs 5 V), baud rate config, UART pin assignments in ESPHome, and whether HLKRadarTool sees the sensor on the physical port at all.
-  - Consider swapping in the working rear sensor on the front port to isolate cable vs. sensor vs. config.
-- Blockers / significant notes: #16 (zone config) remains blocked by #15
-<!-- RESUME:END -->
-
-Last updated: 2026-06-16
+Last updated: 2026-08-10
 
 ---
 
@@ -25,6 +12,7 @@ Last updated: 2026-06-16
 
 ## 🟠 P1
 
+- #20 [BUG] car_detected is "target 1 beyond 20 inches", so a lone person is classified as a vehicle (blocked)
 - #16 [FEATURE] LD2450 zone configuration — hardware and ESPHome software zones
 - #10 [FEATURE] Bootloader too old for OTA rollback — flash via USB once to update bootloader
 
@@ -32,13 +20,13 @@ Last updated: 2026-06-16
 
 ## 🟡 P2
 
-None.
+- #18 [FEATURE] LOCK Door Operations
 
 ---
 
 ## ⏸ Deferred
 
-None.
+- #19 [FEATURE] Firmware presence interlock — refuse HA-initiated close while a person is detected
 
 ---
 

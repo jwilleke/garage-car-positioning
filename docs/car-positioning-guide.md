@@ -21,6 +21,7 @@ Wire all components according to the **Option 1** wiring diagram.
 ➡️ See [hardware/wiring-diagram.md — Option 1](hardware/wiring-diagram.md#option-1-standalone-car-positioning-system)
 
 Key connections:
+
 - GPIO16/17 — Front LD2450 (UART)
 - GPIO18/19 — Rear LD2450 (UART)
 - GPIO0 — WS2812B LED strip data
@@ -62,6 +63,7 @@ Correct physical placement of the LD2450 sensors is critical for accurate readin
 ➡️ See [hardware/LD2450/LD2450-Mounting.md](hardware/LD2450/LD2450-Mounting.md)
 
 Typical placement:
+
 - **Front sensor** — ceiling-mounted above the parking zone, pointing down
 - **Rear sensor** — inside wall-mounted, pointing toward the car
 
@@ -74,6 +76,7 @@ Park your car in the ideal position, observe the sensor values, then update the 
 ➡️ See [calibration.md — Car Positioning System](calibration.md#car-positioning-system)
 
 Key substitutions to set:
+
 - `rear_target_y_min` / `rear_target_y_max` — parking depth range from back wall (inches)
 - `rear_target_x_tolerance` — acceptable side-to-side deviation (inches)
 - `front_target_y_min` / `front_target_y_max` — ceiling-to-car-top range (inches)

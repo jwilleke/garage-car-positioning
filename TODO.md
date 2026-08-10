@@ -1,5 +1,37 @@
 # TODO
 
+<!-- RESUME:START -->
+## ▶ Resume here — 2026-08-10
+
+- Last worked on: #15 diagnosis moved decisively — the front sensor (HLK-LD2450_E0E0) shows
+  **no targets in HLKRadarTool over BLE**, a link that bypasses all wiring. Evidence now points at
+  the sensor itself, not the cable path.
+- Branch / state: master, clean, pushed (only `.claude/settings.local.json` modified — leave it)
+- Running / in-flight: none. All CI green, no background processes
+- Parked / half-done: `utility/ld2450_bench_test.py` is merged but has **never been run against
+  real hardware** — needs a USB-to-TTL adapter (~$8, not owned)
+- Next steps:
+  - Two benign explanations for #15 remain untested. Check both before declaring the sensor dead:
+    - **5 V supply adequacy** — BLE comes up on a marginal supply that cannot sustain the radar
+      front-end. Measure at the sensor, under load
+    - **Zone/region config in the app** — a filter written during June debugging would suppress
+      every target, in the app and over UART alike. Read it before changing anything
+  - If both are clean: the front radar is dead. Replace it, and buy a spare — a second unit turns
+    the next failure into a five-minute swap test instead of a two-month investigation
+  - No-new-hardware alternative: bench the front sensor on ESP **GPIO18/19** (the rear port) with
+    short jumpers. Rear entities coming alive exonerates the sensor and condemns the front path
+- Blockers / significant notes:
+  - **#15 (P0) gates everything** — #16 and #20 are both blocked by it
+  - `bay_motion` (merged in #21) is **unvalidated** — never compiled or walk-tested. Do not wire a
+    door interlock to it until #15 is fixed; reading a dead radar returns a confident "clear"
+  - Ruled out on #15 so far: sensor unpowered, firmware too old (`2.04.23101915` exceeds the
+    required `V2.02.23090617`), baud mismatch, TX/RX polarity, harness continuity
+  - Sensor identities are now recorded in `docs/hardware/LD2450/LD2450.md` — E0E0 = front,
+    1A63 = rear. An active HLKRadarTool BLE session can suppress UART output; disconnect before
+    any serial test
+  - PR #17 (kit sync) has been open since 2026-07-27 and was not touched this session
+<!-- RESUME:END -->
+
 Last updated: 2026-08-10
 
 ---

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `binary_sensor` `Car Position - Bay Motion` (`bay_motion`) — any moving target in the bay, across both radars and both target slots. Intended as the signal a garage-door close interlock consumes, since neither existing person sensor can report a lone occupant (see [#20](https://github.com/jwilleke/garage-car-positioning/issues/20)).
+- Target-2 speed sensors on both radars (`front_t2_speed`, `rear_t2_speed`), internal, feeding the above.
+- Optional substitutions `bay_motion_speed_threshold` (default `2.0` in/s) and `bay_motion_hold_seconds` (default `60`), with defaults defined in the package so existing configurations need no change.
+
+### Notes
+
+- Additive only. No existing entity, lambda or default behavior is modified.
+- Not yet validated on hardware — the front LD2450 has been silent since 2026-08-08 ([#15](https://github.com/jwilleke/garage-car-positioning/issues/15)). The thresholds are starting points and must be calibrated before anything depends on this sensor.
+
 ## [0.2.6] - 2026-06-09
 
 ### Changed

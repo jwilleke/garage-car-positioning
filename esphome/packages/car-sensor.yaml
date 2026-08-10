@@ -11,6 +11,10 @@
 #   person_max_distance: Targets closer than this are likely people (in, e.g., "59.1")
 #   danger_zone_distance: Max distance for person-in-danger-zone detection (in, e.g., "118.1")
 #
+# Optional substitutions (defaults defined in this package, override in main config):
+#   bay_motion_speed_threshold: movement above this counts as bay motion (in/s, default "2.0")
+#   bay_motion_hold_seconds: how long bay_motion stays on after last movement (default "60")
+#
 # Sensor mounting and coordinate axes:
 #   Front sensor (wall-mounted, garage-door wall): Y = distance from front wall into garage; X = lateral offset
 #   Rear sensor (ceiling-mounted):                 Y = distance from ceiling to car top; X = lateral offset
@@ -21,6 +25,16 @@
 #   rear_target_y_min / rear_target_y_max: ceiling-to-car Y range (in) — calibrate to ceiling_height - car_height ± tolerance
 #   rear_target_x_tolerance: max lateral offset (in) from ceiling sensor X axis
 
+substitutions:
+  # Defaults for the bay-motion interlock signal. Override in the main config.
+  # bay_motion_speed_threshold: a target moving faster than this counts as motion.
+  #   Low enough to catch a slow walk, high enough to ignore radar jitter on a
+  #   stationary object. Units match the converted speed sensors (in/s).
+  # bay_motion_hold_seconds: how long bay_motion stays on after the last movement,
+  #   so someone who stops moving does not read as an empty bay.
+  bay_motion_speed_threshold: "2.0"
+  bay_motion_hold_seconds: "60"
+
 globals:
   - id: scan_position
     type: int
@@ -29,6 +43,14 @@ globals:
     type: bool
     restore_value: false
     initial_value: 'true'
+  - id: bay_motion_last_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: '0'
+  - id: bay_motion_seen
+    type: bool
+    restore_value: false
+    initial_value: 'false'
 
 uart:
   - id: uart_ld2450_front
@@ -49,6 +71,27 @@ ld2450:
     uart_id: uart_ld2450_front
   - id: ld2450_rear
     uart_id: uart_ld2450_rear
+
+interval:
+  # Stamps the last time any tracked target was moving, on either sensor and
+  # either target slot. Deliberately makes no car-versus-person judgement — see
+  # the bay_motion binary sensor below for why.
+  - interval: 250ms
+    then:
+      - lambda: |-
+          const float th = ${bay_motion_speed_threshold};
+          auto moving = [](float dist, float speed, float threshold) {
+            return !isnan(dist) && dist > 4.0f &&
+                   !isnan(speed) && fabsf(speed) > threshold;
+          };
+          bool m = moving(id(front_distance).state, id(front_speed).state, th)
+                || moving(id(front_t2_distance).state, id(front_t2_speed).state, th)
+                || moving(id(rear_distance).state, id(rear_speed).state, th)
+                || moving(id(rear_t2_distance).state, id(rear_t2_speed).state, th);
+          if (m) {
+            id(bay_motion_last_ms) = millis();
+            id(bay_motion_seen) = true;
+          }
 
 number:
   - platform: template
@@ -166,6 +209,13 @@ sensor:
         web_server:
           sorting_group_id: group_diag
           sorting_weight: 55
+      speed:
+        name: "Car Position - Front T2 Speed"
+        id: front_t2_speed
+        unit_of_measurement: "in/s"
+        filters:
+          - multiply: 0.3937
+        internal: true
 
   # === REAR SENSOR ===
   - platform: ld2450
@@ -242,6 +292,13 @@ sensor:
         web_server:
           sorting_group_id: group_diag
           sorting_weight: 65
+      speed:
+        name: "Car Position - Rear T2 Speed"
+        id: rear_t2_speed
+        unit_of_measurement: "in/s"
+        filters:
+          - multiply: 0.3937
+        internal: true
 
   # === COMPUTED POSITION ===
   # car_center_x: front (wall-mounted) sensor X — lateral offset of the car in inches.
@@ -284,6 +341,36 @@ sensor:
       sorting_weight: 15
 
 binary_sensor:
+  # Any moving target in the bay, on either sensor and either target slot.
+  #
+  # This is the signal a garage-door close interlock should consume. It is
+  # deliberately NOT a person classifier:
+  #
+  #   - person_detected is gated on !car_detected, and car_detected is currently
+  #     "target 1 is more than 20 inches away" — which a person standing five feet
+  #     from the sensor satisfies. A lone person in an empty bay is therefore
+  #     classified as a vehicle and reported by neither person sensor.
+  #   - person_in_danger_zone requires car_detected AND a target-2 hit, so it
+  #     cannot fire when the only occupant is on target 1.
+  #
+  # Rather than paper over that with a wider person heuristic, this reports the
+  # question a door interlock actually needs answered: is anything moving in the
+  # bay? A departing or arriving vehicle also sets it, which for an interlock is
+  # the correct conservative answer — the close simply waits for the hold to
+  # expire. Repairing the car-versus-person classification is separate work.
+  - platform: template
+    name: "Car Position - Bay Motion"
+    id: bay_motion
+    device_class: motion
+    icon: "mdi:motion-sensor"
+    lambda: |-
+      if (!id(bay_motion_seen)) return false;
+      const uint32_t hold_ms = (uint32_t)(${bay_motion_hold_seconds}) * 1000UL;
+      return (millis() - id(bay_motion_last_ms)) < hold_ms;
+    web_server:
+      sorting_group_id: group_car
+      sorting_weight: 16
+
   - platform: template
     name: "Car Position - Vehicle Detected"
     id: car_detected

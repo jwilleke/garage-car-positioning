@@ -30,10 +30,10 @@ This setup uses two mmWave radar sensors to detect the car's position and an LED
 
 **Placement Details:**
 
-* Front LD2450 Sensor: Mounted on the front wall of the garage, *closest to the garage door opening*, facing the car. This sensor tracks the front of the car.
-* Rear LD2450 Sensor: Mounted on the ceiling, positioned to get a clear view of the back of the car (e.g., trunk or bumper), *further away from the garage door*.
-* WS2812B LED Strip: Mounted on the ceiling, running parallel to the car's parking position. This provides the driver with a clear visual guide.
-* ESP32-C6: Can be co-located with either of the sensors or placed in a central location.
+- Front LD2450 Sensor: Mounted on the front wall of the garage, *closest to the garage door opening*, facing the car. This sensor tracks the front of the car.
+- Rear LD2450 Sensor: Mounted on the ceiling, positioned to get a clear view of the back of the car (e.g., trunk or bumper), *further away from the garage door*.
+- WS2812B LED Strip: Mounted on the ceiling, running parallel to the car's parking position. This provides the driver with a clear visual guide.
+- ESP32-C6: Can be co-located with either of the sensors or placed in a central location.
 
 ## Garage Door Controller
 
@@ -65,10 +65,10 @@ This setup focuses on controlling and monitoring the garage door's status.
 
 ## Placement Details
 
-* Relay Module: Wired in parallel with your existing garage door wall button. It can be housed in a small enclosure near the garage door opener unit.
-* Closed Reed Switch: Attached to the garage door track, with the magnet on the door itself. It should be positioned so the switch is triggered only when the door is fully closed.
-* Rotary Encoder (Hall Effect Sensors & Magnets): This is a DIY component. The magnets are attached to the rotating torsion bar of the garage door, and the Hall effect sensors are mounted in a fixed position to read the magnets as they pass by. This measures the door's rotation and, by extension, its open/closed position.
-* ESP32-C6: Typically located near the garage door opener to easily connect to the relay and encoder.
+- Relay Module: Wired in parallel with your existing garage door wall button. It can be housed in a small enclosure near the garage door opener unit.
+- Closed Reed Switch: Attached to the garage door track, with the magnet on the door itself. It should be positioned so the switch is triggered only when the door is fully closed.
+- Rotary Encoder (Hall Effect Sensors & Magnets): This is a DIY component. The magnets are attached to the rotating torsion bar of the garage door, and the Hall effect sensors are mounted in a fixed position to read the magnets as they pass by. This measures the door's rotation and, by extension, its open/closed position.
+- ESP32-C6: Typically located near the garage door opener to easily connect to the relay and encoder.
 
 ## All-in-One System
 
@@ -105,15 +105,15 @@ This diagram combines both systems, showing how a single ESP32-C6 can manage all
 
 **Placement Details:**
 
-* ESP32-C6: A single ESP32-C6 controls everything. It's often most practical to place it in a central enclosure near the garage door opener, as this provides easy access to power and is a good central point for wiring to the various sensors and modules.
-* Car Positioning Components:
-  * Front LD2450 Sensor: On the front wall, *closest to the garage door opening*.
-  * Rear LD2450 Sensor: On the ceiling above the rear of the car, *further away from the garage door*.
-  * WS2812B LED Strip: On the ceiling, parallel to the car.
-* Garage Door Components:
-  * Relay Module: Near the garage door opener.
-  * Rotary Encoder: On the torsion bar, typically at the Garage door opening.
-  * Closed Reed Switch: On the garage door track, positioned to detect a fully closed door.
+- ESP32-C6: A single ESP32-C6 controls everything. It's often most practical to place it in a central enclosure near the garage door opener, as this provides easy access to power and is a good central point for wiring to the various sensors and modules.
+- Car Positioning Components:
+  - Front LD2450 Sensor: On the front wall, *closest to the garage door opening*.
+  - Rear LD2450 Sensor: On the ceiling above the rear of the car, *further away from the garage door*.
+  - WS2812B LED Strip: On the ceiling, parallel to the car.
+- Garage Door Components:
+  - Relay Module: Near the garage door opener.
+  - Rotary Encoder: On the torsion bar, typically at the Garage door opening.
+  - Closed Reed Switch: On the garage door track, positioned to detect a fully closed door.
 
 ## Wiring Components
 
@@ -121,27 +121,27 @@ This diagram combines both systems, showing how a single ESP32-C6 can manage all
 
 There are three primary locations
 
-* Near Gargedoor opener
-* Wall at back of Garage
-* Ceiling at front of Garage
+- Near Gargedoor opener
+- Wall at back of Garage
+- Ceiling at front of Garage
 
 ### Near Gargedoor opener
 
 Could use 5V Power Suppy for this and WS2812B LED Strip.
 
-* ESP32-C6
-* Close Door Relay Module (5V) (Exisiting Wire on Opener)
-* Rear LD2450 Sensor (Ceiling)
+- ESP32-C6
+- Close Door Relay Module (5V) (Exisiting Wire on Opener)
+- Rear LD2450 Sensor (Ceiling)
 
 ### Wall at Back of Garage
 
 3 Wires
 Could use 5V Power Suppy for Just this. Still need GND to ESP32-C6.
 
-* WS2812B LED Strip
-  * 5V
-  * GND
-  * Data
+- WS2812B LED Strip
+  - 5V
+  - GND
+  - Data
 
 ### Ceiling at front of Garage
 
@@ -162,7 +162,7 @@ Could use 5V Power Suppy for Just this. Still need GND to ESP32-C6
 
 Front LD2450 Sensor (Wall)
 
-* 5V
-* GND
-* RX
-* TX
+- 5V
+- GND
+- RX
+- TX

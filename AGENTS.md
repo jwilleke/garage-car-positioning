@@ -41,7 +41,7 @@ Then:
 - Rules live in `.markdownlint.jsonc`; the editor, CLI, CI and agents all read that one file.
 <!-- KIT:END -->
 
-# 🚗 Garage Automation System
+## 🚗 Garage Automation System
 
 A flexible, DIY garage automation project for Home Assistant, featuring precise car positioning and a full-featured smart garage door controller, all powered by ESPHome and the ESP32-C6.
 
@@ -49,13 +49,13 @@ A flexible, DIY garage automation project for Home Assistant, featuring precise 
 ![ESPHome](https://img.shields.io/badge/ESPHome-supported-green.svg)
 ![Home Assistant](https://img.shields.io/badge/Home%20Assistant-supported-blue.svg)
 
-## Overview
+### Overview
 
 This project provides a comprehensive solution for automating your garage. It can be built as a standalone car positioner, a standalone smart garage door controller, or a combined all-in-one unit.
 
 READ [CODE_STANDARDS.md](./CODE_STANDARDS.md) for code requirements.
 
-## Features
+### Features
 
 - Precise, dual mmWave radar sensors for centimeter-level car positioning.
 - Visual parking aid using a WS2812B addressable LED strip.

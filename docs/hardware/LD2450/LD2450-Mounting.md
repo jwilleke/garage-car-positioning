@@ -55,5 +55,5 @@ In typical home automation setups (paired with an ESP32/ESP32-C3 via ESPHome):
 
 In short
 
-- Standard sealed plastic/3D-printed enclosures work fine without venting for reliable long-term use in home automation. 
+- Standard sealed plastic/3D-printed enclosures work fine without venting for reliable long-term use in home automation.
 - Vents are optional and mainly help if heat from the ESP32 becomes noticeable.

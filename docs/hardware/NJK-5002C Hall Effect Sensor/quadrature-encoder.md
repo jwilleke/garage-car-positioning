@@ -8,15 +8,15 @@ Here is a breakdown of how to get the physical placement just right.
 
 To get a smooth reading, your magnets must be spaced perfectly. If one gap is larger than the others, your garage door "position" will appear to jump or stutter.
 
-* Polarity: Ensure the same side of every magnet (e.g., all North poles) faces the sensors.
-* Spacing: Use a template. If you have 8 magnets, they must be exactly 45° apart.
+- Polarity: Ensure the same side of every magnet (e.g., all North poles) faces the sensors.
+- Spacing: Use a template. If you have 8 magnets, they must be exactly 45° apart.
 
 ## 2. Sensor Placement (The "Quadrature" Secret)
 
 This is the most technical part. For the ESP32 to know the direction, the two sensors cannot trigger at the exact same time. They need to be "out of phase."
 
-* The 90° Rule: Ideally, when Magnet #1 is directly in front of Sensor A, Sensor B should be exactly halfway between Magnet #1 and Magnet #2.
-* Physical Gap: If your magnets are 2 inches apart, place Sensor B about 0.5 inches (1/4 of the distance) away from Sensor A.
+- The 90° Rule: Ideally, when Magnet #1 is directly in front of Sensor A, Sensor B should be exactly halfway between Magnet #1 and Magnet #2.
+- Physical Gap: If your magnets are 2 inches apart, place Sensor B about 0.5 inches (1/4 of the distance) away from Sensor A.
 
 ## 3. Visualizing the Signal
 
@@ -33,27 +33,27 @@ When placed correctly, the electrical signals look like overlapping square waves
 
 ## 4. Installation Checklist
 
-* Air Gap: Keep the sensors 2mm to 5mm away from the magnets. Too far and they miss pulses; too close and they might collide.
-* Rigidity: Use a solid bracket. If the sensors vibrate or flex, you will get "ghost" counts.
-* De-bounce: In your ESPHome code, ensure you have a small `internal_filter` (e.g., `10ms`) to ignore electrical noise.
+- Air Gap: Keep the sensors 2mm to 5mm away from the magnets. Too far and they miss pulses; too close and they might collide.
+- Rigidity: Use a solid bracket. If the sensors vibrate or flex, you will get "ghost" counts.
+- De-bounce: In your ESPHome code, ensure you have a small `internal_filter` (e.g., `10ms`) to ignore electrical noise.
 
 ## Soem caclulations
 
 So if I have a
 
-* wheel (Garage door drum) of 5"
-* How many magnets 1/2" diameter magnets would I need?
-* How far apart are the magnets on the wheel?
+- wheel (Garage door drum) of 5"
+- How many magnets 1/2" diameter magnets would I need?
+- How far apart are the magnets on the wheel?
 
 ### How far apart are the Sensor?
 
 For a 5" diameter drum, you are working with a circumference of approximately 15.7 inches. Designing the layout involves balancing resolution (how precisely you want to track the door) with the physical size of your sensors and magnets.
 Here is the math and the recommended setup for your specific hardware.
 
-* How many magnets do you need? For a garage door, you don't need extreme precision (like a CNC machine), but you want enough to detect a few inches of movement reliably.
-* Recommended: 8 to 12 magnets.
-  * 8 magnets: Gives you 32 "pulses" per rotation (in quadrature). Each pulse represents about 0.5 inches of door travel.
-  * 12 magnets: Gives you 48 pulses per rotation. Each pulse represents about 0.3 inches of travel.
+- How many magnets do you need? For a garage door, you don't need extreme precision (like a CNC machine), but you want enough to detect a few inches of movement reliably.
+- Recommended: 8 to 12 magnets.
+  - 8 magnets: Gives you 32 "pulses" per rotation (in quadrature). Each pulse represents about 0.5 inches of door travel.
+  - 12 magnets: Gives you 48 pulses per rotation. Each pulse represents about 0.3 inches of travel.
 
 Why not more? With 1/2" diameter magnets, if you put too many (e.g., 20+), the magnetic fields will overlap too much, and the Hall sensor won't be able to tell where one magnet ends and the next begins.
 
@@ -64,9 +64,9 @@ Spacing=π×Diameter / Number of Magnets
 ​
 Number of Magnets Center-to-Center Spacing (Approx.)
 
-* 8 magnets 1.96 inches (~50mm)
-* 10 magnets 1.57 inches (~40mm)
-* 12 magnets 1.31 inches (~33mm)
+- 8 magnets 1.96 inches (~50mm)
+- 10 magnets 1.57 inches (~40mm)
+- 12 magnets 1.31 inches (~33mm)
 
 ## Script to Calculate
 
@@ -120,8 +120,8 @@ For a 6-hole pattern, there's a nice shortcut: the chord length between adjacent
 
 Drill Size
 
-* Drill holes at 12.334mm for a press fit, or
-* 12.5mm / ½" for a slip fit (easier assembly, backing plate holds them in)
+- Drill holes at 12.334mm for a press fit, or
+- 12.5mm / ½" for a slip fit (easier assembly, backing plate holds them in)
 
 Edge Clearance Check
 

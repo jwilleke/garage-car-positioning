@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(gh api *)",
+      "Bash(gh auth *)",
+      "Bash(gh issue:*)",
+      "Bash(gh label *)",
+      "Bash(gh pr *)",
+      "Bash(gh repo *)",
+      "Bash(gh run *)",
+      "Bash(esphome:*)",
+      "Bash(esphome config:*)",
+      "Bash(esphome logs:*)",
+      "mcp__ide__getDiagnostics"
+    ]
+  }
+}

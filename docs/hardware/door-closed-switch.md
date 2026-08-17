@@ -4,7 +4,7 @@ This is a magnetic reed door switch mounted at the top (in my case) or bottom of
 
 | GPIO1 | Closed Reed Switch | Signal | Use internal pull-up. Connect other leg to GND. |
 
-**Note:** Changed from GPIO4 (JTAG MTMS) to GPIO1 (stable LP pin) to avoid JTAG interference. See `docs/hardware/ESP32-C6 DevKit.md` for details.
+__Note:__ Changed from GPIO4 (JTAG MTMS) to GPIO1 (stable LP pin) to avoid JTAG interference. See `docs/hardware/ESP32-C6 DevKit.md` for details.
 
 ## My Reed Switch
 

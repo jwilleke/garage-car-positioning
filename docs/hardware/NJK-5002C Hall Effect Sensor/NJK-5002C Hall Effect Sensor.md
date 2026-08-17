@@ -8,8 +8,8 @@
 
 ## Quadrature Encoder Calculations
 
-This project mounts **6 magnets at 5" from the center of the encoder disk** with **two Hall Effect
-sensors** wired in quadrature (Sensor A on GPIO2, Sensor B on GPIO3). The calculations below derive
+This project mounts __6 magnets at 5" from the center of the encoder disk__ with __two Hall Effect
+sensors__ wired in quadrature (Sensor A on GPIO2, Sensor B on GPIO3). The calculations below derive
 magnet spacing, sensor placement, and the `garage_door_full_open_counts` firmware value.
 
 ### Configuration
@@ -22,7 +22,7 @@ magnet spacing, sensor placement, and the `garage_door_full_open_counts` firmwar
 
 ### Derived Values
 
-The magnets travel in a circle, so all spacing is measured along the **arc** at the 5" radius:
+The magnets travel in a circle, so all spacing is measured along the __arc__ at the 5" radius:
 
 ```txt
 Circumference = 2 × π × radius
@@ -44,7 +44,7 @@ Door travel per count = circumference / counts_per_rev
 
 ### Sensor Placement
 
-With quadrature encoding, Sensor B must be offset from Sensor A by **¼ of the magnet spacing**
+With quadrature encoding, Sensor B must be offset from Sensor A by __¼ of the magnet spacing__
 so that the two sensors are 90° out of phase. This is what enables direction detection.
 
 ```txt
@@ -53,7 +53,7 @@ Sensor offset = magnet_spacing / 4
               = 1.309"  (arc distance between Sensor A and Sensor B)
 ```
 
-Mount Sensor B **1.309" ahead of Sensor A** along the arc of magnet travel.
+Mount Sensor B __1.309" ahead of Sensor A__ along the arc of magnet travel.
 
 ### Firmware: `garage_door_full_open_counts`
 
@@ -77,7 +77,7 @@ substitutions:
   garage_door_full_open_counts: "64"   # adjust to your measured door travel
 ```
 
-> **Tip**: After flashing, open the door fully and read the raw encoder count from the Home
+> __Tip__: After flashing, open the door fully and read the raw encoder count from the Home
 > Assistant entity `sensor.garage_door_encoder`. Use that observed count as your calibrated value.
 
 ### General Formula

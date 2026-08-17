@@ -56,7 +56,7 @@ Should show: `Mach-O 64-bit executable arm64` (not x86_64)
 
 The firmware has been successfully compiled:
 
-- **RAM Usage**: 10.8% (35,548 bytes used)
-- **Flash Usage**: 60.8% (1,115,902 bytes used)
-- **Firmware Size**: 0x121540 bytes
-- **Output File**: `firmware.factory.bin` (ready to flash)
+- __RAM Usage__: 10.8% (35,548 bytes used)
+- __Flash Usage__: 60.8% (1,115,902 bytes used)
+- __Firmware Size__: 0x121540 bytes
+- __Output File__: `firmware.factory.bin` (ready to flash)

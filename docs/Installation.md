@@ -46,7 +46,7 @@ This project uses ESPHome to program the microcontroller(s).
   - For Option 1: `car-positioning.yaml`
   - For Option 2: `garage-door.yaml`
   - For Option 3: `all-in-one.yaml` (pre-configured combined system)
-- **Important**: The car positioning configurations (Option 1 and Option 3) require the LD2450 external component. ESPHome will automatically download this when you compile the firmware. If you encounter issues, see the [Build Status Guide](../BUILD_STATUS.md) for troubleshooting.
+- __Important__: The car positioning configurations (Option 1 and Option 3) require the LD2450 external component. ESPHome will automatically download this when you compile the firmware. If you encounter issues, see the [Build Status Guide](../BUILD_STATUS.md) for troubleshooting.
 - Create Secrets: Create a file named `secrets.yaml` in your ESPHome directory (if you don't have one) to store your WiFi credentials and other private information. Your `secrets.yaml` should look something like this:
   - Sample is at [esphome/secrets-example.yaml](../esphome/secrets-example.yaml)
 

@@ -17,7 +17,7 @@ cd esphome
 esphome logs all-in-one.yaml --device /dev/cu.usbmodem31201
 ```
 
-**What to look for:**
+__What to look for:__
 
 - Device booting messages
 - WiFi connection attempts
@@ -42,13 +42,13 @@ If logs show nothing, the device may not be booting:
 
 ### Issue 1: Device Not Booting
 
-**Symptoms:**
+__Symptoms:__
 
 - No logs via USB
 - No AP visible
 - No activity
 
-**Solutions:**
+__Solutions:__
 
 1. Press RESET button on ESP32-C6
 2. Check USB connection
@@ -56,13 +56,13 @@ If logs show nothing, the device may not be booting:
 
 ### Issue 2: WiFi Stuck in Connection Loop
 
-**Symptoms:**
+__Symptoms:__
 
 - Logs show repeated connection attempts
 - Never times out to start AP
 - No AP visible
 
-**Solutions:**
+__Solutions:__
 
 1. Reduce `reboot_timeout` (already set to 5min)
 2. Check WiFi credentials are correct
@@ -70,12 +70,12 @@ If logs show nothing, the device may not be booting:
 
 ### Issue 3: AP Not Starting
 
-**Symptoms:**
+__Symptoms:__
 
 - Device connects to WiFi but no IP
 - AP should start but doesn't
 
-**Solutions:**
+__Solutions:__
 
 1. Force AP to always be available (see below)
 2. Check `ap_timeout` setting
@@ -104,10 +104,10 @@ This makes the AP always available, which is useful for debugging but uses more 
 
 ## Next Steps
 
-1. **Connect USB and check logs** - This is critical to see what's happening
-2. **Press RESET button** - May help if device is stuck
-3. **Check if device appears in Unifi** - Even without IP, it might show as "connecting"
-4. **Try re-uploading firmware** - If logs show nothing, firmware may be corrupted
+1. __Connect USB and check logs__ - This is critical to see what's happening
+2. __Press RESET button__ - May help if device is stuck
+3. __Check if device appears in Unifi__ - Even without IP, it might show as "connecting"
+4. __Try re-uploading firmware__ - If logs show nothing, firmware may be corrupted
 
 ## Quick Test: Force AP Mode
 
@@ -127,7 +127,7 @@ This will force the device to always broadcast the AP. Good for testing, but rem
 
 ## Critical: Get USB Logs
 
-**The most important step is to check USB logs** to see what the device is actually doing. Without logs, we're guessing.
+__The most important step is to check USB logs__ to see what the device is actually doing. Without logs, we're guessing.
 
 Run:
 

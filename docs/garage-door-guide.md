@@ -8,23 +8,23 @@ For a combined system that also includes car positioning, see [Installation.md](
 
 ## Step 1: Bill of Materials
 
-Gather the components listed under **Option 2: Standalone Garage Door Controller** in the Bill of Materials.
+Gather the components listed under __Option 2: Standalone Garage Door Controller__ in the Bill of Materials.
 
 ➡️ See [hardware/BOM.md — Option 2](hardware/BOM.md#option-2-standalone-garage-door-controller)
 
-> **Note:** The BOM reflects components sourced from the builder's existing inventory. Substitutions are generally viable — any 5V relay module with a High/Low trigger jumper will work, and any NPN Hall effect sensor (e.g., A3144) can substitute for the NJK-5002C. Verify pinouts before wiring.
+> __Note:__ The BOM reflects components sourced from the builder's existing inventory. Substitutions are generally viable — any 5V relay module with a High/Low trigger jumper will work, and any NPN Hall effect sensor (e.g., A3144) can substitute for the NJK-5002C. Verify pinouts before wiring.
 
 ---
 
 ## Step 2: Hardware Assembly
 
-Wire all components according to the **Option 2** wiring diagram.
+Wire all components according to the __Option 2__ wiring diagram.
 
 ➡️ See [hardware/wiring-diagram.md — Option 2](hardware/wiring-diagram.md#option-2-standalone-garage-door-controller)
 
 Key connections:
 
-- GPIO10 — Relay module signal (jumper set to **H**)
+- GPIO10 — Relay module signal (jumper set to __H__)
 - GPIO1 — Reed switch (door closed sensor)
 - GPIO2 — Hall effect sensor A (encoder)
 - GPIO3 — Hall effect sensor B (encoder)
@@ -33,9 +33,9 @@ Key connections:
 
 ➡️ See [hardware/wiring-diagram.md — Relay Wiring](hardware/wiring-diagram.md#relay-wiring)
 
-Connect relay **NO** and **COM** to the opener's **push button (PB) dry-contact terminals** — the same terminals used by the wall button. Do not wire to the wall console data port.
+Connect relay __NO__ and __COM__ to the opener's __push button (PB) dry-contact terminals__ — the same terminals used by the wall button. Do not wire to the wall console data port.
 
-> **Genie 2022 note:** The default relay pulse of 200ms may be too short to reliably trigger the Genie 2022 PB input. The firmware includes a runtime-configurable **Garage Door - Relay Pulse (ms)** entity (default 500ms). See [GitHub issue #7](https://github.com/jwilleke/garage-car-positioning/issues/7).
+> __Genie 2022 note:__ The default relay pulse of 200ms may be too short to reliably trigger the Genie 2022 PB input. The firmware includes a runtime-configurable __Garage Door - Relay Pulse (ms)__ entity (default 500ms). See [GitHub issue #7](https://github.com/jwilleke/garage-car-positioning/issues/7).
 
 ### Reed Switch
 
@@ -53,7 +53,7 @@ Physical magnet and sensor placement determines encoder accuracy.
 
 ## Step 3: Power Supply
 
-- **5V 1A minimum** for the standalone door controller
+- __5V 1A minimum__ for the standalone door controller
 - Share a common ground between the ESP32, relay module, and external 5V supply
 
 ➡️ See [Installation.md — Step 4: Power Supply Considerations](Installation.md#step-4-power-supply-considerations)
@@ -87,11 +87,11 @@ Summary:
 1. Flash firmware
 2. Fully close the door — encoder resets to 0
 3. Fully open the door — watch `Garage Door - Last Open Peak Counts` in HA
-4. Set **Garage Door - Full Open Counts** in HA to the peak value observed (no reflash needed — it is a runtime `number` entity with `restore_value: true`)
+4. Set __Garage Door - Full Open Counts__ in HA to the peak value observed (no reflash needed — it is a runtime `number` entity with `restore_value: true`)
 
-**Calibrated value for this installation: 36** (verified 2026-06-10 via `Last Open Peak Counts` diagnostic)
+__Calibrated value for this installation: 36__ (verified 2026-06-10 via `Last Open Peak Counts` diagnostic)
 
-> **Note:** The firmware default (`initial_value`) is also set to 36. If you erase NVS or flash a clean device, the default will be correct without manual calibration.
+> __Note:__ The firmware default (`initial_value`) is also set to 36. If you erase NVS or flash a clean device, the default will be correct without manual calibration.
 
 ---
 
@@ -99,8 +99,8 @@ Summary:
 
 After flashing, the device will be auto-discovered by the ESPHome integration.
 
-Navigate to **Settings → Devices & Services** and click **Configure** on the discovered device.
+Navigate to __Settings → Devices & Services__ and click __Configure__ on the discovered device.
 
-The garage door exposes a **cover** entity for open/close control and position tracking.
+The garage door exposes a __cover__ entity for open/close control and position tracking.
 
 ➡️ See [Installation.md — Step 7: Home Assistant Integration](Installation.md#step-7-home-assistant-integration)

@@ -19,10 +19,10 @@ In all interactions and commit messages
 - NEVER put unencrypted "Secrets" in in Git or other CMS systems.
 - Always create docs/project_log.md file as a log of work done on the project in format specified in document within "## Format"
 - In Markdown documents:
-  - **bold** in list beginings.
+  - __bold__ in list beginings.
   - do not use "1. Headings" ok to use "## Step 1 ..."
-  - **NO Bolding in List Headings:** e.g., `- **Project Overview:**` is invalid. Use `- Project Overview:` instead.
-  - **NO Bolding entire lines:** e.g., `**Process:**` is invalid. Use proper headings (e.g., `### Process`) instead.
+  - __NO Bolding in List Headings:__ e.g., `- **Project Overview:**` is invalid. Use `- Project Overview:` instead.
+  - __NO Bolding entire lines:__ e.g., `**Process:**` is invalid. Use proper headings (e.g., `### Process`) instead.
 
 ## Language & Environment
 

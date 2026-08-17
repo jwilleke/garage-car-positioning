@@ -12,19 +12,19 @@ I've updated the configuration to use a static IP address. You need to customize
 
 ### In Unifi Console
 
-1. **Find Gateway IP** (Router IP):
-   - Go to **Settings** → **Networks**
+1. __Find Gateway IP__ (Router IP):
+   - Go to __Settings__ → __Networks__
    - Find your network (the one "SWIT2" uses)
-   - Look for **Gateway IP/Subnet** (usually `192.168.1.1` or `192.168.68.1`)
+   - Look for __Gateway IP/Subnet__ (usually `192.168.1.1` or `192.168.68.1`)
 
-2. **Find Available IP Address**:
-   - Go to **Clients** or **Insights** → **DHCP Leases**
+2. __Find Available IP Address__:
+   - Go to __Clients__ or __Insights__ → __DHCP Leases__
    - Find an IP that's NOT in use
    - Or use an IP outside your DHCP range (e.g., if DHCP is 192.168.68.100-200, use 192.168.68.50)
 
-3. **Find Subnet Mask**:
+3. __Find Subnet Mask__:
    - Usually `255.255.255.0` for home networks
-   - Check in **Settings** → **Networks** → Your network
+   - Check in __Settings__ → __Networks__ → Your network
 
 ## Step 2: Update Configuration
 
@@ -40,7 +40,7 @@ wifi:
     dns2: 8.8.8.8              # Google DNS backup
 ```
 
-**Example values** (update for your network):
+__Example values__ (update for your network):
 
 - If gateway is `192.168.1.1`: Use `192.168.1.100` for static_ip
 - If gateway is `192.168.68.1`: Use `192.168.68.100` for static_ip
@@ -60,49 +60,49 @@ esphome upload all-in-one.yaml
 
 After upload, check:
 
-1. **In Unifi Console**:
-   - Go to **Clients**
+1. __In Unifi Console__:
+   - Go to __Clients__
    - Look for device with the static IP you configured
    - Should show as "esp32-garage-all-in-one" or MAC address `98:a3:16:b1:c3:fc`
 
-2. **Ping the device**:
+2. __Ping the device__:
 
    ```bash
    ping 192.168.68.100  # Use your static IP
    ```
 
-3. **Check Home Assistant**:
+3. __Check Home Assistant__:
    - Device should appear in ESPHome integration
    - Accessible at the static IP
 
 ## Common Network Ranges
 
-- **192.168.1.x** - Gateway usually `192.168.1.1`
-- **192.168.68.x** - Gateway usually `192.168.68.1` (common in Unifi)
-- **10.0.0.x** - Gateway usually `10.0.0.1`
-- **172.16.x.x** - Less common for home networks
+- __192.168.1.x__ - Gateway usually `192.168.1.1`
+- __192.168.68.x__ - Gateway usually `192.168.68.1` (common in Unifi)
+- __10.0.0.x__ - Gateway usually `10.0.0.1`
+- __172.16.x.x__ - Less common for home networks
 
 ## Troubleshooting
 
 ### Still Not Connecting?
 
-1. **Check IP is available**:
+1. __Check IP is available__:
    - Ping the IP: `ping 192.168.68.100`
    - If it responds, IP is in use - choose different IP
 
-2. **Check Gateway is correct**:
+2. __Check Gateway is correct__:
    - From Unifi Console, verify the exact gateway IP
    - Must match your network's gateway
 
-3. **Check Subnet Mask**:
+3. __Check Subnet Mask__:
    - Most home networks use `255.255.255.0`
    - Verify in Unifi Console
 
-4. **Check Firewall Rules**:
+4. __Check Firewall Rules__:
    - In Unifi Console, check if firewall is blocking the device
    - May need to allow device on network
 
-5. **Try Different IP**:
+5. __Try Different IP__:
    - If one IP doesn't work, try another in the same range
    - Make sure it's outside DHCP range
 
@@ -110,9 +110,9 @@ After upload, check:
 
 Instead of static IP, you can reserve an IP in Unifi:
 
-1. Go to **Clients** in Unifi Console
+1. Go to __Clients__ in Unifi Console
 2. Find device by MAC: `98:a3:16:b1:c3:fc`
-3. Click device → **Configure** → **Use Fixed IP Address**
+3. Click device → __Configure__ → __Use Fixed IP Address__
 4. Assign an IP
 5. Remove `manual_ip` from configuration (let DHCP handle it)
 

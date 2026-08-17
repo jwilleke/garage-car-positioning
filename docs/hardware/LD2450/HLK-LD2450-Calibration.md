@@ -40,8 +40,8 @@ Leave the car there for the rest of this procedure.
 
 In Home Assistant or the ESPHome web server, observe:
 
-- **Car Position - Front T1 Y** — distance from the front wall into the garage (inches)
-- **Car Position - Front T1 X** — lateral offset from front sensor centerline (inches)
+- __Car Position - Front T1 Y__ — distance from the front wall into the garage (inches)
+- __Car Position - Front T1 X__ — lateral offset from front sensor centerline (inches)
 
 Write these down. Example: Y = `24.5`, X = `1.2`
 
@@ -64,8 +64,8 @@ The X tolerance controls how far left or right of center the car can be and stil
 
 Observe:
 
-- **Car Position - Rear T1 Y** — vertical distance from ceiling to car top (inches)
-- **Car Position - Rear T1 X** — lateral offset from rear sensor centerline (inches)
+- __Car Position - Rear T1 Y__ — vertical distance from ceiling to car top (inches)
+- __Car Position - Rear T1 X__ — lateral offset from rear sensor centerline (inches)
 
 Write these down. Example: Y = `42.0`, X = `-0.8`
 
@@ -92,19 +92,19 @@ esphome run esphome/all-in-one.yaml
 
 With the car in the calibrated position:
 
-- **Car Position - Vehicle Detected** should read `ON`
-- **Car Position - Correctly Parked** should read `ON`
-- **Car Position - Parking Guidance** should read `PARKED`
+- __Car Position - Vehicle Detected__ should read `ON`
+- __Car Position - Correctly Parked__ should read `ON`
+- __Car Position - Parking Guidance__ should read `PARKED`
 - LED strip should show green
 
 Then drive the car out completely and confirm:
 
-- **Car Position - Vehicle Detected** flips to `OFF`
+- __Car Position - Vehicle Detected__ flips to `OFF`
 - LED strip turns off
 
 ### Step 7 — Test the Guidance Range
 
-Drive back in slowly and watch **Car Position - Parking Guidance**. You should see the sequence:
+Drive back in slowly and watch __Car Position - Parking Guidance__. You should see the sequence:
 
 ```
 MOVE FORWARD >>>   (car not yet in zone)
@@ -138,11 +138,11 @@ danger_zone_distance: "118.1"  # inches — people within this range of sensor t
 
 Determines whether a detected target is a person vs. a car. The car (Target 1) is typically much further from the sensor than a person standing nearby. Set this to a distance clearly smaller than the car's typical sensor reading but large enough to catch a person in the space.
 
-To calibrate: have someone stand in the garage (car absent) and note **Car Position - Front T1 Distance** or **Rear T1 Distance**. Set `person_max_distance` to ~10 inches above that reading.
+To calibrate: have someone stand in the garage (car absent) and note __Car Position - Front T1 Distance__ or __Rear T1 Distance__. Set `person_max_distance` to ~10 inches above that reading.
 
 ### `danger_zone_distance`
 
-How close a person (Target 2) must be to a sensor to trigger the **Person in Danger Zone** alert while the car is present. This defines the active safety perimeter around the moving car.
+How close a person (Target 2) must be to a sensor to trigger the __Person in Danger Zone__ alert while the car is present. This defines the active safety perimeter around the moving car.
 
 A value of 118 in (~3 m) covers the area immediately around a typical car. Increase if your garage is narrow and you want wider coverage; decrease to reduce false triggers from people in adjacent areas.
 

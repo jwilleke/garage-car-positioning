@@ -12,8 +12,8 @@ The system is powered by ESPHome and integrates seamlessly with Home Assistant.
 
 This project is based on ESPHome, so there is no traditional "build" process. Instead, you will need to:
 
-1. **Set up ESPHome:** If you haven't already, you will need to set up ESPHome. This is typically done as a Home Assistant add-on.
-2. **Configure ESPHome:**
+1. __Set up ESPHome:__ If you haven't already, you will need to set up ESPHome. This is typically done as a Home Assistant add-on.
+2. __Configure ESPHome:__
     - Create a new ESPHome device.
     - Copy the contents of `esphome/car-positioning.yaml` or `esphome/garage-door.yaml` (or a combination of both for the all-in-one system) into the ESPHome editor for your device.
     - Create a `secrets.yaml` file in your ESPHome configuration directory (if you don't already have one) and add the following secrets, replacing the placeholder values with your own:
@@ -26,14 +26,14 @@ This project is based on ESPHome, so there is no traditional "build" process. In
         api_encryption_key: "YOUR_API_ENCRYPTION_KEY"
         ```
 
-3. **Flash the ESP32-C6:**
+3. __Flash the ESP32-C6:__
     - Connect the ESP32-C6 to your computer.
     - Click "Install" in the ESPHome UI and select "Plug into this computer".
     - ESPHome will then compile the firmware and flash it to the ESP32-C6.
 
 ## Development Conventions
 
-- **ESPHome:** The core logic of the project is defined in YAML files in the `esphome/` directory. These files are used to configure the ESP32-C6.
-- **Home Assistant:** The system is designed to be used with Home Assistant. The `home-assistant/` directory contains example configurations for automations and dashboards.
-- **Hardware:** The `hardware/` directory contains the bill of materials (BOM) and wiring diagrams for the different build options.
-- **Documentation:** The `docs/` directory contains detailed documentation on the project, including installation, calibration, and light strip operation.
+- __ESPHome:__ The core logic of the project is defined in YAML files in the `esphome/` directory. These files are used to configure the ESP32-C6.
+- __Home Assistant:__ The system is designed to be used with Home Assistant. The `home-assistant/` directory contains example configurations for automations and dashboards.
+- __Hardware:__ The `hardware/` directory contains the bill of materials (BOM) and wiring diagrams for the different build options.
+- __Documentation:__ The `docs/` directory contains detailed documentation on the project, including installation, calibration, and light strip operation.

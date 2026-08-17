@@ -54,7 +54,7 @@ Four configs exist for the all-in-one build, plus two standalone configs. All us
 
 ### `all-in-one.yaml` — Local Dev / CLI Flashing
 
-Combines car positioning and garage door control. Uses `!include` to reference packages from the **local disk**. Use this when developing or flashing from the Mac CLI.
+Combines car positioning and garage door control. Uses `!include` to reference packages from the __local disk__. Use this when developing or flashing from the Mac CLI.
 
 - Contains only substitutions and WiFi config — all logic lives in packages
 - Packages resolved from local `esphome/packages/` — changes take effect immediately without pushing to GitHub
@@ -62,7 +62,7 @@ Combines car positioning and garage door control. Uses `!include` to reference p
 
 ### `ha-builder.yaml` — Home Assistant ESPHome Builder
 
-Produces **identical firmware** to `all-in-one.yaml`. Uses `github://` package references instead of local `!include` — packages are pulled directly from the public GitHub repo each time HA Builder compiles.
+Produces __identical firmware__ to `all-in-one.yaml`. Uses `github://` package references instead of local `!include` — packages are pulled directly from the public GitHub repo each time HA Builder compiles.
 
 Paste into the ESPHome Builder add-on in Home Assistant. No file copying required.
 
@@ -164,7 +164,7 @@ Garage door subsystem. Requires substitutions:
 | `garage_door_closed_switch_pin` | Reed switch GPIO |
 | `garage_door_encoder_a_pin` | Rotary encoder A GPIO |
 | `garage_door_encoder_b_pin` | Rotary encoder B GPIO |
-| `garage_door_full_open_counts` | Encoder counts at full open — **must calibrate** |
+| `garage_door_full_open_counts` | Encoder counts at full open — __must calibrate__ |
 
 Provides: rotary encoder position tracking (resolution 4), relay with configurable pulse duration, closed switch, door position %, door status text sensor, `cover` entity for Home Assistant, reset encoder button.
 

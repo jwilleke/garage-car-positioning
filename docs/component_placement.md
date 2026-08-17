@@ -28,7 +28,7 @@ This setup uses two mmWave radar sensors to detect the car's position and an LED
                    Rotary Encoder (on torsion bar)
 ```
 
-**Placement Details:**
+__Placement Details:__
 
 - Front LD2450 Sensor: Mounted on the front wall of the garage, *closest to the garage door opening*, facing the car. This sensor tracks the front of the car.
 - Rear LD2450 Sensor: Mounted on the ceiling, positioned to get a clear view of the back of the car (e.g., trunk or bumper), *further away from the garage door*.
@@ -103,7 +103,7 @@ This diagram combines both systems, showing how a single ESP32-C6 can manage all
                    (Garage Door Opening - Reed switch on track)
 ```
 
-**Placement Details:**
+__Placement Details:__
 
 - ESP32-C6: A single ESP32-C6 controls everything. It's often most practical to place it in a central enclosure near the garage door opener, as this provides easy access to power and is a good central point for wiring to the various sensors and modules.
 - Car Positioning Components:

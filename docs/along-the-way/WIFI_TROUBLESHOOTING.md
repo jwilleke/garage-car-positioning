@@ -6,17 +6,17 @@ If your ESP32-C6 device is not connecting to your Unifi network, follow these st
 
 ## Common Causes
 
-### 1. WiFi Band Compatibility ⚠️ **MOST COMMON**
+### 1. WiFi Band Compatibility ⚠️ __MOST COMMON__
 
-**ESP32-C6 only supports 2.4GHz WiFi**, not 5GHz!
+__ESP32-C6 only supports 2.4GHz WiFi__, not 5GHz!
 
-**Check your Unifi network:**
+__Check your Unifi network:__
 
-- Ensure your SSID "SWIT2" broadcasts on **2.4GHz**
+- Ensure your SSID "SWIT2" broadcasts on __2.4GHz__
 - If you have separate 2.4GHz and 5GHz networks, use the 2.4GHz one
 - In Unifi Console, check if "SWIT2" is configured for 2.4GHz band
 
-**Solution**: Create or use a 2.4GHz-only network, or ensure your network broadcasts both bands with the same SSID.
+__Solution__: Create or use a 2.4GHz-only network, or ensure your network broadcasts both bands with the same SSID.
 
 ### 2. WiFi Security Settings
 
@@ -27,7 +27,7 @@ ESP32-C6 supports:
 - ❌ WPA Enterprise (not supported)
 - ❌ WEP (deprecated, not recommended)
 
-**Check Unifi Console:**
+__Check Unifi Console:__
 
 - Security: Should be WPA2 or WPA3
 - Not WPA Enterprise
@@ -41,7 +41,7 @@ wifi_ssid: "SWIT2"  # Must match exactly (case-sensitive)
 wifi_password: "Abc123......"  # Must be correct
 ```
 
-**Common issues:**
+__Common issues:__
 
 - Extra spaces
 - Case sensitivity
@@ -73,7 +73,7 @@ If your Unifi network has:
 - VLAN isolation
 - Firewall rules blocking devices
 
-**Solution**: Temporarily disable isolation or add the device to a trusted network.
+__Solution__: Temporarily disable isolation or add the device to a trusted network.
 
 ## Diagnostic Steps
 
@@ -103,15 +103,15 @@ If WiFi fails, the device should create an access point:
 - SSID: `esp32-garage-all-in-one-AP`
 - Password: From `secrets.yaml` (`ap_password`)
 
-**Connect to the AP** and use the captive portal to configure WiFi.
+__Connect to the AP__ and use the captive portal to configure WiFi.
 
 ### Step 3: Verify Network Settings in Unifi
 
-1. **Check 2.4GHz is enabled** for SSID "SWIT2"
-2. **Check security settings** (WPA2/WPA3)
-3. **Check DHCP pool** - ensure IPs are available
-4. **Check firewall rules** - ensure new devices can connect
-5. **Check if device appears** in "Clients" even if not fully connected
+1. __Check 2.4GHz is enabled__ for SSID "SWIT2"
+2. __Check security settings__ (WPA2/WPA3)
+3. __Check DHCP pool__ - ensure IPs are available
+4. __Check firewall rules__ - ensure new devices can connect
+5. __Check if device appears__ in "Clients" even if not fully connected
 
 ### Step 4: Test with Static IP
 
@@ -186,8 +186,8 @@ wifi:
 
 ## Next Steps
 
-1. **Check USB logs** to see exact error
-2. **Verify 2.4GHz network** in Unifi Console
-3. **Check for AP mode** - look for `esp32-garage-all-in-one-AP` network
-4. **Try static IP** if DHCP is the issue
-5. **Update WiFi config** with improvements above
+1. __Check USB logs__ to see exact error
+2. __Verify 2.4GHz network__ in Unifi Console
+3. __Check for AP mode__ - look for `esp32-garage-all-in-one-AP` network
+4. __Try static IP__ if DHCP is the issue
+5. __Update WiFi config__ with improvements above

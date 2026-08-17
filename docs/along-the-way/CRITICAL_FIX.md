@@ -4,7 +4,7 @@
 
 - Device responds to esptool (hardware OK)
 - Firmware uploads successfully
-- **BUT**: No logs, no AP, no network connection
+- __BUT__: No logs, no AP, no network connection
 - Device appears to crash on boot
 
 ## Fix Applied
@@ -25,11 +25,11 @@ This ensures logs are output to the correct UART on ESP32-C6.
 
 ### 1. Put Device in Bootloader Mode
 
-**IMPORTANT**: Before uploading, put device in bootloader mode:
+__IMPORTANT__: Before uploading, put device in bootloader mode:
 
-1. **Hold BOOT button** on ESP32-C6
-2. **Press and release RESET** button (while holding BOOT)
-3. **Release BOOT button**
+1. __Hold BOOT button__ on ESP32-C6
+2. __Press and release RESET__ button (while holding BOOT)
+3. __Release BOOT button__
 4. Device is now in bootloader mode
 
 ### 2. Re-upload Firmware
@@ -54,7 +54,7 @@ Right after upload completes:
 esphome logs all-in-one.yaml --device /dev/cu.usbmodem31201
 ```
 
-**What to look for:**
+__What to look for:__
 
 - Boot messages
 - WiFi connection attempts
@@ -65,8 +65,8 @@ esphome logs all-in-one.yaml --device /dev/cu.usbmodem31201
 
 After upload, immediately check for WiFi network:
 
-- **SSID**: `garage-aio`
-- **Password**: `Jbsbws12!` (from secrets.yaml)
+- __SSID__: `garage-aio`
+- __Password__: `Jbsbws12!` (from secrets.yaml)
 
 The AP is set to always be on (`ap_timeout: 0s`), so it should appear immediately if device is running.
 
@@ -103,7 +103,7 @@ GPIO0 is used for LED strip. On some ESP32 boards, GPIO0 can be problematic. If 
 
 ## Most Likely Issue
 
-The device is probably **crashing on boot** due to:
+The device is probably __crashing on boot__ due to:
 
 1. Component initialization failure
 2. GPIO conflict

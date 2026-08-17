@@ -2,7 +2,7 @@
 
 This document provides a comprehensive list of components for three different implementation options, all using the ESP32-C6 as the core microcontroller.
 
-> **Note:** This BOM reflects components sourced from the builder's existing inventory. Items marked "Already Had" were on hand and not purchased for this project. Substitutions are generally viable — verify pinouts and voltage compatibility before wiring. This list is a reference, not a prescriptive shopping list.
+> __Note:__ This BOM reflects components sourced from the builder's existing inventory. Items marked "Already Had" were on hand and not purchased for this project. Substitutions are generally viable — verify pinouts and voltage compatibility before wiring. This list is a reference, not a prescriptive shopping list.
 
 ## Option 1: Standalone Car Positioning System
 
@@ -33,7 +33,7 @@ A robust, dedicated system for controlling the garage door.
 
 ## Option 3: Combined All-in-One System
 
-A single, advanced system that performs **both** car positioning and garage door control **use one powerful ESP32-C6 microcontroller**.
+A single, advanced system that performs __both__ car positioning and garage door control __use one powerful ESP32-C6 microcontroller__.
 
 ### Controller & Power
 

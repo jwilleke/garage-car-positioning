@@ -11,14 +11,14 @@
 
 ### 1. Hardware Verification
 
-**Power:**
+__Power:__
 
 - ✅ Is USB cable connected securely?
 - ✅ Try different USB cable
 - ✅ Try different USB port
 - ✅ Check if computer recognizes USB device: `ls /dev/cu.usbmodem*`
 
-**Device:**
+__Device:__
 
 - ✅ Press RESET button on ESP32-C6
 - ✅ Check for any LED indicators
@@ -39,7 +39,7 @@ esptool.py --port /dev/cu.usbmodem31201 chip_id
 esptool.py --port /dev/cu.usbmodem31201 --baud 115200 chip_id
 ```
 
-**If esptool can't connect:**
+__If esptool can't connect:__
 
 - Device may not be in bootloader mode
 - USB driver issue
@@ -49,9 +49,9 @@ esptool.py --port /dev/cu.usbmodem31201 --baud 115200 chip_id
 
 Put device in bootloader mode manually:
 
-1. **Hold BOOT button** on ESP32-C6
-2. **Press and release RESET** button (while holding BOOT)
-3. **Release BOOT button**
+1. __Hold BOOT button__ on ESP32-C6
+2. __Press and release RESET__ button (while holding BOOT)
+3. __Release BOOT button__
 4. Try esptool again
 
 ### 4. Minimal Test Configuration
@@ -91,7 +91,7 @@ cd esphome
 esphome upload all-in-one.yaml --device /dev/cu.usbmodem31201
 ```
 
-**Important:** Put device in bootloader mode first (BOOT + RESET)
+__Important:__ Put device in bootloader mode first (BOOT + RESET)
 
 ### 6. Check for Boot Loop
 
@@ -122,54 +122,54 @@ Press Ctrl+A then K to exit screen.
 
 ### 1. Firmware Corruption
 
-- **Solution:** Re-upload firmware
+- __Solution:__ Re-upload firmware
 - Put in bootloader mode first
 
 ### 2. Power Issues
 
-- **Symptoms:** Device resets randomly
-- **Solution:** Use better USB cable, check power supply
+- __Symptoms:__ Device resets randomly
+- __Solution:__ Use better USB cable, check power supply
 
 ### 3. Hardware Problem
 
-- **Symptoms:** No response at all
-- **Solution:** Check connections, try different device
+- __Symptoms:__ No response at all
+- __Solution:__ Check connections, try different device
 
 ### 4. USB Driver Issue
 
-- **Symptoms:** Port not detected
-- **Solution:** Install/update USB drivers (CP2102, CH340, etc.)
+- __Symptoms:__ Port not detected
+- __Solution:__ Install/update USB drivers (CP2102, CH340, etc.)
 
 ### 5. Boot Loop
 
-- **Symptoms:** Device resets continuously
-- **Solution:** Check logs for error, may need to fix configuration
+- __Symptoms:__ Device resets continuously
+- __Solution:__ Check logs for error, may need to fix configuration
 
 ## Step-by-Step Recovery
 
-1. **Verify USB connection:**
+1. __Verify USB connection:__
 
    ```bash
    ls /dev/cu.usbmodem*
    ```
 
-2. **Test device communication:**
+2. __Test device communication:__
 
    ```bash
    esptool.py --port /dev/cu.usbmodem31201 chip_id
    ```
 
-3. **If device responds:**
+3. __If device responds:__
    - Put in bootloader mode
    - Re-upload firmware
    - Check logs immediately after upload
 
-4. **If device doesn't respond:**
+4. __If device doesn't respond:__
    - Check hardware connections
    - Try different USB cable/port
    - Verify device isn't damaged
 
-5. **After re-upload:**
+5. __After re-upload:__
    - Immediately check for AP "garage-aio"
    - Check USB logs
    - Verify device appears on network
@@ -192,10 +192,10 @@ screen /dev/cu.usbmodem31201 115200
 
 ## Next Steps
 
-1. **First:** Verify USB connection and device detection
-2. **Second:** Test with esptool to see if device responds
-3. **Third:** If device responds, re-upload firmware
-4. **Fourth:** If device doesn't respond, check hardware
+1. __First:__ Verify USB connection and device detection
+2. __Second:__ Test with esptool to see if device responds
+3. __Third:__ If device responds, re-upload firmware
+4. __Fourth:__ If device doesn't respond, check hardware
 
 The fact that there are NO logs suggests either:
 

@@ -8,10 +8,10 @@ Related: GitHub issue [#3](https://github.com/jwilleke/garage-car-positioning/is
 
 ## Current State
 
-- **Protocol:** WiFi + ESPHome native API + Home Assistant
-- **Version:** v0.1.1
-- **Status:** Working — full entity control, OTA updates, log streaming via ESPHome dashboard
-- **Hardware:** ESP32-C6 has IEEE 802.15.4 radio built-in — Thread-capable without extra hardware
+- __Protocol:__ WiFi + ESPHome native API + Home Assistant
+- __Version:__ v0.1.1
+- __Status:__ Working — full entity control, OTA updates, log streaming via ESPHome dashboard
+- __Hardware:__ ESP32-C6 has IEEE 802.15.4 radio built-in — Thread-capable without extra hardware
 
 Thread and Matter are referenced as possible future features in `AGENTS.md` and [garage-door.md](garage-door.md) (hardware selection rationale).
 
@@ -51,7 +51,7 @@ Thread and Matter are referenced as possible future features in `AGENTS.md` and 
 - LED effects, scan animations, and parking guidance text are not Matter-standard — would require custom clusters or be dropped entirely
 - Larger firmware footprint and longer build times
 - OTA still works but Matter commissioning adds setup complexity
-- ESPHome Matter support is marked **experimental** as of 2025
+- ESPHome Matter support is marked __experimental__ as of 2025
 
 ---
 
@@ -67,18 +67,18 @@ Thread and Matter are referenced as possible future features in `AGENTS.md` and 
 | Setup complexity | Low | Higher (commissioning) |
 | Thread Border Router required | No | Only if using Thread transport |
 
-**Hybrid approach:** A possible path is WiFi for ESPHome API (primary) + Thread/Matter as a secondary protocol. The ESP32-C6 hardware supports this concurrently.
+__Hybrid approach:__ A possible path is WiFi for ESPHome API (primary) + Thread/Matter as a secondary protocol. The ESP32-C6 hardware supports this concurrently.
 
 ---
 
 ## Decision
 
-1. **HA-only use case:** ESPHome WiFi API is superior — custom entities, full control, radar/LED support intact. No reason to switch.
-2. **Multi-platform goal (Apple Home, Google Home):** Matter over WiFi is the path. Accept loss of ESPHome-specific features.
-3. **Thread value:** Adds value mainly if WiFi reliability is a problem in the garage environment, or if building a mesh with other Thread devices.
-4. **Wait for maturity:** ESPHome Matter is experimental. Revisit when it stabilizes.
+1. __HA-only use case:__ ESPHome WiFi API is superior — custom entities, full control, radar/LED support intact. No reason to switch.
+2. __Multi-platform goal (Apple Home, Google Home):__ Matter over WiFi is the path. Accept loss of ESPHome-specific features.
+3. __Thread value:__ Adds value mainly if WiFi reliability is a problem in the garage environment, or if building a mesh with other Thread devices.
+4. __Wait for maturity:__ ESPHome Matter is experimental. Revisit when it stabilizes.
 
-**Current decision: No action.** Continue on ESPHome WiFi API. Revisit Matter when ESPHome marks it stable and when multi-platform support becomes a requirement.
+__Current decision: No action.__ Continue on ESPHome WiFi API. Revisit Matter when ESPHome marks it stable and when multi-platform support becomes a requirement.
 
 ---
 

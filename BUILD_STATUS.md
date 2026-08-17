@@ -19,9 +19,9 @@ esphome/packages/
 └── garage-door.yaml # Encoder, relay, cover, door switch
 ```
 
-**Code reduction:** Main config files reduced by ~80% (291→55, 225→34, 98→31 lines).
+__Code reduction:__ Main config files reduced by ~80% (291→55, 225→34, 98→31 lines).
 
-**Bugs fixed:**
+__Bugs fixed:__
 
 - `car-positioning.yaml`: Fixed broken `esp32_rmt` platform → `esp32_rmt_led_strip`
 - Fixed `Color()` wrapper in LED lambdas
@@ -32,7 +32,7 @@ esphome/packages/
 - Changed `ap_timeout: 0s` → `1min`
 - Added `secrets.yaml.example`
 
-**All configs validated successfully.**
+__All configs validated successfully.__
 
 ## 2026-02-14
 

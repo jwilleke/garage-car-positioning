@@ -8,7 +8,7 @@ For a combined system that also controls the garage door, see [Installation.md](
 
 ## Step 1: Bill of Materials
 
-Gather the components listed under **Option 1: Standalone Car Positioning System** in the Bill of Materials.
+Gather the components listed under __Option 1: Standalone Car Positioning System__ in the Bill of Materials.
 
 ➡️ See [hardware/BOM.md — Option 1](hardware/BOM.md#option-1-standalone-car-positioning-system)
 
@@ -16,7 +16,7 @@ Gather the components listed under **Option 1: Standalone Car Positioning System
 
 ## Step 2: Hardware Assembly
 
-Wire all components according to the **Option 1** wiring diagram.
+Wire all components according to the __Option 1__ wiring diagram.
 
 ➡️ See [hardware/wiring-diagram.md — Option 1](hardware/wiring-diagram.md#option-1-standalone-car-positioning-system)
 
@@ -32,7 +32,7 @@ See [hardware/LD2450/LD2450-Mounting.md](hardware/LD2450/LD2450-Mounting.md) for
 
 ## Step 3: Power Supply
 
-- **5V 2A minimum** for the standalone car positioning system
+- __5V 2A minimum__ for the standalone car positioning system
 - Power the LED strip directly from the 5V supply — do not draw through the ESP32's 5V pin
 - Share a common ground across all components
 
@@ -64,8 +64,8 @@ Correct physical placement of the LD2450 sensors is critical for accurate readin
 
 Typical placement:
 
-- **Front sensor** — ceiling-mounted above the parking zone, pointing down
-- **Rear sensor** — inside wall-mounted, pointing toward the car
+- __Front sensor__ — ceiling-mounted above the parking zone, pointing down
+- __Rear sensor__ — inside wall-mounted, pointing toward the car
 
 ---
 
@@ -88,7 +88,7 @@ Key substitutions to set:
 
 After flashing, the device will be auto-discovered by the ESPHome integration.
 
-Navigate to **Settings → Devices & Services** and click **Configure** on the discovered device.
+Navigate to __Settings → Devices & Services__ and click __Configure__ on the discovered device.
 
 ➡️ See [Installation.md — Step 7: Home Assistant Integration](Installation.md#step-7-home-assistant-integration) for dashboard and automation setup.
 

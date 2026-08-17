@@ -97,14 +97,14 @@ ESP32-C6 GPIO0 (L-PIN 10) ──────────────── DIN (
 
 ## Relay Module Wiring
 
-Using 5V Relay Module with High/Low Trigger Jumper. Set jumper to **H** (HIGH trigger).
+Using 5V Relay Module with High/Low Trigger Jumper. Set jumper to __H__ (HIGH trigger).
 
 | Relay Pin | Connect To |
 | ---- | ---- |
 | VCC | External 5V PSU (+) |
 | GND | External 5V PSU (-) AND ESP32-C6 GND |
 | IN | ESP32-C6 GPIO10 |
-| Jumper | **H** (HIGH trigger) |
+| Jumper | __H__ (HIGH trigger) |
 | NO | Garage door opener wall button terminal |
 | COM | Garage door opener wall button terminal |
 

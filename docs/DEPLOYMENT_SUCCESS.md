@@ -6,10 +6,10 @@ The firmware has been successfully deployed to your ESP32-C6 device!
 
 ### Device Information
 
-- **Device**: ESP32-C6 (QFN40) revision v0.2
-- **MAC Address**: 98:a3:16:b1:c3:fc
-- **Flash Size**: 8MB (auto-detected)
-- **Features**: WiFi 6, BT 5, IEEE802.15.4
+- __Device__: ESP32-C6 (QFN40) revision v0.2
+- __MAC Address__: 98:a3:16:b1:c3:fc
+- __Flash Size__: 8MB (auto-detected)
+- __Features__: WiFi 6, BT 5, IEEE802.15.4
 
 ### Upload Details
 
@@ -25,7 +25,7 @@ The firmware has been successfully deployed to your ESP32-C6 device!
 
 View the device logs to verify it's booting correctly:
 
-**Via USB:**
+__Via USB:__
 
 ```bash
 cd esphome
@@ -33,7 +33,7 @@ esphome logs all-in-one.yaml
 # Select option [1] for USB
 ```
 
-**Via OTA (if device is on WiFi):**
+__Via OTA (if device is on WiFi):__
 
 ```bash
 cd esphome
@@ -44,16 +44,16 @@ esphome logs all-in-one.yaml
 ### 2. Check Device Status in Home Assistant
 
 1. Open Home Assistant
-2. Go to **Settings** → **Devices & Services**
-3. Look for **ESPHome** integration
+2. Go to __Settings__ → __Devices & Services__
+3. Look for __ESPHome__ integration
 4. Your device `esp32-garage-all-in-one` should appear
-5. Click **Configure** to add it
+5. Click __Configure__ to add it
 
 ### 3. Verify All Entities
 
 Once connected, verify these entities are available:
 
-**Car Positioning Sensors:**
+__Car Positioning Sensors:__
 
 - `sensor.front_target_x`
 - `sensor.front_target_y`
@@ -65,26 +65,26 @@ Once connected, verify these entities are available:
 - `binary_sensor.car_correctly_parked`
 - `text_sensor.parking_guidance`
 
-**Garage Door:**
+__Garage Door:__
 
 - `cover.garage_door`
 - `sensor.garage_door_position_encoder`
 - `binary_sensor.garage_door_closed_switch`
 
-**LED Strip:**
+__LED Strip:__
 
 - `light.garage_parking_led_strip`
 
 ### 4. Calibrate the System
 
-**Car Positioning Calibration:**
+__Car Positioning Calibration:__
 
 1. Park your car in the ideal position
 2. Note the `car_center_y_position` value in Home Assistant
 3. Update `target_y_min` and `target_y_max` in `all-in-one.yaml`
 4. Re-upload firmware (can use OTA now)
 
-**Garage Door Calibration:**
+__Garage Door Calibration:__
 
 1. Close the garage door completely
 2. Open it fully
@@ -96,19 +96,19 @@ See `docs/calibration.md` for detailed instructions.
 
 ### 5. Test Functionality
 
-**Test LD2450 Sensors:**
+__Test LD2450 Sensors:__
 
 - Walk in front of sensors
 - Check if targets are detected
 - Verify X/Y coordinates are updating
 
-**Test Garage Door:**
+__Test Garage Door:__
 
 - Use Home Assistant to open/close door
 - Verify encoder counts change
 - Check closed switch state
 
-**Test LED Strip:**
+__Test LED Strip:__
 
 - Park car in different positions
 - Verify LED colors change:
@@ -121,35 +121,35 @@ See `docs/calibration.md` for detailed instructions.
 
 ### Device Not Appearing in Home Assistant
 
-1. **Check WiFi connection**:
+1. __Check WiFi connection__:
 
    ```bash
    ping esp32-garage-all-in-one.local
    ```
 
-2. **Check logs** for WiFi connection errors
+2. __Check logs__ for WiFi connection errors
 
-3. **Verify secrets.yaml** has correct WiFi credentials
+3. __Verify secrets.yaml__ has correct WiFi credentials
 
 ### Sensors Not Working
 
-1. **Check UART connections**:
+1. __Check UART connections__:
    - Front LD2450: GPIO16 (RX), GPIO17 (TX)
    - Rear LD2450: GPIO18 (RX), GPIO19 (TX)
 
-2. **Verify power supply** - LD2450 needs 5V
+2. __Verify power supply__ - LD2450 needs 5V
 
-3. **Check baud rate** - should be 256000
+3. __Check baud rate__ - should be 256000
 
 ### Garage Door Not Responding
 
-1. **Check relay wiring** - GPIO10
-2. **Verify encoder connections** - GPIO2 (A), GPIO3 (B)
-3. **Check closed switch** - GPIO1
+1. __Check relay wiring__ - GPIO10
+2. __Verify encoder connections__ - GPIO2 (A), GPIO3 (B)
+3. __Check closed switch__ - GPIO1
 
 ## Future Updates
 
-Now that the device is on your network, you can use **OTA (Over-The-Air)** updates:
+Now that the device is on your network, you can use __OTA (Over-The-Air)__ updates:
 
 ```bash
 cd esphome
@@ -171,10 +171,10 @@ No need to connect USB cable for future updates!
 
 ## Support
 
-- **Documentation**: See `docs/` directory
-- **Calibration**: `docs/calibration.md`
-- **Wiring**: `hardware/wiring-diagram.md`
-- **Build Issues**: `BUILD_FIX.md`
+- __Documentation__: See `docs/` directory
+- __Calibration__: `docs/calibration.md`
+- __Wiring__: `hardware/wiring-diagram.md`
+- __Build Issues__: `BUILD_FIX.md`
 
 ---
 

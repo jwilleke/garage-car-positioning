@@ -31,26 +31,26 @@ A `secrets.yaml` file is required in `esphome/` with: `wifi_ssid`, `wifi_passwor
 
 ## Architecture
 
-**Firmware layer** (`esphome/`): YAML configs define sensors, actuators, and logic using ESPHome's component model with C++ lambda functions for custom calculations.
+__Firmware layer__ (`esphome/`): YAML configs define sensors, actuators, and logic using ESPHome's component model with C++ lambda functions for custom calculations.
 
-**Data flow — car positioning**: LD2450 front/rear sensors (UART at 256000 baud) → raw X/Y/distance readings → template sensors compute car center position → binary sensors determine `car_detected` and `car_correctly_parked` → LED strip color reflects parking status.
+__Data flow — car positioning__: LD2450 front/rear sensors (UART at 256000 baud) → raw X/Y/distance readings → template sensors compute car center position → binary sensors determine `car_detected` and `car_correctly_parked` → LED strip color reflects parking status.
 
-**Data flow — garage door**: Hall effect encoder sensors (GPIO2/3) → pulse counting → door position percentage → Home Assistant cover entity. Reed switch (GPIO1) detects closed state. Relay (GPIO10) triggers door opener.
+__Data flow — garage door__: Hall effect encoder sensors (GPIO2/3) → pulse counting → door position percentage → Home Assistant cover entity. Reed switch (GPIO1) detects closed state. Relay (GPIO10) triggers door opener.
 
-**Home Assistant integration** (`home-assistant/`): Contains example automations, dashboard cards, and templates that consume ESPHome entities.
+__Home Assistant integration__ (`home-assistant/`): Contains example automations, dashboard cards, and templates that consume ESPHome entities.
 
-**Key substitutions** in `all-in-one.yaml` control behavior:
+__Key substitutions__ in `all-in-one.yaml` control behavior:
 
 - `target_y_min`/`target_y_max`: parking zone Y range (mm)
 - `target_x_tolerance`: acceptable X deviation (mm)
 - `garage_door_full_open_counts`: encoder pulses for full open
 - `num_leds`: LED strip length
 
-**GPIO assignments** (ESP32-C6): GPIO0 (LEDs), GPIO1 (door switch), GPIO2-3 (encoder), GPIO10 (relay), GPIO16-17 (front radar UART), GPIO18-19 (rear radar UART).
+__GPIO assignments__ (ESP32-C6): GPIO0 (LEDs), GPIO1 (door switch), GPIO2-3 (encoder), GPIO10 (relay), GPIO16-17 (front radar UART), GPIO18-19 (rear radar UART).
 
 ## Related Projects
 
-**Home Assistant config:** `/Volumes/jobd/code/GitHub/mjs-ha`
+__Home Assistant config:__ `/Volumes/jobd/code/GitHub/mjs-ha`
 
 This firmware publishes entities that HA automations and Node-RED flows consume. Entity renames in this repo change HA entity IDs — coordinate with the HA project before flashing.
 

@@ -2,7 +2,7 @@
 
 ## Related Project
 
-**Home Assistant config:** `/Volumes/jobd/code/GitHub/mjs-ha`
+__Home Assistant config:__ `/Volumes/jobd/code/GitHub/mjs-ha`
 GitHub: <https://github.com/jwilleke/mjs-ha>
 
 ## Responsibility Split
@@ -14,7 +14,7 @@ GitHub: <https://github.com/jwilleke/mjs-ha>
 | BLE scanning | Passive scan, forward ALL advertisements + RSSI to HA | Identify devices by MAC, detect approach/departure via RSSI trends |
 | Notifications | — | Node-RED "Garage" flow triggers on entity state changes |
 
-**BLE design principle:** Firmware is fully MAC-agnostic. `esp32_ble_tracker` + `bluetooth_proxy` forward every BLE advertisement (RSSI included) to HA. HA configures which MACs to track and determines approach/departure. No BLE device knowledge lives in firmware.
+__BLE design principle:__ Firmware is fully MAC-agnostic. `esp32_ble_tracker` + `bluetooth_proxy` forward every BLE advertisement (RSSI included) to HA. HA configures which MACs to track and determines approach/departure. No BLE device knowledge lives in firmware.
 
 ## Entity IDs Exposed by This Firmware
 
@@ -68,7 +68,7 @@ Last updated: 2026-06-10
 
 - Firmware: v0.2.6 — rebuilt for ESPHome 2026.5.1 (OTA flashed 2026-06-09)
 - Issue #15 (front sensor offline): active — both LD2450 sensors offline; suspected TX/RX swap at connection block; car positioning entities degraded (`car_correctly_parked` always false)
-- Issue #13 (encoder): **In Review** — encoder confirmed working (36 pulses/cycle); `full_open_counts` calibrated to 36; OTA flash pending to ship renamed Open/Close step sensors and per-cycle reset
+- Issue #13 (encoder): __In Review__ — encoder confirmed working (36 pulses/cycle); `full_open_counts` calibrated to 36; OTA flash pending to ship renamed Open/Close step sensors and per-cycle reset
 - Issue #11 (BLE): complete — firmware MAC-agnostic; `bluetooth_proxy` forwarding all BLE + RSSI to HA; mjs-ha handles device identification
 - Entity removed: `binary_sensor.garage_all_in_one_tesla_blue_moon_approaching` / `target_approaching` — gone since v0.2.4
 - HA Builder error resolved: `garage-all-in-one.yaml` on HA host updated to remove `tesla_ble` package reference

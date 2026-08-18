@@ -38,3 +38,5 @@ garage.log
 .claude/worktrees/
 .kit-sync/
 .kit-check/
+.continue/
+.agents/

@@ -1,4 +1,4 @@
-<!-- KIT:START v1.10.2-0-g0903de6 — managed by mjs-project-template; edit below the KIT:END marker -->
+<!-- KIT:START v1.11.1-0-g71bbbdf — managed by mjs-project-template; edit below the KIT:END marker -->
 ## Agent Kit Protocols
 
 This section is __managed by the kit__ (`install-kit.sh`) — it is identical across repos. Put repo-specific context __below the `KIT:END` marker__; do not edit here.

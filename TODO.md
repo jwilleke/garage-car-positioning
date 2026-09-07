@@ -11,10 +11,6 @@
 - Parked / half-done: none locally. But see the first next step — there is a bot branch on the
   remote with no PR behind it
 - Next steps:
-  - __Delete the stale remote branch `chore/kit-sync-v1.12.0`__ (or leave it; it is inert).
-    It is fully superseded: PR #32 merged `chore/kit-sync-v1.12.0-1-gd3d2248` into master, and
-    master now contains every line that branch carried plus 9 more in
-    `.github/workflows/kit-sync.yml`. Opening a PR for it would propose reverting those 9 lines
   - __Resume #15 where the last session stopped.__ Two benign explanations remain untested; check
     both before declaring the front sensor dead:
     - __5 V supply adequacy__ — BLE comes up on a marginal supply that cannot sustain the radar
@@ -42,6 +38,9 @@
     USB-to-TTL adapter (~$8, not owned)
   - Correction to the previous pointer: PR #17 is __not__ still open — it was closed unmerged on
     2026-08-17. No PRs are open now
+  - The stale remote branch `chore/kit-sync-v1.12.0` was deleted this session. It was fully
+    superseded by PR #32; its head `23b3315` is recoverable from GitHub if ever needed. No
+    `chore/*` branches remain on the remote
   - Kit jumped `v1.11.1` to `v1.12.0-1-gd3d2248` today across PRs #30 and #32. #32 rewrote four
     `.claude/commands/*.md` files, so `/wrap`, `/pstatus`, `/context`, `/session-commit` and
     `/semver` all carry new text that has not been exercised yet — this session ran the older

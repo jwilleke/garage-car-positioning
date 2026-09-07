@@ -1,38 +1,54 @@
 # TODO
 
 <!-- RESUME:START -->
-## ▶ Resume here — 2026-08-10
+## ▶ Resume here — 2026-09-07
 
-- Last worked on: #15 diagnosis moved decisively — the front sensor (HLK-LD2450_E0E0) shows
-  __no targets in HLKRadarTool over BLE__, a link that bypasses all wiring. Evidence now points at
-  the sensor itself, not the cable path.
-- Branch / state: master, clean, pushed (only `.claude/settings.local.json` modified — leave it)
-- Running / in-flight: none. All CI green, no background processes
-- Parked / half-done: `utility/ld2450_bench_test.py` is merged but has __never been run against
-  real hardware__ — needs a USB-to-TTL adapter (~$8, not owned)
+- Last worked on: housekeeping only, no firmware touched. Committed the garage door quadrature
+  encoder debugging notes and cleared the kit-sync backlog. __No progress on #15__ — the P0 stands
+  exactly where 2026-08-10 left it
+- Branch / state: master, clean, pushed, 0 stashes. Kit at `v1.12.0-1-gd3d2248`. All CI green
+- Running / in-flight: none. No background agents, dev servers, or scheduled jobs
+- Parked / half-done: none locally. But see the first next step — there is a bot branch on the
+  remote with no PR behind it
 - Next steps:
-  - Two benign explanations for #15 remain untested. Check both before declaring the sensor dead:
+  - __Delete the stale remote branch `chore/kit-sync-v1.12.0`__ (or leave it; it is inert).
+    It is fully superseded: PR #32 merged `chore/kit-sync-v1.12.0-1-gd3d2248` into master, and
+    master now contains every line that branch carried plus 9 more in
+    `.github/workflows/kit-sync.yml`. Opening a PR for it would propose reverting those 9 lines
+  - __Resume #15 where the last session stopped.__ Two benign explanations remain untested; check
+    both before declaring the front sensor dead:
     - __5 V supply adequacy__ — BLE comes up on a marginal supply that cannot sustain the radar
       front-end. Measure at the sensor, under load
     - __Zone/region config in the app__ — a filter written during June debugging would suppress
       every target, in the app and over UART alike. Read it before changing anything
-  - If both are clean: the front radar is dead. Replace it, and buy a spare — a second unit turns
-    the next failure into a five-minute swap test instead of a two-month investigation
+  - If both are clean: the front radar is dead. Replace it, and buy a spare
   - No-new-hardware alternative: bench the front sensor on ESP __GPIO18/19__ (the rear port) with
     short jumpers. Rear entities coming alive exonerates the sensor and condemns the front path
+  - Optional: file a `[BUG]` for the encoder questions raised in
+    `docs/hardware/NJK-5002C Hall Effect Sensor/encoder-steps.md` — no open issue covers them
 - Blockers / significant notes:
   - __#15 (P0) gates everything__ — #16 and #20 are both blocked by it
-  - `bay_motion` (merged in #21) is __unvalidated__ — never compiled or walk-tested. Do not wire a
-    door interlock to it until #15 is fixed; reading a dead radar returns a confident "clear"
+  - Encoder notes recorded four unanswered questions: whether `sensor_a_count` / `sensor_b_count`
+    reset to zero on close, whether A and B are reversed in the rotation config, how correct
+    rotation direction is determined, and whether quadrature needs `resolution: 1` instead of `4`.
+    Concrete next test: close the door to zero the encoder, open fully, watch CW steps for ~36
+  - `bay_motion` (merged in #21) is still __unvalidated__ — never compiled or walk-tested. Do not
+    wire a door interlock to it until #15 is fixed; reading a dead radar returns a confident "clear"
   - Ruled out on #15 so far: sensor unpowered, firmware too old (`2.04.23101915` exceeds the
     required `V2.02.23090617`), baud mismatch, TX/RX polarity, harness continuity
-  - Sensor identities are now recorded in `docs/hardware/LD2450/LD2450.md` — E0E0 = front,
-    1A63 = rear. An active HLKRadarTool BLE session can suppress UART output; disconnect before
-    any serial test
-  - PR #17 (kit sync) has been open since 2026-07-27 and was not touched this session
+  - Sensor identities are in `docs/hardware/LD2450/LD2450.md` — E0E0 = front, 1A63 = rear. An
+    active HLKRadarTool BLE session can suppress UART output; disconnect before any serial test
+  - `utility/ld2450_bench_test.py` has still __never been run against real hardware__ — needs a
+    USB-to-TTL adapter (~$8, not owned)
+  - Correction to the previous pointer: PR #17 is __not__ still open — it was closed unmerged on
+    2026-08-17. No PRs are open now
+  - Kit jumped `v1.11.1` to `v1.12.0-1-gd3d2248` today across PRs #30 and #32. #32 rewrote four
+    `.claude/commands/*.md` files, so `/wrap`, `/pstatus`, `/context`, `/session-commit` and
+    `/semver` all carry new text that has not been exercised yet — this session ran the older
+    `/wrap` and `/session-commit`
 <!-- RESUME:END -->
 
-Last updated: 2026-08-10
+Last updated: 2026-09-07
 
 ---
 

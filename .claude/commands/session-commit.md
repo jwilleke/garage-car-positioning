@@ -24,7 +24,8 @@ related GitHub issues. The personal log is __never committed__.
   P0 / Epics / P1 / P2 / In review / Deferred / Needs triage). The `▶ Resume here` pointer is owned by `/wrap`; no need
   to preserve it here. If `/pstatus` was just run, it is already current.
 - Apply `needs-triage` to any open issue with no placement label (`P0` / `P1` / `P2` / `deferred` /
-  `in-review`), exactly as `/pstatus` does. Two commands that regenerate the same file from the same
+  `in-review`) that is not an epic, exactly as `/pstatus` does, and place items by its precedence
+  rules. Two commands that regenerate the same file from the same
   labels must not disagree about what an unlabeled issue means.
 - Follow `.markdownlint-cli2.jsonc`, the control file for markdown style — including for any bare
   URL that arrives inside an issue or PR title. `TODO.md` is generated, so a violation turns the lint

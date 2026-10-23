@@ -1,0 +1,19 @@
+# GitGuardian configuration. Seeded by mjs-project-template's agent kit (#106),
+# then owned by this repo: adjust the paths to where this repo keeps its tests.
+#
+# Test code is ignored because GitGuardian's generic password detector flags it
+# by shape (e.g. `password: RIGHT_PW`, where RIGHT_PW is a per-run randomUUID).
+# That is safe only under the AGENTS.md rule that test credentials are generated
+# at run time, never literal. gitleaks (.github/workflows/secret-scan.yml) has no
+# path exclusions, so test directories are still scanned for real secrets.
+#
+# The GitGuardian app reads this file from the default branch.
+# https://github.com/jwilleke/mjs-project-template/issues/106
+version: 2
+secret:
+  ignored_paths:
+    - "**/__tests__/**"
+    - "**/tests/**"
+    - "**/test/**"
+    - "**/*.test.*"
+    - "**/*.spec.*"

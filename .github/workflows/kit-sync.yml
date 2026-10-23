@@ -18,7 +18,9 @@
 # independently and go green. utility/kit-sync.sh detects this and says so in the
 # PR body. To unblock, make the checks fire under a user token — close and reopen
 # the PR if those workflows list `reopened`, otherwise push any commit to the
-# branch. No admin bypass needed.
+# branch. No admin bypass needed. utility/kit-sync.sh now dispatches every check
+# workflow that accepts workflow_dispatch (#92), which clears this wherever the
+# required checks come from such workflows.
 #
 # No cron. A schedule fires while nobody is looking, and GitHub disables
 # scheduled workflows after 60 days of repository inactivity — so it stops firing
@@ -42,10 +44,12 @@ on:
     branches: [master, main]
   workflow_dispatch:
 
+# actions: write lets the sync dispatch the PR's check workflows (#92).
 permissions:
   contents: write
   pull-requests: write
   issues: write
+  actions: write
 
 concurrency:
   group: kit-sync

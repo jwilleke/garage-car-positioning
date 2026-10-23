@@ -1,4 +1,4 @@
-<!-- KIT:START v1.13.0-1-g94f5b0b — managed by mjs-project-template; edit below the KIT:END marker -->
+<!-- KIT:START v1.14.0-0-g282c9b7 — managed by mjs-project-template; edit below the KIT:END marker -->
 ## Agent Kit Protocols
 
 This section is __managed by the kit__ (`install-kit.sh`) — it is identical across repos. Put repo-specific context __below the `KIT:END` marker__; do not edit here.
@@ -23,6 +23,7 @@ The long form is the operator's __Do NOT Repeat Yourself (DRY)__ page. It lives 
 - Commit a chunk of work with `/session-commit`: commits code + `TODO.md`, appends a journal entry to `private/project_log.md` (the log is never committed).
 - Run `/pstatus` often (after every `/session-commit`): it ranks open work and recommends the next step.
 - End a session with `/wrap`: commits anything outstanding, refreshes the `▶ Resume here` pointer, and reports whether it is safe to shut down the editor.
+- While the operator is away, `/work-alone` progresses open issues in priority order, doing only reversible work. It logs what needs the operator (Stuck), decisions made without them, abnormalities, and new issues filed to `private/agent-work-alone.md`, which it creates on first use.
 
 ### Priorities — GitHub labels are the source of truth
 
@@ -35,7 +36,7 @@ Priority labels are mutually exclusive and mean:
 
 Then:
 
-- Security comes first. Scanner alerts (Dependabot / code-scanning / GitGuardian) become issues labeled `security` + a graded priority: critical/high → `P0`, medium → `P1`, low → `P2`.
+- Security comes first. Scanner alerts (Dependabot / code-scanning / GitGuardian / the ecosystem audit, e.g. `npm audit`) become issues labeled `security` + a graded priority: critical/high → `P0`, medium → `P1`, low → `P2`.
 - `TODO.md` = a `▶ Resume here` block (maintained by `/wrap`) on top, then priority bands that `/pstatus` regenerates from the labels. Do not hand-edit the bands.
 - The two halves have one writer each and a deliberate handover: `/wrap` writes the resume pointer at session end, `/context` reads it at session open, and the first `/pstatus` of the session __removes__ it — by then you have already resumed, so it has served its purpose. A bands-only `TODO.md` mid-session is expected, not a loss.
 - Kit files are overwritten wholesale on every sync — `.claude/commands/*.md`, `utility/sync-labels.sh`, `.markdownlint-cli2.jsonc`. Never add a rule to one of them: it is destroyed at the next sync (the installer now warns, but the rule still goes). A __generic__ rule belongs upstream in [mjs-project-template](https://github.com/jwilleke/mjs-project-template) so every repo gets it. A __repo-specific__ note about a command — a package manager the kit does not name, a scanner only this repo has — goes in `.claude/commands/<command>.local.md`, which the kit never writes, reads, or deletes. Read that file, if present, as part of the command; commit it, so it travels with the repo.
